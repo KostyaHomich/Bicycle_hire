@@ -79,6 +79,15 @@ public class UserService implements Service {
         }
         return true;
     }
+    public User getById(int id) throws ServiceException {
+
+        try {
+            UserDao userDao = (UserDao) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(User.class);
+            return userDao.getByPK(id);
+        } catch ( DaoException | SQLException | PersistException e) {
+            throw new ServiceException("Failed to delete user", e);
+        }
+    }
 
     public boolean update(User user) throws ServiceException {
         try {

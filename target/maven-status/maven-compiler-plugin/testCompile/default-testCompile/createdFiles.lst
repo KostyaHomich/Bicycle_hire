@@ -1,0 +1,7 @@
+epam\project\database\dao\ConnectionPoolTest\ConnectionPoolTest.class
+epam\project\database\dao\impl\PointHireDaoTest.class
+epam\project\database\dao\impl\UserDaoImplTest.class
+epam\project\database\dao\impl\BicycleDaoTest.class
+epam\project\database\dao\impl\OrderDaoTest.class
+epam\project\service\impl\UserServiceTest.class
+epam\project\database\dao\impl\InitBdTest.class

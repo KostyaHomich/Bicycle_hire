@@ -1,10 +1,11 @@
 package epam.project.controller;
 
+import epam.project.command.Command;
+import epam.project.command.CommandProvider;
 import epam.project.dto.ResponseContent;
-import epam.project.controller.command.Command;
-import epam.project.controller.command.CommandProvider;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet(name = "index", urlPatterns = {"/"})
+@WebServlet(name = "index", urlPatterns = "/")
 public class FrontController  extends HttpServlet {
 
     private static final Logger LOGGER=LogManager.getLogger(FrontController.class);
@@ -31,7 +32,7 @@ public class FrontController  extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandParameter = request.getParameter("command");
-        LOGGER.info(commandParameter);
+        LOGGER.info("command = "+commandParameter);
         Command command = CommandProvider.getInstance().takeCommand(commandParameter);
 
         ResponseContent responseContent = command.execute(request);

@@ -9,6 +9,7 @@ public class UserValidator implements Validator {
 
     private static final  Logger LOGGER = LogManager.getRootLogger();
     private static final  String CHECK_EMAIL = "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
+    private static final  String CHECK_NAME = "[a-zA-Z]";
     private static final  String SPACE = " ";
     private static final  String EMPTY = "";
     private static final  int MAX_EMAIL_LENGTH = 40;
@@ -34,6 +35,8 @@ public class UserValidator implements Validator {
                 && user.getFirstName().length() < MAX_FIRST_NAME_LENGTH
                 && user.getFirstName().length() > MIN_FIRST_NAME_LENGTH
                 && user.getLastName().length() < MAX_LAST_NAME_LENGTH
-                && user.getLastName().length() > MIN_LAST_NAME_LENGTH;
+                && user.getLastName().length() > MIN_LAST_NAME_LENGTH
+                && user.getFirstName().matches(CHECK_NAME)
+                && user.getLastName().matches(CHECK_NAME);
     }
 }

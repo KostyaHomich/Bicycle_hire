@@ -1,12 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="epam.project.controller.command.CommandType" %>
+<%@ page import="epam.project.command.CommandType" %>
 <html lang="en" >
 <head>
     <meta charset="utf-8">
     <title>Paper Stack</title>
-    <style>
-        <%@include file='../css/style.css' %>
-    </style>
+    <link rel="stylesheet" href="static/css/style.css">
+
 </head>
 <body>
 <div class="container">
@@ -21,7 +20,7 @@
                 <input type="text" placeholder="Email" required="" id="email" name="email" />
             </div>
             <div>
-                <input type="submit" value="Recovery" />
+                <input type="submit" value="Recovery"/>
             </div>
             <input type="hidden" name="command" value="${CommandType.RECOVERY_PASSWORD}">
         </form>

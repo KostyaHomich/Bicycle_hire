@@ -1,6 +1,6 @@
 package epam.project.dto;
 
-import epam.project.controller.command.Router;
+import epam.project.command.Router;
 
 public class ResponseContent {
     private Router router;

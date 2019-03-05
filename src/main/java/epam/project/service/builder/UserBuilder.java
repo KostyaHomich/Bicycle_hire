@@ -1,6 +1,6 @@
 package epam.project.service.builder;
 
-import epam.project.controller.command.CommandRegisterUser;
+import epam.project.command.CommandRegisterUser;
 import epam.project.entity.User;
 import epam.project.service.HashGenerator;
 import epam.project.service.ServiceFactory;

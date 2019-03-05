@@ -1,0 +1,84 @@
+-------------------------------------------------------------------------------
+Test set: epam.project.database.dao.impl.OrderDaoTest
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 0, Errors: 10, Skipped: 0, Time elapsed: 0.001 s <<< FAILURE! - in epam.project.database.dao.impl.OrderDaoTest
+persistTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+epam.project.database.dao.exception.ConnectionPoolException: Initialize error.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.sql.SQLNonTransientConnectionException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.lang.NumberFormatException: For input string: "null"
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+
+persistTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at epam.project.database.dao.impl.OrderDaoTest.destroy(OrderDaoTest.java:208)
+
+getByPKTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+epam.project.database.dao.exception.ConnectionPoolException: Initialize error.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.sql.SQLNonTransientConnectionException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.lang.NumberFormatException: For input string: "null"
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+
+getByPKTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at epam.project.database.dao.impl.OrderDaoTest.destroy(OrderDaoTest.java:208)
+
+updateTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0.001 s  <<< ERROR!
+epam.project.database.dao.exception.ConnectionPoolException: Initialize error.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.sql.SQLNonTransientConnectionException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.lang.NumberFormatException: For input string: "null"
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+
+updateTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.NullPointerException
+	at epam.project.database.dao.impl.OrderDaoTest.destroy(OrderDaoTest.java:208)
+
+getAllTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+epam.project.database.dao.exception.ConnectionPoolException: Initialize error.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.sql.SQLNonTransientConnectionException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.lang.NumberFormatException: For input string: "null"
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+
+getAllTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at epam.project.database.dao.impl.OrderDaoTest.destroy(OrderDaoTest.java:208)
+
+deleteTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+epam.project.database.dao.exception.ConnectionPoolException: Initialize error.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.sql.SQLNonTransientConnectionException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.UnableToConnectException: Cannot load connection class because of underlying exception: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: com.mysql.cj.exceptions.WrongArgumentException: Failed to parse the host:port pair 'null:null'.
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+Caused by: java.lang.NumberFormatException: For input string: "null"
+	at epam.project.database.dao.impl.OrderDaoTest.init(OrderDaoTest.java:68)
+
+deleteTest(epam.project.database.dao.impl.OrderDaoTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at epam.project.database.dao.impl.OrderDaoTest.destroy(OrderDaoTest.java:208)
+
