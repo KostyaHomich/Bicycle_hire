@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 
 </head>
-<body>          
+<body>
 <div class="container">
     <section id="content">
         <form action="${pageContext.request.contextPath}/login" method="post">

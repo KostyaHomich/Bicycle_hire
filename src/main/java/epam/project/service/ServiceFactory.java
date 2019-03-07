@@ -28,6 +28,6 @@ public class ServiceFactory {
         return new HashGenerator();
     }
     public RecoveryPasswordService getRecoveryPasswordService() {
-        return new RecoveryPasswordService();
+        return RecoveryPasswordService.getInstance();
     }
 }

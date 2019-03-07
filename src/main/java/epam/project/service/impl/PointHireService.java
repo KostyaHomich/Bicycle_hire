@@ -1,12 +1,16 @@
 package epam.project.service.impl;
 
 import epam.project.database.dao.DaoFactoryType;
+import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.FactoryProducer;
+import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.PointHireDao;
+import epam.project.entity.Bicycle;
 import epam.project.entity.PointHire;
+import epam.project.entity.User;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
@@ -16,35 +20,26 @@ import java.util.List;
 
 public class PointHireService implements Service {
     private static Logger LOGGER = Logger.getLogger(PointHireService.class.getName());
-    private PointHireDao pointHireDao;
 
-    public PointHireService() throws ServiceException {
-        init();
+
+    public PointHireService(){
     }
 
-    private void init() throws ServiceException {
-        try {
-            JdbcDaoFactory factory = (JdbcDaoFactory) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
-            pointHireDao = (PointHireDao) factory.getDao(PointHire.class);
-        } catch (DaoException e) {
-            throw new ServiceException("Initialize error.", e);
-        }
-    }
 
     public List<PointHire> takeAll() throws ServiceException {
 
-        List<PointHire> pointHires;
         try {
-            pointHires = pointHireDao.getAll();
-        } catch (DaoException  e) {
+            EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
+            return  pointHireDao.getAll();
+        } catch (DaoException e) {
             throw new ServiceException("Failed to get all point hires", e);
         }
-        return pointHires;
     }
 
     public boolean add(PointHire pointHire) throws ServiceException {
 
         try {
+            EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
             pointHireDao.persist(pointHire);
         } catch (DaoException e) {
             throw new ServiceException("Failed to add point hire", e);
@@ -56,6 +51,7 @@ public class PointHireService implements Service {
     public boolean delete(PointHire pointHire) throws ServiceException {
 
         try {
+            EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
             pointHireDao.delete(pointHire);
         } catch (  DaoException e) {
             throw new ServiceException("Failed to delete point hire",e);
@@ -65,6 +61,7 @@ public class PointHireService implements Service {
 
     public boolean update(PointHire pointHire) throws ServiceException {
         try {
+            EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
             pointHireDao.update(pointHire);
         } catch ( DaoException e) {
             throw new ServiceException("Failed to delete point hire",e);
@@ -72,12 +69,13 @@ public class PointHireService implements Service {
         return true;
     }
 
-    public PointHire takePointHire(int id) throws ServiceException {
-        try {
-            return pointHireDao.getByPK(id);
-        } catch (PersistException | DaoException e) {
-            throw new ServiceException("Failed to take order", e);
-        }
+    public PointHire getById(int id) throws ServiceException {
 
+        try {
+            EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
+            return pointHireDao.getByPK(id);
+        } catch ( DaoException | SQLException | PersistException e) {
+            throw new ServiceException("Failed to delete point hire", e);
+        }
     }
 }

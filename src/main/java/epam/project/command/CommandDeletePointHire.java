@@ -19,7 +19,7 @@ public class CommandDeletePointHire implements Command {
             PointHireService pointHireService = (PointHireService) ServiceFactory.getInstance().getService(ServiceType.POINT_HIRE);
 
             Integer id = Integer.valueOf(request.getParameter("id"));
-            PointHire pointHire = pointHireService.takePointHire(id);
+            PointHire pointHire = pointHireService.getById(id);
             pointHireService.delete(pointHire);
             ResponseContent responseContent = new ResponseContent();
             responseContent.setRouter(new Router("?command="+CommandType.DELETE_POINT_HIRE, Router.Type.REDIRECT));

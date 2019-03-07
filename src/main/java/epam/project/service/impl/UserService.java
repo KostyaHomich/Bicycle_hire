@@ -38,13 +38,9 @@ public class UserService implements Service {
     public boolean register(User user) throws ServiceException {
 
         try {
-            UserValidator userValidator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);
-            if (userValidator.doValidate(user)) {
                 EntityDao<User, Integer> dao = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(User.class);
                 dao.persist(user);
-            } else {
-                return false;
-            }
+
         } catch (DaoException e) {
             throw new ServiceException("Failed to register user", e);
         }
@@ -57,12 +53,11 @@ public class UserService implements Service {
 
             UserDao userDao = (UserDao) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(User.class);
             User user = userDao.getByLogin(login);
-            LOGGER.info(" "+user.getPassword() +"   " +password);
             if (user.getPassword().equals(password)) {
                 return user;
             }
             else {
-                throw new ServiceException("No such user: " + login);
+                throw new ServiceException("Wrong password.");
             }
         } catch (PersistException | DaoException e) {
             throw new ServiceException("Failed to sign in user.", e);

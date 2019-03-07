@@ -14,7 +14,7 @@ public class CommandShowRegistrationPage implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router("/static/jsp/registration.jsp",Router.Type.FORWARD));
+        responseContent.setRouter(new Router("/WEB-INF/jsp/registration.jsp",Router.Type.FORWARD));
         return responseContent;
     }
 

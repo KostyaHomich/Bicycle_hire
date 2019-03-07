@@ -24,6 +24,14 @@ public class RecoveryPasswordService implements Service {
     private static final String EMAIL_MESSAGE_TEXT = "Hey, this is your password ";
     private static final String EMAIL_SOCKET = "javax.net.ssl.SSLSocketFactory";
 
+    private static final RecoveryPasswordService recoveryPasswordService = new RecoveryPasswordService();
+
+    private RecoveryPasswordService() {
+    }
+
+    public static RecoveryPasswordService getInstance() {
+        return recoveryPasswordService;
+    }
 
     public void sendFromGMail(User user) throws ServiceException {
         Properties props = new Properties();

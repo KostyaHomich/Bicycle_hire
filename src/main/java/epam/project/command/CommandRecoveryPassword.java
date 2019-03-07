@@ -25,7 +25,7 @@ public class CommandRecoveryPassword implements Command {
 
         try {
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
-            RecoveryPasswordService recoveryPasswordService=new RecoveryPasswordService();
+            RecoveryPasswordService recoveryPasswordService=ServiceFactory.getInstance().getRecoveryPasswordService();
             HashGenerator hashGenerator=ServiceFactory.getInstance().getHashGenerator();
             User user = new User();
             user.setLogin(request.getParameter(LOGIN));

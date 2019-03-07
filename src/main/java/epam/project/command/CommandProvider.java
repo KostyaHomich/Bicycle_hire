@@ -1,15 +1,11 @@
 package epam.project.command;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandProvider {
     private static CommandProvider instance = new CommandProvider();
     private Map<CommandType, Command> commandMap = new HashMap<>();
-    private static final Logger LOGGER=LogManager.getLogger(CommandProvider.class);
 
     private CommandProvider() {
         commandMap.put(CommandType.ADD_BICYCLE, new CommandAddBicycle());
@@ -35,8 +31,10 @@ public class CommandProvider {
 
         commandMap.put(CommandType.RECOVERY_PASSWORD,new CommandRecoveryPassword());
         commandMap.put(CommandType.SHOW_ADMIN_PAGE,new CommandShowAdminPage());
-        commandMap.put(CommandType.TAKE_ALL_USERS,new CommandShowAllUsers());
+        commandMap.put(CommandType.SHOW_USERS_PAGE,new CommandShowUsersPageAndTakeAllUsers());
 
+        commandMap.put(CommandType.SHOW_BICYCLES_PAGE,new CommandShowBicyclesPageAndTakeAllBicycles());
+        commandMap.put(CommandType.SHOW_POINT_HIRE_PAGE,new CommandShowPointHirePageAndTakeAllPointHire());
     }
 
     public static CommandProvider getInstance() {

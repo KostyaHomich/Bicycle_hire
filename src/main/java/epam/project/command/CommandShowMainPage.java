@@ -11,7 +11,7 @@ public class CommandShowMainPage implements Command {
     public ResponseContent execute(HttpServletRequest request) {
 
         ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router("/static/jsp/main.jsp",Router.Type.REDIRECT));
+        responseContent.setRouter(new Router("/WEB-INF/jsp/main.jsp",Router.Type.REDIRECT));
         request.setAttribute("viewName", "empty");
         return responseContent;
     }

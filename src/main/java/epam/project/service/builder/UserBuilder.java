@@ -22,12 +22,10 @@ public class UserBuilder implements Builder<User> {
     private static final String LAST_NAME="last_name";
     private static final Logger LOGGER = LogManager.getLogger(CommandRegisterUser.class);
     @Override
-    public User build(HttpServletRequest request) throws ServiceException, UnsupportedEncodingException {
-        request.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
+    public User build(Map params) throws ServiceException {
+
         HashGenerator hashGenerator = ServiceFactory.getInstance().getHashGenerator();
         User user=new User();
-
-        Map params=request.getParameterMap();
         for (Object key: params.keySet())
         {
             String keyStr = (String)key;

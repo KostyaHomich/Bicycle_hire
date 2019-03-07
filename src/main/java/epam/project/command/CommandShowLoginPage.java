@@ -10,7 +10,7 @@ public class CommandShowLoginPage implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router("/static/jsp/login.jsp",Router.Type.FORWARD));
+        responseContent.setRouter(new Router("/WEB-INF/jsp/login.jsp",Router.Type.FORWARD));
         return responseContent;
     }
 }

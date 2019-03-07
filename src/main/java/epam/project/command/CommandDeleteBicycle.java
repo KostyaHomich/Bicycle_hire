@@ -5,6 +5,7 @@ import epam.project.dto.ResponseContent;
 import epam.project.command.Command;
 import epam.project.command.Router;
 import epam.project.entity.Bicycle;
+import epam.project.entity.User;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
@@ -17,9 +18,9 @@ public class CommandDeleteBicycle implements Command {
     public ResponseContent execute(HttpServletRequest request) {
         try {
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
-
             Integer id = Integer.valueOf(request.getParameter("id"));
-            Bicycle bicycle = bicycleService.takeBicycle(id);
+
+            Bicycle bicycle = bicycleService.getById(id);
             bicycleService.delete(bicycle);
             ResponseContent responseContent = new ResponseContent();
             responseContent.setRouter(new Router("?command="+CommandType.DELETE_BICYCLE, Router.Type.REDIRECT));
