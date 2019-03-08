@@ -1,20 +1,36 @@
 package epam.project.listener;
 
+import epam.project.database.dao.exception.ConnectionPoolException;
+import epam.project.database.pool.ConnectionPoolFactory;
+import epam.project.database.pool.ConnectionPoolImpl;
+import org.apache.log4j.Logger;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
-public class ContextListener  implements ServletContextListener {
+@WebListener
+public class ContextListener implements ServletContextListener {
+
+    private static Logger LOGGER = Logger.getLogger(ContextListener.class.getName());
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        //Provide your code here
-
-
+        try {
+         ConnectionPoolImpl connectionPool= (ConnectionPoolImpl) ConnectionPoolFactory.getInstance().getConnectionPool();
+         connectionPool.init();
+        } catch (ConnectionPoolException e) {
+            LOGGER.error("Failed to init connection pool",e);
+        }
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        // Provide your code here
-
+        try {
+            ConnectionPoolImpl connectionPool= (ConnectionPoolImpl) ConnectionPoolFactory.getInstance().getConnectionPool();
+            connectionPool.destroyPool();
+        } catch (ConnectionPoolException e) {
+            LOGGER.error("Failed to init destroy connection pool",e);
+        }
     }
 }

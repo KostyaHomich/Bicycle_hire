@@ -7,5 +7,5 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 public interface Builder<T> {
-    T build(Map params) throws ServiceException, UnsupportedEncodingException;
+    T build(Map<String,String> params) throws ServiceException, UnsupportedEncodingException;
 }

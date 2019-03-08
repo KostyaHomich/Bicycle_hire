@@ -18,7 +18,7 @@ public class CommandShowUsersPageAndTakeAllUsers implements Command {
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             List<User> userList = userService.takeAll();
             request.setAttribute("users",userList);
-            responseContent.setRouter(new Router("/WEB-INF/jsp/user.jsp", Router.Type.FORWARD));
+            responseContent.setRouter(new Router("/WEB-INF/jsp/user_list.jsp", Router.Type.FORWARD));
         } catch (ServiceException e) {
 
         }

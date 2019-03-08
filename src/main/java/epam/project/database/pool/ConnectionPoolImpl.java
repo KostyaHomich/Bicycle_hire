@@ -26,33 +26,26 @@ public class ConnectionPoolImpl implements ConnectionPool {
     private static Logger LOGGER = Logger.getLogger(ConnectionPoolImpl.class.getName());
 
     private static final String DRIVER_CLASS = "driver";
-    private static final String DB_USER = "user";
     private static final String DB_HOST = "host";
-    private static final String DB_PASSWORD = "password";
     private static final String DB_PORT = "port";
     private static final String DB_NAME = "name";
     private static final String POOL_CAPACITY = "poolCapacity";
     private static final String DB_PROPERTIES_NAME = "db.properties";
 
-    private String driver;
+    private Properties properties;
     private String url;
     private String host;
-    private String password;
     private int poolCapacity;
     private String port;
     private String dbName;
-    private String user;
     private Semaphore semaphore;
     private static Lock lock = new ReentrantLock();
 
-
-    private BlockingDeque<Connection> usingConnection = new LinkedBlockingDeque<>();
     private BlockingDeque<Connection> connections = new LinkedBlockingDeque<>();
 
     private static ConnectionPool instance;
 
-    private ConnectionPoolImpl() throws ConnectionPoolException {
-        init();
+    private ConnectionPoolImpl(){
     }
 
     public static ConnectionPool getInstance() throws ConnectionPoolException {
@@ -72,7 +65,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
     public void init() throws ConnectionPoolException {
 
-        Properties properties = new Properties();
+        properties = new Properties();
         try (InputStream inputStream  = ConnectionPoolImpl.class.getClassLoader().getResourceAsStream(DB_PROPERTIES_NAME)) {
             properties.load(inputStream);
 
@@ -89,13 +82,11 @@ public class ConnectionPoolImpl implements ConnectionPool {
                     "&serverTimezone=UTC" +
                     "&allowPublicKeyRetrieval=true";
 
-            user = properties.getProperty(DB_USER);
-            password = properties.getProperty(DB_PASSWORD);
+
             poolCapacity = Integer.parseInt(properties.getProperty(POOL_CAPACITY));
             Class.forName(properties.getProperty(DRIVER_CLASS));
             semaphore = new Semaphore(poolCapacity);
             connections = new LinkedBlockingDeque<>();
-            usingConnection = new LinkedBlockingDeque<>();
             for (int i = 0; i < poolCapacity; i++) {
                createConnection();
             }
@@ -114,7 +105,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
                 createConnection();
             }
             connection = connections.take();
-            usingConnection.add(connection);
+
         } catch (InterruptedException | SQLException e) {
             throw new ConnectionPoolException("Error taking the connection.", e);
         }
@@ -123,7 +114,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
     @Override
     public void releaseConnection(Connection connection) {
-        usingConnection.remove(connection);
         connections.push(connection);
         semaphore.release();
     }
@@ -148,7 +138,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
     }
 
     private Connection createConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
+        Connection connection = DriverManager.getConnection(url, properties);
         connections.add(connection);
         InvocationHandler connectionHandler = (Object proxy, Method method, Object[] args) -> {
             if (method.getName().equals("close")) {

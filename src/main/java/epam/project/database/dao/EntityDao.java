@@ -10,14 +10,14 @@ import java.util.List;
 
 public interface EntityDao<T extends Identified<PK>, PK extends Serializable> {
 
-     @AutoConnection
-     T persist(T object) throws  DaoException;
-     @AutoConnection
-     T getByPK(PK key) throws DaoException, SQLException, PersistException;
-     @AutoConnection
-     void update(T object) throws  DaoException;
-     @AutoConnection
-     void delete(T object) throws  DaoException;
-     @AutoConnection
-     List<T> getAll() throws  DaoException;
+
+    T persist(T object) throws DaoException;
+
+    T getByPK(PK key) throws DaoException, SQLException, PersistException;
+
+    void update(T object) throws DaoException;
+
+    void delete(T object) throws DaoException;
+
+    List<T> getAll() throws DaoException;
 }

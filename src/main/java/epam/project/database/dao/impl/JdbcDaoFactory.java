@@ -49,7 +49,6 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
 
                     result = method.invoke(dao, args);
                 }
-
                 TransactionManager.setConnectionWithReflection(dao, null);
 
             } else {

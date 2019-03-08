@@ -1,10 +1,7 @@
 package epam.project.validation;
 
 
-import epam.project.validation.impl.BicycleValidator;
-import epam.project.validation.impl.OrderValidator;
-import epam.project.validation.impl.PointHireValidator;
-import epam.project.validation.impl.UserValidator;
+import epam.project.validation.impl.*;
 
 public class ValidatorFactory {
 
@@ -27,6 +24,8 @@ public class ValidatorFactory {
             case ORDER:return new OrderValidator();
             case USER:return new UserValidator();
             case POINTHIRE:return new PointHireValidator();
+            case LOGIN:return new ContainsValidator();
+
         }
         return null;
     }

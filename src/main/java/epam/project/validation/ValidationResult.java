@@ -11,7 +11,7 @@ public class ValidationResult {
     public ValidationResult() {
     }
 
-    public void add(String key, ArrayList<String> values) {
+    public void add(String key, List<String> values) {
         errors.put(key, values);
     }
 

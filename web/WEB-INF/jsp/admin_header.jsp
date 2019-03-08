@@ -8,12 +8,12 @@
             <a href="#" class="hamburger"></a>
             <nav>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/user.jsp ?command=${CommandType.SHOW_USERS_PAGE}">Users</a></li>
-                    <li><a href="${pageContext.request.contextPath}/bicycle.jsp ?command=${CommandType.SHOW_BICYCLES_PAGE}">Bicycles</a></li>
-                    <li><a href="${pageContext.request.contextPath}/point_hire.jsp ?command=${CommandType.SHOW_POINT_HIRE_PAGE}">Point hires</a></li>
-                    <li><a href="${pageContext.request.contextPath}/order.jsp ?command=${CommandType.SHOW_LOGIN_PAGE}">Orders</a></li>
+                    <li><a href="${pageContext.request.contextPath}/user ?command=${CommandType.SHOW_USERS_PAGE}">Users</a></li>
+                    <li><a href="${pageContext.request.contextPath}/bicycle ?command=${CommandType.SHOW_BICYCLES_PAGE}">Bicycles</a></li>
+                    <li><a href="${pageContext.request.contextPath}/point_hire?command=${CommandType.SHOW_POINT_HIRE_PAGE}">Point hires</a></li>
+                    <!-- <li><a href="${pageContext.request.contextPath}/WEB-INF/jsp/order.jsp ?command=${CommandType.SHOW_LOGIN_PAGE}">Orders</a></li> -->
                 </ul>
-                <a href="${pageContext.request.contextPath}/login.jsp ?command=${CommandType.SHOW_LOGIN_PAGE}"
+                <a href="${pageContext.request.contextPath}/main ?command=${CommandType.LOGOUT}"
                    class="login_btn">Log out</a>
             </nav>
         </div>

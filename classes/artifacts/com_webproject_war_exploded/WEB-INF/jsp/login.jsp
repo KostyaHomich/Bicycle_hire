@@ -13,7 +13,6 @@
     <section id="content">
         <form action="${pageContext.request.contextPath}/login" method="post">
 
-
             <h1>Login Form</h1>
             <c:out value="${error}"/>
 
@@ -32,8 +31,8 @@
             </div>
             <div>
                 <input type="submit" value="Log in"/>
-                <a href="${pageContext.request.contextPath}/password_recovery.jsp ?command=${CommandType.SHOW_RECOVERY_PAGE}">Lost your password?</a>
-                <a href="${pageContext.request.contextPath}/registration.jsp ?command=${CommandType.SHOW_REGISTRATION_PAGE}">Register</a>
+                <a href="${pageContext.request.contextPath}/password_recovery ?command=${CommandType.SHOW_RECOVERY_PAGE}">Lost your password?</a>
+                <a href="${pageContext.request.contextPath}/registration ?command=${CommandType.SHOW_REGISTRATION_PAGE}">Register</a>
             </div>
             <input type="hidden" name="command" value="${CommandType.LOGIN}">
         </form>

@@ -2,6 +2,7 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
+import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.builder.UserBuilder;
@@ -10,18 +11,16 @@ import epam.project.service.impl.UserService;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
 import epam.project.validation.ValidatorType;
-import epam.project.validation.impl.UserValidator;
+import epam.project.validation.impl.ContainsValidator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 
 public class CommandLogIn implements Command {
-    private static final String ID = "id";
-    private static final String ROLE = "role";
-    private static final String LOGIN = "login";
+    private static final String USER = "signInUser";
     private static final Logger LOGGER = LogManager.getLogger(CommandLogIn.class);
 
 
@@ -32,26 +31,22 @@ public class CommandLogIn implements Command {
             ResponseContent responseContent = new ResponseContent();
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             UserBuilder userBuilder = new UserBuilder();
-            UserValidator userValidator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);
+            ContainsValidator userValidator = (ContainsValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.LOGIN);
 
-            ValidationResult validationResult = userValidator.doValidate(request.getParameterMap());
-            if (validationResult.getErrors().size()>0) {
-                User user = userBuilder.build(request.getParameterMap());
-                if (userService.contains(user)) {
-                    User signInUser = userService.signIn(user.getLogin(), user.getPassword() + user.getLogin());
+            Map<String, String> parameters= RequestParameterParser.parseParameters(request);
+            ValidationResult validationResult = userValidator.doValidate(parameters);
 
-                    Router router = new Router(CommandType.SHOW_MAIN_PAGE, Router.Type.REDIRECT);
+            if (validationResult.getErrors().size()==0) {
+                User user = userBuilder.build(parameters);
 
-                    request.getSession().setAttribute(ID, signInUser.getId());
-                    request.getSession().setAttribute(ROLE, signInUser.getRole());
-                    request.getSession().setAttribute(LOGIN, signInUser.getLogin());
+                    User signInUser = userService.signIn(user.getLogin(), user.getPassword());
+
+                    Router router = new Router("/WEB-INF/jsp/admin_page.jsp", Router.Type.FORWARD);
+
+                    request.getSession().setAttribute(USER, signInUser);
 
                     responseContent.setRouter(router);
                     return responseContent;
-
-                } else {
-                    throw new ServiceException("User with this login doesn't exist.");
-                }
 
             } else {
                 Router router = new Router("/WEB-INF/jsp/login.jsp", Router.Type.FORWARD);

@@ -35,6 +35,9 @@ public class CommandProvider {
 
         commandMap.put(CommandType.SHOW_BICYCLES_PAGE,new CommandShowBicyclesPageAndTakeAllBicycles());
         commandMap.put(CommandType.SHOW_POINT_HIRE_PAGE,new CommandShowPointHirePageAndTakeAllPointHire());
+        commandMap.put(CommandType.LOGOUT,new CommandLogOut());
+
+        commandMap.put(CommandType.SHOW_USER_DETAILS,new CommandShowUserDetails());
     }
 
     public static CommandProvider getInstance() {

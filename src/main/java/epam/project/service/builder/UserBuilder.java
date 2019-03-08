@@ -15,32 +15,44 @@ import java.util.Map;
 
 
 public class UserBuilder implements Builder<User> {
-    private static final String PASSWORD="password";
-    private static final String LOGIN="login";
-    private static final String EMAIL="email";
-    private static final String FIST_NAME="first_name";
-    private static final String LAST_NAME="last_name";
+    private static final String PASSWORD = "password";
+    private static final String LOGIN = "login";
+    private static final String EMAIL = "email";
+    private static final String FIST_NAME = "first_name";
+    private static final String LAST_NAME = "last_name";
     private static final Logger LOGGER = LogManager.getLogger(CommandRegisterUser.class);
+
     @Override
-    public User build(Map params) throws ServiceException {
+    public User build(Map<String, String> params) throws ServiceException {
 
         HashGenerator hashGenerator = ServiceFactory.getInstance().getHashGenerator();
-        User user=new User();
-        for (Object key: params.keySet())
-        {
-            String keyStr = (String)key;
-            String[] value = (String[])params.get(keyStr);
+        User user = new User();
+        for (Object key : params.keySet()) {
+            String keyStr = (String) key;
+            String value = params.get(keyStr);
             switch (keyStr) {
-                case LOGIN:user.setLogin(value[0]);break;
-                case PASSWORD:user.setPassword(hashGenerator.encode(value[0]));break;
-                case FIST_NAME:user.setFirstName(value[0]);break;
-                case LAST_NAME:user.setLastName(value[0]);break;
-                case EMAIL:user.setEmail(value[0]);break;
-                default:break;
+                case LOGIN:
+                    user.setLogin(value);
+                    break;
+                case PASSWORD:
+                    user.setPassword(hashGenerator.encode(value + user.getLogin()));
+                    break;
+                case FIST_NAME:
+                    user.setFirstName(value);
+                    break;
+                case LAST_NAME:
+                    user.setLastName(value);
+                    break;
+                case EMAIL:
+                    user.setEmail(value);
+                    break;
+                default:
+                    break;
             }
 
         }
 
         return user;
     }
+
 }

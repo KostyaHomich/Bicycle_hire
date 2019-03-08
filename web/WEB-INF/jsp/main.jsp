@@ -27,12 +27,15 @@
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
-                <c:if test="${sessionScope.role==null}">
-                <a href="${pageContext.request.contextPath}/registration.jsp ?command=${CommandType.SHOW_REGISTRATION_PAGE}" class="login_btn">Registration</a>
-                <a href="${pageContext.request.contextPath}/login.jsp ?command=${CommandType.SHOW_LOGIN_PAGE}" class="login_btn">Login</a>
+                <c:if test="${sessionScope.signInUser==null}">
+                    <a href="${pageContext.request.contextPath}/registration ?command=${CommandType.SHOW_REGISTRATION_PAGE}"
+                       class="login_btn">Registration</a>
+                    <a href="${pageContext.request.contextPath}/login ?command=${CommandType.SHOW_LOGIN_PAGE}"
+                       class="login_btn">Login</a>
                 </c:if>
-                <c:if test="${sessionScope.role!=null}">
-                <a href="${pageContext.request.contextPath}/admin_page.jsp ?command=${CommandType.SHOW_ADMIN_PAGE}" class="login_btn">Account</a>
+                <c:if test="${sessionScope.signInUser!=null}">
+                    <a href="${pageContext.request.contextPath}/admin_page ?command=${CommandType.SHOW_ADMIN_PAGE}"
+                       class="login_btn">Account</a>
                 </c:if>
 
             </nav>
@@ -46,128 +49,6 @@
     </section>
 </section>
 <!--  end hero section  -->
-
-
-<section class="listings">
-    <div class="wrapper">
-        <ul class="properties_list">
-            <li>
-                <a href="#">
-                    <img src="static/img/property_1.jpg" alt="" title=""
-                         class="property_img"/>
-                </a>
-                <span class="price">$2500</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="static/img/property_2.jpg" alt="" title=""
-                         class="property_img"/>
-                </a>
-                <span class="price">$1000</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="static/img/property_3.jpg" alt="" title=""
-                         class="property_img"/>
-                </a>
-                <span class="price">$500</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/static/img/property_1.jpg" alt="" title="" class="property_img"/>
-                </a>
-                <span class="price">$2500</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/static/img/property_2.jpg" alt="" title="" class="property_img"/>
-                </a>
-                <span class="price">$1000</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/static/img/property_3.jpg" alt="" title="" class="property_img"/>
-                </a>
-                <span class="price">$500</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/static/img/property_1.jpg" alt="" title="" class="property_img"/>
-                </a>
-                <span class="price">$2500</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/static/img/property_2.jpg" alt="" title="" class="property_img"/>
-                </a>
-                <span class="price">$1000</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="/static/img/property_3.jpg" alt="" title="" class="property_img"/>
-                </a>
-                <span class="price">$500</span>
-                <div class="property_details">
-                    <h1>
-                        <a href="#">Fuisque dictum tortor at purus libero</a>
-                    </h1>
-                    <h2>2 kitchens, 2 bed, 2 bath... <span class="property_size">(288ftsq)</span></h2>
-                </div>
-            </li>
-        </ul>
-        <div class="more_listing">
-            <a href="#" class="more_listing_btn">View More Listings</a>
-        </div>
-    </div>
-</section>    <!--  end listing section  -->
 
 <footer>
     <div class="wrapper footer">

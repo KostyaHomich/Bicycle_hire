@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="epam.project.command.CommandType" %>
 <html>
 <head>
     <title>Users</title>
@@ -36,7 +37,6 @@
                     <th class="column-title">Last name</th>
                     <th class="column-title">Status</th>
                     <th class="column-title">Balance</th>
-                    <th class="column-title no-link last"><span class="nobr">Action</span></th>
                     <th class="column-title"></th>
 
                     <th class="bulk-actions" colspan="7">
@@ -56,10 +56,12 @@
                         <td class=" ">${user.getStatus()}</td>
                         <td class=" ">${user.getBalance()}</td>
                         <td>
-                            <button type="button"><img style="height: 20px; width: 20px" src="${pageContext.request.contextPath}/static/img/edit.jpg"></button>
-                            <button type="button"><img style="height: 20px; width: 20px" src="${pageContext.request.contextPath}/static/img/delete.jpg"></button>
+                            <form action="${pageContext.request.contextPath}/user_details" method="post">
+                                <input type="hidden" name="userId" value="${user.getId()}">
+                                <input type="hidden" name="command" value="${CommandType.SHOW_USER_DETAILS}">
+                                <input type="image" style="width: 20px;height: 20px" src="${pageContext.request.contextPath}/static/img/edit.jpg">
+                            </form>
                         </td>
-                        <td class=" last"><a href="#">View</a>
                     </tr>
                 </c:forEach>
                 </tbody>

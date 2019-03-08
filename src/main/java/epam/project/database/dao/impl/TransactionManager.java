@@ -14,22 +14,18 @@ import java.sql.SQLException;
 public final class TransactionManager {
     private Connection proxyConnection;
 
-    public void begin(EntityDao dao, EntityDao... daos) throws DaoException, ConnectionPoolException {
-
-        ConnectionPool connectionPool = ConnectionPoolFactory.getInstance().getConnectionPool();
+    public void begin(EntityDao dao, EntityDao... daos) throws DaoException {
 
         try {
+            ConnectionPool connectionPool = ConnectionPoolFactory.getInstance().getConnectionPool();
             proxyConnection = connectionPool.getConnection();
             proxyConnection.setAutoCommit(false);
-            setConnectionWithReflection(daos, proxyConnection);
+            setConnectionWithReflection(dao, proxyConnection);
             for (EntityDao d : daos) {
                 setConnectionWithReflection(d, proxyConnection);
             }
-
-        } catch (ConnectionPoolException e) {
+        } catch (ConnectionPoolException | SQLException e) {
             throw new DaoException("Failed to get a connection from CP.", e);
-        } catch (SQLException e) {
-            throw new DaoException("Failed to set auto commit", e);
         }
     }
 
@@ -62,7 +58,7 @@ public final class TransactionManager {
             connectionField.set(dao, connection);
 
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new DaoException("Failed to set connection for transactional DAO. ", e);
+            throw new DaoException("Failed to set connections ", e);
         }
     }
 

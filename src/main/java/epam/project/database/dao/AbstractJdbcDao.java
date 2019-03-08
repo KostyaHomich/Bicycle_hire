@@ -2,11 +2,16 @@ package epam.project.database.dao;
 
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
+import epam.project.database.dao.impl.UserDaoImpl;
+import epam.project.service.impl.UserService;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.List;
 
 public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Number> implements EntityDao<T, PK> {
+
+    private static Logger LOGGER = Logger.getLogger(AbstractJdbcDao.class.getName());
 
     protected Connection connection;
 
@@ -28,8 +33,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     @Override
     @AutoConnection
     public T getByPK(PK key) throws DaoException, PersistException {
-        try (PreparedStatement preparedStatement =
-                     connection.prepareStatement(getSelectQuery() + " WHERE id = " + key)) {
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(getSelectQuery() + " WHERE id = " + key)) {
             return parseResultSet(preparedStatement.executeQuery()).get(0);
         } catch (SQLException e) {
             throw new DaoException("Failed to get by pk entity.",e);
@@ -41,7 +45,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     public List<T> getAll() throws DaoException {
         List<T> list;
         String sql = getSelectQuery();
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
         } catch (SQLException | PersistException e) {
@@ -53,7 +57,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     @Override
     @AutoConnection
     public T persist(T object) throws DaoException {
-        try (PreparedStatement insertStatement = connection.prepareStatement(getCreateQuery(), Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement insertStatement = this.connection.prepareStatement(getCreateQuery(), Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForInsert(insertStatement, object);
             insertStatement.execute();
             ResultSet generatedKeys = insertStatement.getGeneratedKeys();
@@ -73,19 +77,21 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     @AutoConnection
     public void update(T object) throws DaoException {
         String sql = getUpdateQuery();
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             prepareStatementForUpdate(statement, object);
             statement.execute();
+
         } catch (Exception e) {
             throw new DaoException("Cannot update entity.",e);
         }
+
     }
 
     @Override
     @AutoConnection
     public void delete(T object) throws DaoException {
         String sql = getDeleteQuery();
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setObject(1, object.getId());
             statement.execute();
 

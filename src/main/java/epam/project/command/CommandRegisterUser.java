@@ -3,19 +3,24 @@ package epam.project.command;
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
 import epam.project.service.HashGenerator;
+import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.builder.UserBuilder;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
+import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
 import epam.project.validation.ValidatorType;
 import epam.project.validation.impl.UserValidator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommandRegisterUser implements Command {
 
@@ -23,43 +28,52 @@ public class CommandRegisterUser implements Command {
 
     private static final String PASSWORD = "password";
     private static final String REPEAT_PASSWORD = "repeat_password";
-    private static final String LOGIN = "login";
-    private static final String EMAIL = "email";
-    private static final String FIST_NAME = "first_name";
-    private static final String LAST_NAME = "last_name";
+
 
     @Override
     public ResponseContent execute(HttpServletRequest request) {
-        ResponseContent responseContent = new ResponseContent();
-
         try {
-
+            ResponseContent responseContent = new ResponseContent();
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
-            UserValidator validator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);
-            HashGenerator hashGenerator = ServiceFactory.getInstance().getHashGenerator();
+            UserValidator userValidator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);
+
             UserBuilder userBuilder = new UserBuilder();
 
+            Map<String, String> parameters= RequestParameterParser.parseParameters(request);
+            ValidationResult validationResult = userValidator.doValidate(parameters);
 
-            String password = request.getParameter(PASSWORD);
-            String repeat_password = request.getParameter(REPEAT_PASSWORD);
-            String login = request.getParameter(LOGIN);
+            if (validationResult.getErrors().size() == 0) {
 
+                User user = userBuilder.build(parameters);
+                if (userService.checkLoginExistance(user.getLogin())) {
 
-            User user = userBuilder.build(request.getParameterMap());
-            user.setPassword(hashGenerator.encode(password + login));
-            user.setRegistrationDate(LocalDate.now().toString());
+                    String password = request.getParameter(PASSWORD);
+                    String repeat_password = request.getParameter(REPEAT_PASSWORD);
+                    user.setRegistrationDate(LocalDate.now().toString());
 
-            LOGGER.info("User was register.");
-            userService.register(user);
-            responseContent.setRouter(new Router(CommandType.SHOW_MAIN_PAGE, Router.Type.REDIRECT));
+                    if (password.equals(repeat_password)) {
+                        userService.register(user);
+                        Router router = new Router("/WEB-INF/jsp/main.jsp", Router.Type.FORWARD);
+                        responseContent.setRouter(router);
+                        return responseContent;
 
-
-            return responseContent;
-        } catch (ServiceException | NullPointerException e) {
-            LOGGER.info("Fail");
-            request.setAttribute("error_message", "All fields except e-mail must " +
-                    "contain only letters, digits and underscore, e-mail must be valid and unique.");
-            responseContent.setRouter(new Router(CommandType.SHOW_REGISTRATION_PAGE, Router.Type.FORWARD));
+                    } else {
+                        throw new ServiceException("Passwords are not equals");
+                    }
+                }
+                else {
+                    throw new ServiceException("User with this login already exist");
+                }
+            } else {
+                Router router = new Router("/WEB-INF/jsp/registration.jsp", Router.Type.FORWARD);
+                request.setAttribute("errorsList", validationResult);
+                responseContent.setRouter(router);
+                return responseContent;
+            }
+        } catch (ServiceException e) {
+            request.setAttribute("error", e.getMessage());
+            ResponseContent responseContent = new ResponseContent();
+            responseContent.setRouter(new Router("/WEB-INF/jsp/registration.jsp", Router.Type.FORWARD));
             return responseContent;
         }
     }

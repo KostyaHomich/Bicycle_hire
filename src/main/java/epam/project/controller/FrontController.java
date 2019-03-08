@@ -39,6 +39,8 @@ public class FrontController  extends HttpServlet {
         if (responseContent.getRouter().getType().equals("redirect")) {
             response.sendRedirect(responseContent.getRouter().getRoute());
         } else {
+//            request.setAttribute("viewName", responseContent.getRouter().getRoute());
+//            request.getRequestDispatcher("/jsp/layout.jsp").forward(request, response);
             request.getRequestDispatcher(responseContent.getRouter().getRoute()).forward(request, response);
         }
     }

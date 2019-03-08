@@ -4,6 +4,7 @@ import epam.project.database.dao.Identified;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 public class User implements Identified<Integer> {
@@ -24,7 +25,6 @@ public class User implements Identified<Integer> {
         this.role="user";
         this.balance=new BigDecimal(0);
         this.status="not conformed";
-
     }
 
     @Override

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
 
@@ -11,6 +12,15 @@
 
 <div class="container">
 <section id="content">
+	<c:out value="${error}"/>
+
+	<c:if test="${ not empty errorsList}">
+		<c:forEach var="entry" items="${errorsList.getErrors()}">
+			<c:if test="${entry.value.size() >0}">
+				Error:<c:out value="${entry.value}"/>
+			</c:if>
+		</c:forEach>
+	</c:if>
 		<form action="${pageContext.request.contextPath}/registration" method="post">
 			<h1>Registration Form</h1>
 			<div>
