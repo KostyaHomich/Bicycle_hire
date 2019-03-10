@@ -41,7 +41,7 @@ public class CommandLogIn implements Command {
 
                     User signInUser = userService.signIn(user.getLogin(), user.getPassword());
 
-                    Router router = new Router("/WEB-INF/jsp/admin_page.jsp", Router.Type.FORWARD);
+                    Router router = new Router(PageConst.ADMIN_PAGE_PATH, Router.Type.FORWARD);
 
                     request.getSession().setAttribute(USER, signInUser);
 
@@ -49,7 +49,7 @@ public class CommandLogIn implements Command {
                     return responseContent;
 
             } else {
-                Router router = new Router("/WEB-INF/jsp/login.jsp", Router.Type.FORWARD);
+                Router router = new Router(PageConst.LOGIN_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);
                 responseContent.setRouter(router);
                 return responseContent;
@@ -58,7 +58,7 @@ public class CommandLogIn implements Command {
 
             request.setAttribute("error", e.getMessage());
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router("/WEB-INF/jsp/login.jsp", Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.LOGIN_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         }
 

@@ -41,10 +41,10 @@ public class CommandRecoveryPassword implements Command {
             takeUser.setPassword(hashGenerator.encode(newPassword));
             userService.update(takeUser);
 
-            responseContent.setRouter(new Router(CommandType.SHOW_MAIN_PAGE, Router.Type.REDIRECT));
+            responseContent.setRouter(new Router(PageConst.MAIN_PAGE_PATH, Router.Type.REDIRECT));
             return responseContent;
         } catch (ServiceException e) {
-            responseContent.setRouter(new Router(CommandType.SHOW_RECOVERY_PAGE, Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.PASSWORD_RECOVERY_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         }
     }

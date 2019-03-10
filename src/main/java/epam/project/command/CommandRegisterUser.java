@@ -2,7 +2,6 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
-import epam.project.service.HashGenerator;
 import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
@@ -16,10 +15,8 @@ import epam.project.validation.impl.UserValidator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 public class CommandRegisterUser implements Command {
@@ -45,7 +42,7 @@ public class CommandRegisterUser implements Command {
             if (validationResult.getErrors().size() == 0) {
 
                 User user = userBuilder.build(parameters);
-                if (userService.checkLoginExistance(user.getLogin())) {
+                if (!userService.checkLoginExistance(user.getLogin())) {
 
                     String password = request.getParameter(PASSWORD);
                     String repeat_password = request.getParameter(REPEAT_PASSWORD);
@@ -53,7 +50,7 @@ public class CommandRegisterUser implements Command {
 
                     if (password.equals(repeat_password)) {
                         userService.register(user);
-                        Router router = new Router("/WEB-INF/jsp/main.jsp", Router.Type.FORWARD);
+                        Router router = new Router(PageConst.MAIN_PAGE_PATH, Router.Type.REDIRECT);
                         responseContent.setRouter(router);
                         return responseContent;
 
@@ -65,7 +62,7 @@ public class CommandRegisterUser implements Command {
                     throw new ServiceException("User with this login already exist");
                 }
             } else {
-                Router router = new Router("/WEB-INF/jsp/registration.jsp", Router.Type.FORWARD);
+                Router router = new Router(PageConst.REGISTRATION_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);
                 responseContent.setRouter(router);
                 return responseContent;
@@ -73,7 +70,7 @@ public class CommandRegisterUser implements Command {
         } catch (ServiceException e) {
             request.setAttribute("error", e.getMessage());
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router("/WEB-INF/jsp/registration.jsp", Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.REGISTRATION_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         }
     }

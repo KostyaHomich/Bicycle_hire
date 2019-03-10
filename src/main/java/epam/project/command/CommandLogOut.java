@@ -12,7 +12,7 @@ public class CommandLogOut implements Command {
             ResponseContent responseContent = new ResponseContent();
             HttpSession session = request.getSession();
             session.invalidate();
-            Router router = new Router("/WEB-INF/jsp/main.jsp", Router.Type.FORWARD);
+            Router router = new Router(PageConst.MAIN_PAGE_PATH, Router.Type.FORWARD);
             responseContent.setRouter(router);
             return responseContent;
 

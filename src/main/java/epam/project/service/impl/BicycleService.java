@@ -1,13 +1,15 @@
 package epam.project.service.impl;
 
-import epam.project.database.dao.DaoFactoryType;
+import epam.project.database.dao.BicycleDao;
 import epam.project.database.dao.EntityDao;
-import epam.project.database.dao.FactoryProducer;
+import epam.project.database.dao.TransactionalDaoFactory;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
-import epam.project.database.dao.impl.BicycleDao;
+import epam.project.database.dao.impl.BicycleDaoImpl;
 import epam.project.database.dao.impl.JdbcDaoFactory;
+import epam.project.database.dao.impl.TransactionManager;
+import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
 import epam.project.entity.User;
 import epam.project.service.Service;
@@ -27,8 +29,8 @@ public class BicycleService implements Service {
     public List<Bicycle> takeAll() throws ServiceException {
 
         try {
-            EntityDao<Bicycle,Integer> bicycleDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(Bicycle.class);
-            return  bicycleDao.getAll();
+            EntityDao<Bicycle, Integer> bicycleDao = JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return bicycleDao.getAll();
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all bicycles", e);
         }
@@ -36,19 +38,25 @@ public class BicycleService implements Service {
 
     public boolean add(Bicycle bicycle) throws ServiceException {
         try {
-            BicycleDao bicycleDao = (BicycleDao) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(Bicycle.class).getAll();
-            bicycleDao.persist(bicycle);
-        } catch (DaoException e) {
-            throw new ServiceException("Failed to register user", e);
-        }
-        return true;//user was registered
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            TransactionManager transactionManager = new TransactionManager();
 
+            transactionManager.begin(bicycleDao);
+            bicycleDao.persist(bicycle);
+            bicycleDao.addPointHireBicycle(bicycle);
+            transactionManager.end();
+            transactionManager.commit();
+
+            return true;
+        } catch (DaoException | SQLException e) {
+            throw new ServiceException("Failed to login user", e);
+        }
     }
 
     public boolean delete(Bicycle bicycle) throws ServiceException {
 
         try {
-            BicycleDao bicycleDao = (BicycleDao) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(Bicycle.class).getAll();
+            EntityDao<Bicycle, Integer> bicycleDao = JdbcDaoFactory.getInstance().getDao(Bicycle.class);
             bicycleDao.delete(bicycle);
         } catch (DaoException e) {
             throw new ServiceException("Failed to delete user", e);
@@ -58,7 +66,7 @@ public class BicycleService implements Service {
 
     public boolean update(Bicycle bicycle) throws ServiceException {
         try {
-            BicycleDao bicycleDao = (BicycleDao) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(Bicycle.class).getAll();
+            EntityDao<Bicycle, Integer> bicycleDao = JdbcDaoFactory.getInstance().getDao(Bicycle.class);
             bicycleDao.update(bicycle);
         } catch (DaoException e) {
             throw new ServiceException("Failed to delete user", e);
@@ -68,8 +76,11 @@ public class BicycleService implements Service {
 
     public Bicycle getById(int id) throws ServiceException {
         try {
-            BicycleDao bicycleDao = (BicycleDao) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(Bicycle.class).getAll();
-            return bicycleDao.getByPK(id);
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            PointHireBicycle pointHireBicycle = bicycleDao.getByBicyclePkPointHireBicycle(id);
+            Bicycle bicycle = bicycleDao.getByPK(id);
+            bicycle.setPoint_hire_id(pointHireBicycle.getId_point_hire());
+            return bicycle;
         } catch (PersistException | DaoException e) {
             throw new ServiceException("Failed to login user", e);
         }

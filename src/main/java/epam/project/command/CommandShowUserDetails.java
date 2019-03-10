@@ -18,13 +18,13 @@ public class CommandShowUserDetails implements Command {
             User user=userService.getById(Integer.valueOf(request.getParameter("userId")));
             request.setAttribute("user", user);
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router("/WEB-INF/jsp/user_details.jsp",Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.USER_DETAILS_PAGE_PATH,Router.Type.FORWARD));
             return responseContent;
 
         }
         catch (ServiceException e) {
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router("/WEB-INF/jsp/user_list.jsp",Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.USER_LIST_PAGE_PATH,Router.Type.FORWARD));
             return responseContent;
         }
 

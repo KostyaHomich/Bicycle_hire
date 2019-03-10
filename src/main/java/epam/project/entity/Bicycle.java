@@ -16,9 +16,12 @@ public class Bicycle implements Identified<Integer> {
     private String status;
 
     private String description;
+    private int point_hire_id;
 
     public Bicycle(){
         this.status="available";
+        this.point_hire_id=0;
+
     }
 
     @Override

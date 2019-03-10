@@ -1,9 +1,6 @@
 package epam.project.command;
 
-import epam.project.command.CommandType;
 import epam.project.dto.ResponseContent;
-import epam.project.command.Command;
-import epam.project.command.Router;
 import epam.project.entity.Order;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;

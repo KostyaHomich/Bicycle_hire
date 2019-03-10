@@ -43,12 +43,13 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
                     .anyMatch(m -> m.equals(method.getName()))) {
 
                 ConnectionPool connectionPool = ConnectionPoolFactory.getInstance().getConnectionPool();
-                try (Connection connection = connectionPool.getConnection()) {
+                Connection connection = connectionPool.getConnection();
 
-                    TransactionManager.setConnectionWithReflection(dao, connection);
+                TransactionManager.setConnectionWithReflection(dao, connection);
 
-                    result = method.invoke(dao, args);
-                }
+                result = method.invoke(dao, args);
+
+                connectionPool.releaseConnection(connection);
                 TransactionManager.setConnectionWithReflection(dao, null);
 
             } else {
@@ -61,7 +62,7 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
     }
 
     private JdbcDaoFactory() {
-        creators.put(Bicycle.class, BicycleDao::new);
+        creators.put(Bicycle.class, BicycleDaoImpl::new);
         creators.put(PointHire.class, PointHireDao::new);
         creators.put(Order.class, OrderDao::new);
         creators.put(User.class, UserDaoImpl::new);
@@ -97,7 +98,7 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
     public <T extends Identified<PK>, PK extends Serializable> EntityDao<T, PK> getTransactionalDao(Class<T> entityClass) throws DaoException {
         Supplier<EntityDao> daoCreator = creators.get(entityClass);
         if (daoCreator == null) {
-            throw new DaoException("Entity Class cannot be find");
+            throw new DaoException("Entity class cannot be find");
         }
 
         return daoCreator.get();

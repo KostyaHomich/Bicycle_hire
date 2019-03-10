@@ -34,10 +34,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
     private Properties properties;
     private String url;
-    private String host;
-    private int poolCapacity;
-    private String port;
-    private String dbName;
     private Semaphore semaphore;
     private static Lock lock = new ReentrantLock();
 
@@ -45,7 +41,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
     private static ConnectionPool instance;
 
-    private ConnectionPoolImpl(){
+    private ConnectionPoolImpl() {
     }
 
     public static ConnectionPool getInstance() throws ConnectionPoolException {
@@ -66,12 +62,12 @@ public class ConnectionPoolImpl implements ConnectionPool {
     public void init() throws ConnectionPoolException {
 
         properties = new Properties();
-        try (InputStream inputStream  = ConnectionPoolImpl.class.getClassLoader().getResourceAsStream(DB_PROPERTIES_NAME)) {
+        try (InputStream inputStream = ConnectionPoolImpl.class.getClassLoader().getResourceAsStream(DB_PROPERTIES_NAME)) {
             properties.load(inputStream);
 
-            host = properties.getProperty(DB_HOST);
-            port = properties.getProperty(DB_PORT);
-            dbName = properties.getProperty(DB_NAME);
+            String host = properties.getProperty(DB_HOST);
+            String port = properties.getProperty(DB_PORT);
+            String dbName = properties.getProperty(DB_NAME);
 
             this.url = "jdbc:mysql://" + host + ":" + port + "/" + dbName +
                     "?verifyServerCertificate=false" +
@@ -83,38 +79,36 @@ public class ConnectionPoolImpl implements ConnectionPool {
                     "&allowPublicKeyRetrieval=true";
 
 
-            poolCapacity = Integer.parseInt(properties.getProperty(POOL_CAPACITY));
+            int poolCapacity = Integer.parseInt(properties.getProperty(POOL_CAPACITY));
             Class.forName(properties.getProperty(DRIVER_CLASS));
             semaphore = new Semaphore(poolCapacity);
             connections = new LinkedBlockingDeque<>();
             for (int i = 0; i < poolCapacity; i++) {
-               createConnection();
+                createConnection();
             }
 
-        } catch (IOException |SQLException| ClassNotFoundException e ) {
-            throw new ConnectionPoolException("Initialize error.", e);
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            throw new ConnectionPoolException("Initialize error", e);
         }
     }
 
     @Override
     public Connection getConnection() throws ConnectionPoolException {
-        Connection connection ;
+
         try {
             semaphore.acquire();
-            if (connections.isEmpty()) {
-                createConnection();
-            }
-            connection = connections.take();
 
-        } catch (InterruptedException | SQLException e) {
-            throw new ConnectionPoolException("Error taking the connection.", e);
+            return connections.take();
+
+        } catch (InterruptedException e) {
+            throw new ConnectionPoolException("Error taking the connection", e);
         }
-        return connection;
+
     }
 
     @Override
     public void releaseConnection(Connection connection) {
-        connections.push(connection);
+        connections.add(connection);
         semaphore.release();
     }
 
@@ -126,14 +120,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
             }
         } catch (SQLException e) {
             throw new ConnectionPoolException(e);
-        }
-    }
-
-    private void initDriver(String driverClass) {
-        try {
-            Class.forName(driverClass);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("Driver cannot be found", e);
         }
     }
 

@@ -74,7 +74,7 @@ public class PointHireService implements Service {
         try {
             EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
             return pointHireDao.getByPK(id);
-        } catch ( DaoException | SQLException | PersistException e) {
+        } catch ( DaoException  | PersistException e) {
             throw new ServiceException("Failed to delete point hire", e);
         }
     }

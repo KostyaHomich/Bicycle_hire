@@ -1,8 +1,5 @@
 package epam.project.service.impl;
 
-import epam.project.database.dao.DaoFactoryType;
-import epam.project.database.dao.EntityDao;
-import epam.project.database.dao.FactoryProducer;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
@@ -12,8 +9,6 @@ import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 
 import org.apache.log4j.Logger;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserService implements Service {
@@ -79,7 +74,7 @@ public class UserService implements Service {
         try {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
             return userDao.getByPK(id);
-        } catch (DaoException | SQLException | PersistException e) {
+        } catch (DaoException  | PersistException e) {
             throw new ServiceException("Failed to delete user", e);
         }
     }
@@ -87,11 +82,14 @@ public class UserService implements Service {
     public boolean update(User user) throws ServiceException {
         try {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
+            user.setPassword(userDao.getByLogin(user.getLogin()).getPassword());
+            user.setRegistrationDate(userDao.getByLogin(user.getLogin()).getRegistrationDate());
             userDao.update(user);
-        } catch (DaoException e) {
+            return true;
+        } catch (DaoException | PersistException e) {
             throw new ServiceException("Failed to update user", e);
         }
-        return true;
+
     }
 
     public User takeUser(String login) throws ServiceException {
@@ -118,7 +116,6 @@ public class UserService implements Service {
 
     public boolean checkLoginExistance(String login) throws ServiceException {
         try {
-
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
             return userDao.checkLoginExistance(login);
 

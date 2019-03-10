@@ -3,6 +3,7 @@ package epam.project.controller;
 import epam.project.command.Command;
 import epam.project.command.CommandProvider;
 import epam.project.dto.ResponseContent;
+import epam.project.service.exception.ServiceException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -16,9 +17,9 @@ import java.io.IOException;
 
 
 @WebServlet(name = "index", urlPatterns = "/")
-public class FrontController  extends HttpServlet {
+public class FrontController extends HttpServlet {
 
-    private static final Logger LOGGER=LogManager.getLogger(FrontController.class);
+    private static final Logger LOGGER = LogManager.getLogger(FrontController.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,15 +33,15 @@ public class FrontController  extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandParameter = request.getParameter("command");
-        LOGGER.info("command = "+commandParameter);
         Command command = CommandProvider.getInstance().takeCommand(commandParameter);
 
-        ResponseContent responseContent = command.execute(request);
+        ResponseContent responseContent;
+
+        responseContent = command.execute(request);
+
         if (responseContent.getRouter().getType().equals("redirect")) {
             response.sendRedirect(responseContent.getRouter().getRoute());
         } else {
-//            request.setAttribute("viewName", responseContent.getRouter().getRoute());
-//            request.getRequestDispatcher("/jsp/layout.jsp").forward(request, response);
             request.getRequestDispatcher(responseContent.getRouter().getRoute()).forward(request, response);
         }
     }

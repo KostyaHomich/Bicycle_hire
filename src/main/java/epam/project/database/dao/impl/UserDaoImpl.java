@@ -24,7 +24,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
             "insert into user values (NULL ,?,?,?, ?,?,?, ?,?,?);";
     private static final String UPDATE_QUERY =
             "update user set login=?,password=?,first_name=?,last_name=?,status=?,registration_Date=?,balance=?,email=?,id_Role=? where " +
-                    "id=?";
+                    "id=?;";
     private static final String DELETE_QUERY = "DELETE FROM user WHERE id=?;";
     private static final String SELECT_QUERY = "SELECT * FROM user";
 
@@ -47,75 +47,65 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
                 user.setRegistrationDate(rs.getString("registration_Date"));
                 user.setBalance(rs.getBigDecimal("balance"));
                 user.setEmail(rs.getString("email"));
-                int role=rs.getInt("id_Role");
+                int role = rs.getInt("id_Role");
                 user.setRole(Role.values()[--role].toString().toLowerCase());
 
 
                 result.add(user);
             }
         } catch (Exception e) {
-            throw new PersistException("Failed to create entity.",e);
+            throw new PersistException("Failed to create entity.", e);
         }
         return result;
     }
+
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, User object) throws SQLException {
 
-        int counter=1;
-        Date date = new java.sql.Date(System.currentTimeMillis());
-        Timestamp timestamp = new Timestamp(date.getTime());
-
-        statement.setString(counter,object.getLogin());
-        statement.setString(++counter,object.getPassword());
-        statement.setString(++counter,object.getFirstName());
-        statement.setString(++counter,object.getLastName());
-        statement.setString(++counter,object.getStatus());
-        statement.setTimestamp(++counter,timestamp);
-        statement.setBigDecimal(++counter,object.getBalance());
-        statement.setString(++counter,object.getEmail());
-
-        int role=Role.valueOf(object.getRole().toUpperCase()).ordinal();
-        role++;
-
-        statement.setInt(++counter,role);
-
+        setDefaultUserData(statement, object, 0);
     }
+
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, User object) throws SQLException {
 
-        int counter=1;
-        statement.setString(counter,object.getLogin());
-        statement.setString(++counter,object.getPassword());
-        statement.setString(++counter,object.getFirstName());
-        statement.setString(++counter,object.getLastName());
-        statement.setString(++counter,object.getStatus());
-        statement.setString(++counter,object.getRegistrationDate());
-        statement.setBigDecimal(++counter,object.getBalance());
-        statement.setString(++counter,object.getEmail());
-
-        int role=Role.valueOf(object.getRole().toUpperCase()).ordinal();
-        role++;
-
-        statement.setInt(++counter,role);
-        statement.setInt(++counter,object.getId());
-
-
+        int counter = 0;
+        counter=setDefaultUserData(statement, object, counter);
+        statement.setInt(++counter, object.getId());
     }
 
+    private int setDefaultUserData(PreparedStatement statement, User object, int counter) throws SQLException {
+
+        statement.setString(++counter, object.getLogin());
+        statement.setString(++counter, object.getPassword());
+        statement.setString(++counter, object.getFirstName());
+        statement.setString(++counter, object.getLastName());
+        statement.setString(++counter, object.getStatus());
+        statement.setString(++counter, object.getRegistrationDate());
+        statement.setBigDecimal(++counter, object.getBalance());
+        statement.setString(++counter, object.getEmail());
+        int role = Role.valueOf(object.getRole().toUpperCase()).ordinal();
+        role++;
+        statement.setInt(++counter, role);
+        return counter;
+
+    }
 
 
     @Override
     public String getSelectQuery() {
         return SELECT_QUERY;
     }
+
     @Override
     public String getCreateQuery() {
         return CREATE_QUERY;
     }
+
     @Override
     public String getUpdateQuery() {
         return UPDATE_QUERY;
     }
+
     @Override
     public String getDeleteQuery() {
         return DELETE_QUERY;
@@ -128,13 +118,13 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
         User user;
         ResultSet rs;
 
-        try(PreparedStatement statement = connection.prepareStatement(GET_BY_LOGIN)) {
+        try (PreparedStatement statement = connection.prepareStatement(GET_BY_LOGIN)) {
 
             statement.setString(1, login);
             rs = statement.executeQuery();
 
-            if(rs.next()) {
-                user=new User();
+            if (rs.next()) {
+                user = new User();
                 user.setId(rs.getInt("id"));
                 user.setLogin(rs.getString("login"));
                 user.setPassword(rs.getString("password"));
@@ -144,15 +134,13 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
                 user.setRegistrationDate(rs.getString("registration_Date"));
                 user.setBalance(rs.getBigDecimal("balance"));
                 user.setEmail(rs.getString("email"));
-                int role=rs.getInt("id_Role");
+                int role = rs.getInt("id_Role");
                 user.setRole(Role.values()[--role].toString().toLowerCase());
-            }
-            else{
+            } else {
                 throw new DaoException("This user doesn't exist");
             }
-        }
-        catch (SQLException e) {
-            throw new PersistException("Failed to get entity.",e);
+        } catch (SQLException e) {
+            throw new PersistException("Failed to get entity.", e);
         }
 
         return user;
@@ -162,52 +150,40 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
     @Override
     public boolean contains(User user) throws PersistException {
 
-        try(  PreparedStatement statement= connection.prepareStatement(CHECK_IF_CONTAINS_BY_LOGIN)) {
+        try (PreparedStatement statement = connection.prepareStatement(CHECK_IF_CONTAINS_BY_LOGIN)) {
 
             statement.setString(1, user.getLogin());
 
-            ResultSet rs  = statement.executeQuery();
-            if (!rs.next()) {
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-        catch (SQLException e) {
-            throw new PersistException("Failed to get entity.",e);
+            ResultSet rs = statement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new PersistException("Failed to get entity.", e);
         }
 
     }
 
     @AutoConnection
     @Override
-    public boolean checkLoginExistance(String login) throws DaoException, PersistException {
+    public boolean checkLoginExistance(String login) throws PersistException {
 
-        try(PreparedStatement statement= connection.prepareStatement(CHECK_IF_CONTAINS_BY_LOGIN)) {
-            statement.setString(1, login);
-            ResultSet rs  = statement.executeQuery();
-            return rs.next();
-        }
-        catch (SQLException e) {
-            throw new PersistException("Failed to get entity.",e);
-        }
+        return checkExistance(login, CHECK_IF_CONTAINS_BY_LOGIN);
     }
 
     @AutoConnection
     @Override
-    public boolean checkEmailExistance(String email) throws DaoException, PersistException {
+    public boolean checkEmailExistance(String email) throws PersistException {
 
-        try(PreparedStatement statement= connection.prepareStatement(CHECK_IF_CONTAINS_BY_EMAIL)) {
-            statement.setString(1, email);
-            ResultSet rs  = statement.executeQuery();
+        return checkExistance(email, CHECK_IF_CONTAINS_BY_EMAIL);
+
+    }
+
+    private boolean checkExistance(String value, String checkIfContains) throws PersistException {
+        try (PreparedStatement statement = connection.prepareStatement(checkIfContains)) {
+            statement.setString(1, value);
+            ResultSet rs = statement.executeQuery();
             return rs.next();
-        }
-        catch (SQLException e) {
-            throw new PersistException("Failed to get entity.",e);
-        }
-        finally {
-
+        } catch (SQLException e) {
+            throw new PersistException("Failed to get entity.", e);
         }
     }
 }

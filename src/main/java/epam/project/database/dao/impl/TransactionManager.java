@@ -10,29 +10,44 @@ import epam.project.database.pool.ConnectionPool;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public final class TransactionManager {
     private Connection proxyConnection;
+    private List<EntityDao> daoList;
 
     public void begin(EntityDao dao, EntityDao... daos) throws DaoException {
-
         try {
             ConnectionPool connectionPool = ConnectionPoolFactory.getInstance().getConnectionPool();
             proxyConnection = connectionPool.getConnection();
-            proxyConnection.setAutoCommit(false);
             setConnectionWithReflection(dao, proxyConnection);
             for (EntityDao d : daos) {
                 setConnectionWithReflection(d, proxyConnection);
             }
-        } catch (ConnectionPoolException | SQLException e) {
+
+            daoList = new ArrayList<>(daos.length + 1);
+            daoList.addAll(Arrays.asList(daos));
+            daoList.add(dao);
+
+        } catch (ConnectionPoolException e) {
             throw new DaoException("Failed to get a connection from CP.", e);
         }
     }
 
-    public void end() throws SQLException {
-        proxyConnection.setAutoCommit(true);
-        proxyConnection.close();
-
+    public void end() throws DaoException {
+        try {
+            for (EntityDao d : daoList) {
+                setConnectionWithReflection(d, null);
+            }
+            ConnectionPool connectionPool = ConnectionPoolFactory.getInstance().getConnectionPool();
+            connectionPool.releaseConnection(proxyConnection);
+            proxyConnection = null;
+            daoList = null;
+        } catch (ConnectionPoolException e) {
+            e.printStackTrace();
+        }
     }
 
     public void commit() throws SQLException {
@@ -43,11 +58,11 @@ public final class TransactionManager {
         proxyConnection.rollback();
     }
 
-
     static void setConnectionWithReflection(Object dao, Connection connection) throws DaoException {
         if (!(dao instanceof AbstractJdbcDao)) {
-            throw new DaoException("DAO implementation does not extend AbstractJdbcDao.");
+            throw new DaoException("DAO implementation does not extends AbstractJdbcDao.");
         }
+
         try {
 
             Field connectionField = AbstractJdbcDao.class.getDeclaredField("connection");
@@ -58,8 +73,7 @@ public final class TransactionManager {
             connectionField.set(dao, connection);
 
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new DaoException("Failed to set connections ", e);
+            throw new DaoException("Failed to set connection for transactional DAO. ", e);
         }
     }
-
 }

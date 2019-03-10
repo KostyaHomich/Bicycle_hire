@@ -13,7 +13,7 @@ public interface EntityDao<T extends Identified<PK>, PK extends Serializable> {
 
     T persist(T object) throws DaoException;
 
-    T getByPK(PK key) throws DaoException, SQLException, PersistException;
+    T getByPK(PK key) throws DaoException, PersistException;
 
     void update(T object) throws DaoException;
 
