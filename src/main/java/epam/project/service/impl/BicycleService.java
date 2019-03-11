@@ -2,16 +2,12 @@ package epam.project.service.impl;
 
 import epam.project.database.dao.BicycleDao;
 import epam.project.database.dao.EntityDao;
-import epam.project.database.dao.TransactionalDaoFactory;
-import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
-import epam.project.database.dao.impl.BicycleDaoImpl;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.TransactionManager;
 import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
-import epam.project.entity.User;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
@@ -36,6 +32,15 @@ public class BicycleService implements Service {
         }
     }
 
+    public List<Bicycle> takeAllBicycleByPointHirePk(int id) throws ServiceException {
+        try {
+           BicycleDao bicycleDao = (BicycleDao)JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return bicycleDao.getAllBicycleByPointHirePk(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get all bicycles by pk", e);
+        }
+    }
+
     public boolean add(Bicycle bicycle) throws ServiceException {
         try {
             BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
@@ -49,7 +54,7 @@ public class BicycleService implements Service {
 
             return true;
         } catch (DaoException | SQLException e) {
-            throw new ServiceException("Failed to login user", e);
+            throw new ServiceException("Failed to login bicycle", e);
         }
     }
 
@@ -59,7 +64,7 @@ public class BicycleService implements Service {
             EntityDao<Bicycle, Integer> bicycleDao = JdbcDaoFactory.getInstance().getDao(Bicycle.class);
             bicycleDao.delete(bicycle);
         } catch (DaoException e) {
-            throw new ServiceException("Failed to delete user", e);
+            throw new ServiceException("Failed to delete bicycle", e);
         }
         return true;
     }
@@ -69,11 +74,21 @@ public class BicycleService implements Service {
             EntityDao<Bicycle, Integer> bicycleDao = JdbcDaoFactory.getInstance().getDao(Bicycle.class);
             bicycleDao.update(bicycle);
         } catch (DaoException e) {
-            throw new ServiceException("Failed to delete user", e);
+            throw new ServiceException("Failed to delete bicycle", e);
         }
         return true;
     }
+    public boolean contains(int id) throws ServiceException {
 
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return bicycleDao.containsBicycle(id);
+
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to check contains bicycle", e);
+        }
+
+    }
     public Bicycle getById(int id) throws ServiceException {
         try {
             BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
@@ -82,7 +97,7 @@ public class BicycleService implements Service {
             bicycle.setPoint_hire_id(pointHireBicycle.getId_point_hire());
             return bicycle;
         } catch (PersistException | DaoException e) {
-            throw new ServiceException("Failed to login user", e);
+            throw new ServiceException("Failed to login bicycle", e);
         }
 
     }

@@ -2,13 +2,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
 
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Paper Stack</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
-</head>
-<body>
 
 <div class="container">
     <section id="content">
@@ -34,9 +27,6 @@
             <div>
                 <input type="text" value="${bicycle.getStatus()}" placeholder="Status" id="status" name="status"/>
             </div>
-            <div>
-                <input type="text" value="${bicycle.getPoint_hire_id()}" placeholder="Point hire id" id="point_hire_id" name="point_hire_id"/>
-            </div>
 
             <div>
                 <input type="text" value="${bicycle.getDescription()}" placeholder="Description" id="description" name="description"/>
@@ -55,17 +45,14 @@
             </div>
 
         </form>
-        <form action="${pageContext.request.contextPath}/registration" method="post">
+        <form action="${pageContext.request.contextPath}/bicycle_details" method="post">
             <div>
                 <input type="submit" value="Back">
-                <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLES_PAGE}">
+                <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
             </div>
         </form>
         <!-- form -->
     </section>
     <!-- content -->
 </div>
-<!-- container -->
-</body>
-</html>
 

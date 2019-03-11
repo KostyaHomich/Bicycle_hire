@@ -1,7 +1,6 @@
 package epam.project.validation.impl;
 
 
-import epam.project.entity.Bicycle;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.Validator;
 import org.apache.log4j.LogManager;
@@ -17,6 +16,7 @@ public class BicycleValidator implements Validator {
     private static final String NAME = "name";
     private static final String STATUS = "status";
     private static final String DESCRIPTION = "description";
+
 
     private static final Logger LOGGER = LogManager.getLogger(UserValidator.class);
 
@@ -69,7 +69,7 @@ public class BicycleValidator implements Validator {
             errors.add("Daily rental price are not valid");
         }
         if (errors.size() > 0) {
-            validationResult.add("login", errors);
+            validationResult.add("daily_rental_price", errors);
         }
     }
 
@@ -118,5 +118,6 @@ public class BicycleValidator implements Validator {
             validationResult.add("password", errors);
         }
     }
+
 
 }

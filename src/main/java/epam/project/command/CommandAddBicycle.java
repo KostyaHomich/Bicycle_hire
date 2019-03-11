@@ -35,14 +35,12 @@ public class CommandAddBicycle implements Command {
                 Bicycle bicycle = bicycleBuilder.build(parameters);
 
                 bicycleService.add(bicycle);
-
-
-                Router router = new Router(PageConst.BICYCLE_LIST_PAGE_PATH, Router.Type.FORWARD);
+                Router router = new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD);
                 responseContent.setRouter(router);
                 return responseContent;
 
             } else {
-                Router router = new Router(PageConst.BICYCLE_DETAILS_PAGE_PATH, Router.Type.FORWARD);
+                Router router = new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);
                 responseContent.setRouter(router);
                 return responseContent;
@@ -50,7 +48,7 @@ public class CommandAddBicycle implements Command {
         } catch (ServiceException e) {
             request.setAttribute("error", e.getMessage());
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.BICYCLE_DETAILS_PAGE_PATH, Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         }
 

@@ -2,14 +2,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
 
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Paper Stack</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
-</head>
-<body>
-
 <div class="container">
     <section id="content">
 
@@ -48,17 +40,13 @@
             </div>
 
         </form>
-        <form action="${pageContext.request.contextPath}/registration" method="post">
+        <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
             <div>
                 <input type="submit" value="Back">
-                <input type="hidden" name="command" value="${CommandType.SHOW_POINT_HIRE_PAGE}">
+                <input type="hidden" name="command" value="${CommandType.SHOW_POINT_HIRE_LIST}">
             </div>
         </form>
         <!-- form -->
     </section>
     <!-- content -->
 </div>
-<!-- container -->
-</body>
-</html>
-

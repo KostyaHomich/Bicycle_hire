@@ -30,19 +30,19 @@ public class CommandUpdateBicycle implements Command {
 
             if (validationResult.getErrors().size() == 0) {
                 bicycleService.update(bicycleBuilder.build(parameters));
-                Router router = new Router(PageConst.BICYCLE_LIST_PAGE_PATH, Router.Type.FORWARD);
+                Router router = new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD);
                 responseContent.setRouter(router);
                 return responseContent;
             } else {
-                Router router = new Router(PageConst.BICYCLE_DETAILS_PAGE_PATH, Router.Type.FORWARD);
+                Router router = new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);
                 responseContent.setRouter(router);
                 return responseContent;
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("error", "Error: failed to update bicycle");
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.BICYCLE_DETAILS_PAGE_PATH, Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         }
 

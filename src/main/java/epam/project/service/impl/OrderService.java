@@ -1,11 +1,9 @@
 package epam.project.service.impl;
 
-import epam.project.database.dao.DaoFactoryType;
-import epam.project.database.dao.FactoryProducer;
+import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
-import epam.project.database.dao.impl.OrderDao;
 import epam.project.entity.Order;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
@@ -16,25 +14,15 @@ import java.util.List;
 public class OrderService implements Service {
     private static Logger LOGGER = Logger.getLogger(OrderService.class.getName());
 
-    private OrderDao orderDao;
+    public OrderService(){
 
-    public OrderService() throws ServiceException {
-        init();
-    }
-
-    private void init() throws ServiceException {
-        try {
-            JdbcDaoFactory factory = (JdbcDaoFactory) FactoryProducer.getDaoFactory(DaoFactoryType.JDBC);
-            orderDao = (OrderDao) factory.getDao(Order.class);
-        } catch (DaoException e) {
-            throw new ServiceException("Initialize error.", e);
-        }
     }
 
     public List<Order> takeAll() throws ServiceException {
 
         List<Order> orders;
         try {
+            EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
             orders = orderDao.getAll();
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all orders", e);
@@ -45,7 +33,9 @@ public class OrderService implements Service {
     public boolean add(Order order) throws ServiceException {
 
         try {
+            EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
             orderDao.persist(order);
+
         } catch (DaoException e) {
             throw new ServiceException("Failed to add order", e);
         }
@@ -56,6 +46,7 @@ public class OrderService implements Service {
     public boolean delete(Order order) throws ServiceException {
 
         try {
+            EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
             orderDao.delete(order);
         } catch (DaoException e) {
             throw new ServiceException("Failed to delete order", e);
@@ -63,20 +54,23 @@ public class OrderService implements Service {
         return true;
     }
 
-    public boolean update(Order order) throws ServiceException {
+    public Order getById(int id) throws ServiceException {
+
         try {
-            orderDao.update(order);
-        } catch (DaoException e) {
-            throw new ServiceException("Failed to delete order", e);
+            EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
+            return orderDao.getByPK(id);
+        } catch (DaoException  | PersistException e) {
+            throw new ServiceException("Failed to get order", e);
         }
-        return true;
     }
 
-    public Order takeOrder(int id) throws ServiceException {
+    public boolean update(Order order) throws ServiceException {
         try {
-            return orderDao.getByPK(id);
-        } catch (PersistException | DaoException e) {
-            throw new ServiceException("Failed to take order", e);
+            EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
+            orderDao.update(order);
+            return true;
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to update order", e);
         }
 
     }

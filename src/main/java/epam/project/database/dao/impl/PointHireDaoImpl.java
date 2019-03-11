@@ -1,15 +1,19 @@
 package epam.project.database.dao.impl;
 
 import epam.project.database.dao.AbstractJdbcDao;
+import epam.project.database.dao.AutoConnection;
 import epam.project.database.dao.EntityDao;
+import epam.project.database.dao.PointHireDao;
+import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.entity.PointHire;
+
 import java.sql.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PointHireDao  extends AbstractJdbcDao<PointHire, Integer> implements EntityDao<PointHire, Integer>{
+public class PointHireDaoImpl extends AbstractJdbcDao<PointHire, Integer> implements PointHireDao,EntityDao<PointHire, Integer> {
 
     private static final String CREATE_QUERY =
             "insert into point_hire values (NULL ,?,?,?)";
@@ -20,7 +24,7 @@ public class PointHireDao  extends AbstractJdbcDao<PointHire, Integer> implement
     private static final String SELECT_QUERY =
             "SELECT * FROM point_hire";
     private static final String CHECK_IF_CONTAINS =
-            "SELECT id FROM point_hire WHERE id=?";
+            "SELECT * FROM point_hire WHERE id=?";
     private static final String TAKE_BY_ID =
             "SELECT * FROM bicycle_hire.point_hire WHERE id=?";
 
@@ -46,19 +50,19 @@ public class PointHireDao  extends AbstractJdbcDao<PointHire, Integer> implement
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, PointHire object) throws SQLException {
 
-            statement.setString(1, object.getLocation());
-            statement.setString(2, object.getTelephone());
-            statement.setString(3, object.getDescription());
+        statement.setString(1, object.getLocation());
+        statement.setString(2, object.getTelephone());
+        statement.setString(3, object.getDescription());
 
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, PointHire object) throws SQLException {
 
-            statement.setString(1, object.getLocation());
-            statement.setString(2, object.getTelephone());
-            statement.setString(3, object.getDescription());
-            statement.setInt(4, object.getId());
+        statement.setString(1, object.getLocation());
+        statement.setString(2, object.getTelephone());
+        statement.setString(3, object.getDescription());
+        statement.setInt(4, object.getId());
 
     }
 
@@ -82,7 +86,19 @@ public class PointHireDao  extends AbstractJdbcDao<PointHire, Integer> implement
         return DELETE_QUERY;
     }
 
+    @AutoConnection
+    @Override
+    public boolean containsPointHire(int id) throws DaoException {
 
+        try (PreparedStatement statement = connection.prepareStatement(CHECK_IF_CONTAINS)) {
 
+            statement.setInt(1, id);
 
+            ResultSet rs = statement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity.", e);
+        }
+
+    }
 }

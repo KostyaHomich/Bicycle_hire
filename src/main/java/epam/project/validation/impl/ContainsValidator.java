@@ -21,6 +21,7 @@ public class ContainsValidator implements Validator {
     private static final String LOGIN = "login";
     private static final String EMAIL = "email";
 
+
     private static final Logger LOGGER = LogManager.getLogger(UserValidator.class);
 
     public ValidationResult doValidate(Map<String, String> params) throws ServiceException {
@@ -47,19 +48,19 @@ public class ContainsValidator implements Validator {
         return validationResult;
     }
 
-    private ValidationResult checkLogin(ValidationResult validationResult, String login) throws ServiceException {
+    private ValidationResult checkLogin(ValidationResult validationResult, String value) throws ServiceException {
         UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
         ArrayList<String> errors = new ArrayList<>();
-        if (!userService.checkLoginExistance(login)) {
+        if (!userService.checkLoginExistance(value)) {
             errors.add("User with this login doesn't exist");
           validationResult.add("login",errors);
         }
         return validationResult;
     }
-    private ValidationResult checkEmail(ValidationResult validationResult, String email) throws ServiceException {
+    private ValidationResult checkEmail(ValidationResult validationResult, String value) throws ServiceException {
         UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
         ArrayList<String> errors = new ArrayList<>();
-        if (!userService.checkEmailExistance(email)) {
+        if (!userService.checkEmailExistance(value)) {
             errors.add("User with this email doesn't exist");
             validationResult.add("email",errors);
         }

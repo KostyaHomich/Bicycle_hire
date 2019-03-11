@@ -7,8 +7,8 @@ import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.entity.User;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
-
 import org.apache.log4j.Logger;
+
 import java.util.List;
 
 public class UserService implements Service {
@@ -102,17 +102,7 @@ public class UserService implements Service {
 
     }
 
-    public boolean contains(User user) throws ServiceException {
 
-        try {
-            UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
-            return userDao.contains(user);
-
-        } catch (DaoException | PersistException e) {
-            throw new ServiceException("Failed to check contains user", e);
-        }
-
-    }
 
     public boolean checkLoginExistance(String login) throws ServiceException {
         try {

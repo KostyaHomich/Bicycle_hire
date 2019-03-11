@@ -14,15 +14,18 @@ public class CommandDeleteOrder implements Command {
     public ResponseContent execute(HttpServletRequest request) {
         try {
             OrderService orderService = (OrderService) ServiceFactory.getInstance().getService(ServiceType.ORDER);
+            Integer id = Integer.valueOf(request.getParameter("orderId"));
 
-            Integer id = Integer.valueOf(request.getParameter("id"));
-            Order order = orderService.takeOrder(id);
+            Order order = orderService.getById(id);
             orderService.delete(order);
-            ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router("?command="+CommandType.DELETE_ORDER, Router.Type.REDIRECT));
-            return responseContent;
+
+            Command command = new CommandShowOrderPageAndTakeAllOrders();
+            return  command.execute(request);
         } catch (ServiceException e) {
-            throw new RuntimeException("Can't delete order.", e);
+            request.setAttribute("error","Can't delete order.");
+            Command command = new CommandShowOrderPageAndTakeAllOrders();
+            return  command.execute(request);
+
         }
     }
 }

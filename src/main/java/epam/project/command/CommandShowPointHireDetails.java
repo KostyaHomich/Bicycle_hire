@@ -26,7 +26,7 @@ public class CommandShowPointHireDetails implements Command {
         }
         catch (ServiceException e) {
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.POINT_HIRE_DETAILS_PAGE_PATH,Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH,Router.Type.FORWARD));
             return responseContent;
         }
     }
@@ -34,7 +34,7 @@ public class CommandShowPointHireDetails implements Command {
     private ResponseContent setAttribute(HttpServletRequest request, PointHire pointHire) {
         request.setAttribute("pointHire", pointHire);
         ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router(PageConst.POINT_HIRE_LIST_PAGE_PATH, Router.Type.FORWARD));
+        responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
         return responseContent;
     }
 }

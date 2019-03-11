@@ -1,9 +1,5 @@
 package epam.project.validation.impl;
 
-import epam.project.service.ServiceFactory;
-import epam.project.service.ServiceType;
-import epam.project.service.exception.ServiceException;
-import epam.project.service.impl.UserService;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.Validator;
 import org.apache.log4j.LogManager;

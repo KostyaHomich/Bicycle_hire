@@ -14,15 +14,18 @@ public class CommandDeletePointHire implements Command {
     public ResponseContent execute(HttpServletRequest request) {
         try {
             PointHireService pointHireService = (PointHireService) ServiceFactory.getInstance().getService(ServiceType.POINT_HIRE);
+            Integer id = Integer.valueOf(request.getParameter("point_hireId"));
 
-            Integer id = Integer.valueOf(request.getParameter("id"));
             PointHire pointHire = pointHireService.getById(id);
             pointHireService.delete(pointHire);
-            ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router("?command="+CommandType.DELETE_POINT_HIRE, Router.Type.REDIRECT));
-            return responseContent;
+
+            Command command = new CommandShowPointHirePageAndTakeAllPointHires();
+            return  command.execute(request);
         } catch (ServiceException e) {
-            throw new RuntimeException("Can't delete point hire.", e);
+            request.setAttribute("error","Can't delete point hire.");
+            Command command = new CommandShowPointHirePageAndTakeAllPointHires();
+            return  command.execute(request);
+
         }
     }
 }

@@ -8,7 +8,6 @@ import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.entity.Role;
 import epam.project.entity.User;
-import epam.project.service.impl.UserService;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -146,21 +145,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
         return user;
     }
 
-    @AutoConnection
-    @Override
-    public boolean contains(User user) throws PersistException {
 
-        try (PreparedStatement statement = connection.prepareStatement(CHECK_IF_CONTAINS_BY_LOGIN)) {
-
-            statement.setString(1, user.getLogin());
-
-            ResultSet rs = statement.executeQuery();
-            return rs.next();
-        } catch (SQLException e) {
-            throw new PersistException("Failed to get entity.", e);
-        }
-
-    }
 
     @AutoConnection
     @Override

@@ -26,7 +26,7 @@ public class CommandShowBicycleDetails implements Command {
        }
         catch (ServiceException e) {
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.BICYCLE_DETAILS_PAGE_PATH,Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH,Router.Type.FORWARD));
             return responseContent;
         }
     }
@@ -34,7 +34,7 @@ public class CommandShowBicycleDetails implements Command {
     private ResponseContent setAttribute(HttpServletRequest request, Bicycle bicycle) {
         request.setAttribute("bicycle", bicycle);
         ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router(PageConst.BICYCLE_DETAILS_PAGE_PATH, Router.Type.FORWARD));
+        responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
         return responseContent;
     }
 }

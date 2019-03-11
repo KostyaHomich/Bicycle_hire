@@ -33,21 +33,21 @@ public class CommandUpdateUser implements Command {
             ResponseContent responseContent = new ResponseContent();
             if (validationResult.getErrors().size() == 0) {
                 userService.update(userBuilder.build(parameters));
-                Router router = new Router(PageConst.USER_LIST_PAGE_PATH, Router.Type.FORWARD);
+                Router router = new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD);
                 responseContent.setRouter(router);
                 return responseContent;
 
 
             } else {
-                Router router = new Router(PageConst.USER_DETAILS_PAGE_PATH, Router.Type.FORWARD);
+                Router router = new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);
                 responseContent.setRouter(router);
                 return responseContent;
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("error", "Error: failed to update user");
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.USER_DETAILS_PAGE_PATH, Router.Type.FORWARD));
+            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         }
 

@@ -1,5 +1,5 @@
 package epam.project.validation;
 
 public enum ValidatorType {
-    BICYCLE,ORDER,POINTHIRE,USER,LOGIN
+    BICYCLE,ORDER,POINT_HIRE,USER,LOGIN
 }

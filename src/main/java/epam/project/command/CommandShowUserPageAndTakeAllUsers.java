@@ -22,8 +22,9 @@ public class CommandShowUserPageAndTakeAllUsers implements Command {
             responseContent.setRouter(new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         } catch (ServiceException e) {
-            request.setAttribute("error","Error: failed get all users");
-            responseContent.setRouter(new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD));
+            request.setAttribute("error", "Error: failed get all users.");
+            responseContent = new ResponseContent();
+            responseContent.setRouter(new Router(PageConst.ADMIN_PAGE_PATH, Router.Type.FORWARD));
             return responseContent;
         }
     }

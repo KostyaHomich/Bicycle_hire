@@ -13,8 +13,8 @@ public class CommandDeleteUser implements Command {
     public ResponseContent execute(HttpServletRequest request) {
         try {
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
+            Integer id = Integer.valueOf(request.getParameter("userId"));
 
-            int id = Integer.valueOf(request.getParameter("id"));
             User user = userService.getById(id);
             userService.delete(user);
 
@@ -24,6 +24,7 @@ public class CommandDeleteUser implements Command {
             request.setAttribute("error","Can't delete user.");
             Command command = new CommandShowUserPageAndTakeAllUsers();
             return  command.execute(request);
+
         }
     }
 

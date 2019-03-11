@@ -63,7 +63,7 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
 
     private JdbcDaoFactory() {
         creators.put(Bicycle.class, BicycleDaoImpl::new);
-        creators.put(PointHire.class, PointHireDao::new);
+        creators.put(PointHire.class, PointHireDaoImpl::new);
         creators.put(Order.class, OrderDao::new);
         creators.put(User.class, UserDaoImpl::new);
     }

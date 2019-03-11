@@ -1,17 +1,92 @@
 package epam.project.validation.impl;
 
-import epam.project.entity.PointHire;
+import epam.project.validation.ValidationResult;
 import epam.project.validation.Validator;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 
 public class PointHireValidator implements Validator {
 
     private static final String CHECK_TELEPHONE="/^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?$/";
 
-    public static boolean doValidate(PointHire pointHire) {
-        if(pointHire.getTelephone().matches(CHECK_TELEPHONE)) {
-            return true;
+    private static final String LOCATION = "location";
+    private static final String TELEPHONE = "telephone";
+    private static final String DESCRIPTION = "description";
+
+
+    private static final Logger LOGGER = LogManager.getLogger(UserValidator.class);
+
+    private static final int MIN_LOCATION_LENGTH = 4;
+    private static final int MAX_LOCATION_LENGTH = 25;
+    private static final int MIN_DESCRIPTION_LENGTH = 4;
+
+    public ValidationResult doValidate(Map<String, String> params) {
+
+        ValidationResult validationResult = new ValidationResult();
+
+        for (Object key : params.keySet()) {
+            String keyStr = (String) key;
+            String value = params.get(keyStr);
+            switch (keyStr) {
+                case LOCATION:
+                    validateLocation(validationResult, value);
+                    break;
+                case TELEPHONE:
+                    validateTelephone(validationResult, value);
+                    break;
+                case DESCRIPTION:
+                    validateDescription(validationResult, value);
+                    break;
+                default:
+                    break;
+
+            }
+
         }
-        return false;
+        return validationResult;
     }
+
+
+    private void validateLocation(ValidationResult validationResult, String location) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (location.length() <= MIN_LOCATION_LENGTH) {
+            errors.add("Location must be more then " + MIN_LOCATION_LENGTH + " symbols");
+        }
+        if (location.length() > MAX_LOCATION_LENGTH) {
+            errors.add("Location must be less then " + MAX_LOCATION_LENGTH + " symbols");
+        }
+        if (errors.size() > 0) {
+            validationResult.add("point_hire", errors);
+        }
+    }
+
+    private void validateTelephone(ValidationResult validationResult, String telephone) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (telephone.matches(CHECK_TELEPHONE)) {
+            errors.add("Telephone are not valid");
+        }
+        if (errors.size() > 0) {
+            validationResult.add("password", errors);
+        }
+    }
+
+    private void validateDescription(ValidationResult validationResult, String description) {
+        ArrayList<String> errors = new ArrayList<>();
+
+        if (description.length() <= MIN_DESCRIPTION_LENGTH) {
+            errors.add("Description length must be more then " + MIN_DESCRIPTION_LENGTH + " symbols");
+        }
+
+        if (errors.size() > 0) {
+            validationResult.add("password", errors);
+        }
+    }
+
+
 }

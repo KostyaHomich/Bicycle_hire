@@ -3,19 +3,18 @@ package epam.project.service.impl;
 import epam.project.database.dao.DaoFactoryType;
 import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.FactoryProducer;
-import epam.project.database.dao.UserDao;
+import epam.project.database.dao.PointHireDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
-import epam.project.database.dao.impl.PointHireDao;
 import epam.project.entity.Bicycle;
 import epam.project.entity.PointHire;
-import epam.project.entity.User;
 import epam.project.service.Service;
+import epam.project.service.ServiceFactory;
+import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class PointHireService implements Service {
@@ -27,10 +26,14 @@ public class PointHireService implements Service {
 
 
     public List<PointHire> takeAll() throws ServiceException {
-
         try {
             EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
-            return  pointHireDao.getAll();
+            BicycleService bicycleService=(BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
+            List<PointHire> pointHireList= pointHireDao.getAll();
+            for(PointHire pointHire:pointHireList) {
+                pointHire.setBicycleList(bicycleService.takeAllBicycleByPointHirePk(pointHire.getId()));
+            }
+            return pointHireList;
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all point hires", e);
         }
@@ -57,6 +60,18 @@ public class PointHireService implements Service {
             throw new ServiceException("Failed to delete point hire",e);
         }
         return true;
+    }
+
+    public boolean contains(int id) throws ServiceException {
+
+        try {
+            PointHireDao pointHireDao =(PointHireDao) JdbcDaoFactory.getInstance().getDao(PointHire.class);
+            return pointHireDao.containsPointHire(id);
+
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to check contains point hire", e);
+        }
+
     }
 
     public boolean update(PointHire pointHire) throws ServiceException {

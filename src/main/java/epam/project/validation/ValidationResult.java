@@ -2,7 +2,9 @@ package epam.project.validation;
 
 import lombok.Data;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 public class ValidationResult {

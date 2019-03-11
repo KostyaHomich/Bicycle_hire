@@ -23,7 +23,7 @@ public class ValidatorFactory {
             case BICYCLE:return new BicycleValidator();
             case ORDER:return new OrderValidator();
             case USER:return new UserValidator();
-            case POINTHIRE:return new PointHireValidator();
+            case POINT_HIRE:return new PointHireValidator();
             case LOGIN:return new ContainsValidator();
 
         }

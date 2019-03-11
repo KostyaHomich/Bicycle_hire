@@ -1,12 +1,10 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
-import epam.project.entity.Bicycle;
 import epam.project.entity.PointHire;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
-import epam.project.service.impl.BicycleService;
 import epam.project.service.impl.PointHireService;
 
 import javax.servlet.http.HttpServletRequest;

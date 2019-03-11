@@ -2,19 +2,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
 
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Paper Stack</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
-</head>
-<body>
-
 <div class="container">
     <section id="content">
 
         <form action="${pageContext.request.contextPath}/user_list" method="post">
-            <h1>Update user Form</h1>
+            <h1>User details</h1>
             <c:out value="${error}"/>
 
             <c:if test="${ not empty errorsList}">
@@ -37,7 +29,6 @@
                 <input type="text" value="${user.getLastName()}" placeholder="Last name" id="last_name"
                        name="last_name"/>
             </div>
-
             <div>
                 <input type="text" value="${user.getBalance()}" placeholder="Balance" id="balance" name="balance"/>
             </div>
@@ -49,18 +40,14 @@
             </div>
             <input type="hidden" name="command" value="${CommandType.UPDATE_USER}">
         </form>
-        <form action="${pageContext.request.contextPath}/registration" method="post">
+        <form action="${pageContext.request.contextPath}/user_details" method="post">
 
             <div>
                 <input type="submit" value="Back">
-                <input type="hidden" name="command" value="${CommandType.SHOW_USERS_PAGE}">
+                <input type="hidden" name="command" value="${CommandType.SHOW_USER_LIST}">
             </div>
         </form>
         <!-- form -->
     </section>
     <!-- content -->
 </div>
-<!-- container -->
-</body>
-</html>
-

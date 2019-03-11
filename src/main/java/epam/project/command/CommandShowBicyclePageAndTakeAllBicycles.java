@@ -20,13 +20,14 @@ public class CommandShowBicyclePageAndTakeAllBicycles implements Command{
                 request.setAttribute("entity","bicycle");
                 request.setAttribute("bicycles",bicycleList);
                 responseContent.setRouter(new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD));
+                return responseContent;
             } catch (ServiceException e) {
                 request.setAttribute("error", "Error: failed get all bicycles.");
                 responseContent = new ResponseContent();
                 responseContent.setRouter(new Router(PageConst.ADMIN_PAGE_PATH, Router.Type.FORWARD));
                 return responseContent;
             }
-            return responseContent;
+
 
     }
 }
