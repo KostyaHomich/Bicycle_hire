@@ -11,6 +11,7 @@
 <body>
 <div class="container">
     <section id="content">
+
         <form action="${pageContext.request.contextPath}/login" method="post">
 
             <h1>Login Form</h1>

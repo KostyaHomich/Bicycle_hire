@@ -2,6 +2,7 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.Bicycle;
+import epam.project.entity.EntityType;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
@@ -15,6 +16,7 @@ public class CommandShowBicycleDetails implements Command {
         try {
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
             int id=Integer.valueOf(request.getParameter("bicycleId"));
+            request.setAttribute("entity", EntityType.BICYCLE);
             if(id==0) {
                 Bicycle bicycle=new Bicycle();
                 return setAttribute(request, bicycle);

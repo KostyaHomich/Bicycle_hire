@@ -9,10 +9,6 @@ public class Router {
         this.route = route;
         this.type = type;
     }
-    public Router(CommandType command, Type type) {
-        this.route = "?command="+command;
-        this.type = type;
-    }
 
     public String getRoute() {
         return route;

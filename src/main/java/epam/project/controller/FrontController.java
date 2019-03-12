@@ -3,10 +3,8 @@ package epam.project.controller;
 import epam.project.command.Command;
 import epam.project.command.CommandProvider;
 import epam.project.dto.ResponseContent;
-import epam.project.service.exception.ServiceException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,10 +32,7 @@ public class FrontController extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String commandParameter = request.getParameter("command");
         Command command = CommandProvider.getInstance().takeCommand(commandParameter);
-
-        ResponseContent responseContent;
-
-        responseContent = command.execute(request);
+        ResponseContent responseContent= command.execute(request);
 
         if (responseContent.getRouter().getType().equals("redirect")) {
             response.sendRedirect(responseContent.getRouter().getRoute());

@@ -8,7 +8,7 @@ public class CommandShowAdminPage implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router(PageConst.ADMIN_PAGE_PATH,Router.Type.FORWARD));
+        responseContent.setRouter(new Router(PageConst.ADMIN_PAGE_PATH,Router.Type.REDIRECT));
         return responseContent;
     }
 }

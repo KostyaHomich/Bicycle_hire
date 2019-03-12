@@ -50,7 +50,6 @@
 			<input type="hidden" name="command" value="${CommandType.REGISTER_USER}">
 		</form>
 	<form action="${pageContext.request.contextPath}/registration" method="post">
-
 		<div>
 			<input type="submit" value="Back">
 			<input type="hidden" name="command" value="${CommandType.SHOW_MAIN_PAGE}">

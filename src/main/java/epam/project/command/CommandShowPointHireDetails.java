@@ -1,6 +1,7 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
+import epam.project.entity.EntityType;
 import epam.project.entity.PointHire;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
@@ -13,8 +14,11 @@ public class CommandShowPointHireDetails implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
+            request.setAttribute("entity", EntityType.POINT_HIRE);
+
             PointHireService pointHireService = (PointHireService) ServiceFactory.getInstance().getService(ServiceType.POINT_HIRE);
             int id=Integer.valueOf(request.getParameter("pointHireId"));
+
             if(id==0) {
                 PointHire pointHire=new PointHire();
                 return setAttribute(request, pointHire);

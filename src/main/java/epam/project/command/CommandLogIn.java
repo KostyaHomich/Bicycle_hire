@@ -2,6 +2,7 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
+import epam.project.entity.UserRole;
 import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
@@ -33,20 +34,24 @@ public class CommandLogIn implements Command {
             UserBuilder userBuilder = new UserBuilder();
             ContainsValidator userValidator = (ContainsValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.LOGIN);
 
-            Map<String, String> parameters= RequestParameterParser.parseParameters(request);
+            Map<String, String> parameters = RequestParameterParser.parseParameters(request);
             ValidationResult validationResult = userValidator.doValidate(parameters);
 
-            if (validationResult.getErrors().size()==0) {
+            if (validationResult.getErrors().size() == 0) {
                 User user = userBuilder.build(parameters);
 
-                    User signInUser = userService.signIn(user.getLogin(), user.getPassword());
+                User signInUser = userService.signIn(user.getLogin(), user.getPassword());
+                request.getSession().setAttribute(USER, signInUser);
 
+                if (signInUser.getRole().equalsIgnoreCase(UserRole.ADMIN.name())) {
                     Router router = new Router(PageConst.ADMIN_PAGE_PATH, Router.Type.FORWARD);
-
-                    request.getSession().setAttribute(USER, signInUser);
-
                     responseContent.setRouter(router);
                     return responseContent;
+                } else {
+                    Router router = new Router(PageConst.USER_PAGE_PATH, Router.Type.FORWARD);
+                    responseContent.setRouter(router);
+                    return responseContent;
+                }
 
             } else {
                 Router router = new Router(PageConst.LOGIN_PAGE_PATH, Router.Type.FORWARD);

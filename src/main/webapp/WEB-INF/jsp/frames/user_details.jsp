@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
+<%@ page import="epam.project.entity.UserRole" %>
 
 <div class="container">
     <section id="content">
@@ -35,10 +36,12 @@
             <div>
                 <input type="text" value="${user.getStatus()}" placeholder="Status" id="status" name="status"/>
             </div>
+
             <div>
                 <input  type="submit" value="Update">
             </div>
             <input type="hidden" name="command" value="${CommandType.UPDATE_USER}">
+
         </form>
         <form action="${pageContext.request.contextPath}/user_details" method="post">
 

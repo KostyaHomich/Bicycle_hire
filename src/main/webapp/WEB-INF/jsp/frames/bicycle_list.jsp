@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="epam.project.command.CommandType" %>
+<%@ page import="epam.project.entity.UserRole" %>
+
+<c:out value="${error}"/>
 <table class="table table-striped jambo_table bulk_action">
 
     <thead>
@@ -9,7 +12,7 @@
         <th class="column-title">Daily rental price</th>
         <th class="column-title">Status</th>
         <th class="column-title">Description</th>
-        <th class="column-title no-link last"><span class="nobr">Action</span></th>
+
     </tr>
     </thead>
     <tbody>
@@ -21,6 +24,7 @@
             <td class=" ">${bicycle.getStatus()}</td>
             <td class=" ">${bicycle.getDescription()}</td>
             <td>
+                <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
                 <form style="display: inline-block;" action="${pageContext.request.contextPath}/bicycle_details" method="post">
                     <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
                     <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
@@ -31,6 +35,7 @@
                     <input type="hidden" name="command" value="${CommandType.DELETE_BICYCLE}">
                     <input type="image" style="width: 20px;height: 20px" src="${pageContext.request.contextPath}/static/img/delete.jpg">
                 </form>
+                </c:if>
             </td>
         </tr>
     </c:forEach>

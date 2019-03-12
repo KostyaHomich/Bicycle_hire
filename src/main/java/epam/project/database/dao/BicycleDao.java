@@ -2,7 +2,6 @@ package epam.project.database.dao;
 
 
 import epam.project.database.dao.exception.DaoException;
-
 import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
 
@@ -14,4 +13,8 @@ public interface BicycleDao extends EntityDao<Bicycle, Integer> {
     PointHireBicycle getByBicyclePkPointHireBicycle(int id) throws DaoException;
     boolean containsBicycle(int id) throws DaoException;
     List<Bicycle> getAllBicycleByPointHirePk(int id) throws DaoException;
+
+    List<Bicycle> getAllAvailableBicycleByPointHirePk(int id) throws DaoException;
+
+    List<Bicycle> getAllAvailableBicycle() throws DaoException;
 }

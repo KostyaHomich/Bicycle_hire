@@ -1,6 +1,7 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
+import epam.project.entity.EntityType;
 import epam.project.entity.PointHire;
 import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
@@ -22,6 +23,8 @@ public class CommandAddPointHire implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
+            request.setAttribute("entity", EntityType.POINT_HIRE);
+
             ResponseContent responseContent = new ResponseContent();
 
             PointHireValidator pointHireValidator = (PointHireValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.POINT_HIRE);
@@ -36,6 +39,7 @@ public class CommandAddPointHire implements Command {
 
                 pointHireService.add(pointHire);
                 Router router = new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD);
+
                 responseContent.setRouter(router);
                 return responseContent;
 

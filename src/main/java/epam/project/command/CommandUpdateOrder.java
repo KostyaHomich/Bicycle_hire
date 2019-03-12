@@ -1,35 +1,53 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
-import epam.project.entity.Order;
+import epam.project.entity.EntityType;
+import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
+import epam.project.service.builder.OrderBuilder;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.OrderService;
+import epam.project.validation.ValidationResult;
+import epam.project.validation.ValidatorFactory;
+import epam.project.validation.ValidatorType;
+import epam.project.validation.impl.OrderValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 
 public class CommandUpdateOrder implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
+            request.setAttribute("entity", EntityType.ORDER);
+
             OrderService orderService = (OrderService) ServiceFactory.getInstance().getService(ServiceType.ORDER);
+            OrderValidator orderValidator = (OrderValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.ORDER);
+            Map<String, String> parameters = RequestParameterParser.parseParameters(request);
+            OrderBuilder pointHireBuilder = new OrderBuilder();
 
-
-            Order order = new Order();
-            order.setIdUser(Integer.valueOf(request.getParameter("idUser")));
-            order.setIdPointHireBicycle(Integer.valueOf(request.getParameter("idPointHIreBicycle")));
-            order.setRentalTime(Integer.valueOf(request.getParameter("rentalTime")));
-            order.setTimeOrder(request.getParameter("timeOrder"));
-            orderService.add(order);
-
-            orderService.update(order);
+            ValidationResult validationResult = orderValidator.doValidate(parameters);
             ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router("?command="+CommandType.UPDATE_ORDER, Router.Type.REDIRECT));
-            return responseContent;
+            if (validationResult.getErrors().size() == 0) {
+                orderService.update(pointHireBuilder.build(parameters));
+                Router router = new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD);
+                responseContent.setRouter(router);
+                return responseContent;
+
+            } else {
+                Router router = new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD);
+                request.setAttribute("errorsList", validationResult);
+                responseContent.setRouter(router);
+                return responseContent;
+            }
         } catch (ServiceException e) {
-            throw new RuntimeException("Can't update order.", e);
+            request.setAttribute("error", "Error: failed to update order");
+            ResponseContent responseContent = new ResponseContent();
+            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
+            return responseContent;
         }
+
     }
 }

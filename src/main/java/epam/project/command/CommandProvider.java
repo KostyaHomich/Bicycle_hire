@@ -31,13 +31,15 @@ public class CommandProvider {
 
         commandMap.put(CommandType.RECOVERY_PASSWORD,new CommandRecoveryPassword());
         commandMap.put(CommandType.SHOW_ADMIN_PAGE,new CommandShowAdminPage());
-        commandMap.put(CommandType.SHOW_USER_LIST,new CommandShowUserPageAndTakeAllUsers());
+        commandMap.put(CommandType.SHOW_USER_LIST, new CommandShowUserList());
 
-        commandMap.put(CommandType.SHOW_BICYCLE_LIST,new CommandShowBicyclePageAndTakeAllBicycles());
-        commandMap.put(CommandType.SHOW_POINT_HIRE_LIST,new CommandShowPointHirePageAndTakeAllPointHires());
+        commandMap.put(CommandType.SHOW_BICYCLE_LIST, new CommandShowBicycleList());
+        commandMap.put(CommandType.SHOW_POINT_HIRE_LIST, new CommandShowPointHireList());
         commandMap.put(CommandType.LOGOUT,new CommandLogOut());
 
-        commandMap.put(CommandType.SHOW_ORDER_LIST,new CommandShowOrderPageAndTakeAllOrders());
+        commandMap.put(CommandType.SHOW_ORDER_LIST, new CommandShowOrderList());
+        commandMap.put(CommandType.SHOW_ORDER_DETAILS, new CommandShowOrderDetails());
+        commandMap.put(CommandType.SHOW_USER_PAGE, new CommandShowUserPage());
 
 
         commandMap.put(CommandType.SHOW_USER_DETAILS,new CommandShowUserDetails());

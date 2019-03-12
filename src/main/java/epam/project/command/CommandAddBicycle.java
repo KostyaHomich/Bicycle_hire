@@ -2,6 +2,7 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.Bicycle;
+import epam.project.entity.EntityType;
 import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
@@ -21,24 +22,24 @@ public class CommandAddBicycle implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
+            request.setAttribute("entity", EntityType.BICYCLE);
+
             ResponseContent responseContent = new ResponseContent();
 
             BicycleValidator bicycleValidator = (BicycleValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.BICYCLE);
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
+
             Map<String, String> parameters = RequestParameterParser.parseParameters(request);
+
             ValidationResult validationResult = bicycleValidator.doValidate(parameters);
             BicycleBuilder bicycleBuilder = new BicycleBuilder();
-
-
+            //sweet-alert
             if (validationResult.getErrors().size() == 0) {
-
                 Bicycle bicycle = bicycleBuilder.build(parameters);
-
                 bicycleService.add(bicycle);
                 Router router = new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD);
                 responseContent.setRouter(router);
                 return responseContent;
-
             } else {
                 Router router = new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);

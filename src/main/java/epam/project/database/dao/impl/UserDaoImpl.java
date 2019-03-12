@@ -6,11 +6,13 @@ import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
-import epam.project.entity.Role;
 import epam.project.entity.User;
+import epam.project.entity.UserRole;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
                 user.setBalance(rs.getBigDecimal("balance"));
                 user.setEmail(rs.getString("email"));
                 int role = rs.getInt("id_Role");
-                user.setRole(Role.values()[--role].toString().toLowerCase());
+                user.setRole(UserRole.values()[--role].toString().toLowerCase());
 
 
                 result.add(user);
@@ -82,7 +84,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
         statement.setString(++counter, object.getRegistrationDate());
         statement.setBigDecimal(++counter, object.getBalance());
         statement.setString(++counter, object.getEmail());
-        int role = Role.valueOf(object.getRole().toUpperCase()).ordinal();
+        int role = UserRole.valueOf(object.getRole().toUpperCase()).ordinal();
         role++;
         statement.setInt(++counter, role);
         return counter;
@@ -134,7 +136,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
                 user.setBalance(rs.getBigDecimal("balance"));
                 user.setEmail(rs.getString("email"));
                 int role = rs.getInt("id_Role");
-                user.setRole(Role.values()[--role].toString().toLowerCase());
+                user.setRole(UserRole.values()[--role].toString().toLowerCase());
             } else {
                 throw new DaoException("This user doesn't exist");
             }

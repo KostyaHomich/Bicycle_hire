@@ -2,11 +2,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
 
+<c:out value="${error}"/>
 <table class="table table-striped jambo_table bulk_action">
     <thead>
 
     <tr class="headings">
-        <th class="column-title">ID</th>
+
         <th class="column-title">Login</th>
         <th class="column-title">Email</th>
         <th class="column-title">First name</th>
@@ -18,9 +19,8 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${users}" var="user">
+    <c:forEach items="${requestScope.users}" var="user">
         <tr class="even pointer">
-            <td class=" ">${user.getId()}</td>
             <td class=" ">${user.getLogin()}</td>
             <td class=" ">${user.getEmail()}</td>
             <td class=" ">${user.getFirstName()}</td>

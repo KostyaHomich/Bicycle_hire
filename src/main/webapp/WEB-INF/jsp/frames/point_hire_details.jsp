@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
-
+<%@ page import="epam.project.entity.UserRole" %>
 <div class="container">
     <section id="content">
 
@@ -18,23 +18,28 @@
             </c:if>
             <input type="hidden" name="id" value="${pointHire.getId()}">
             <div>
-                <input type="text" value="${pointHire.getLocation()}" placeholder="Location" id="location" name="location"/>
+                <input type="text" value="${pointHire.getLocation()}" placeholder="Location" id="location"
+                       name="location"/>
             </div>
             <div>
-                <input type="text" value="${pointHire.getTelephone()}" placeholder="Telephone" id="telephone" name="telephone"/>
+                <input type="text" value="${pointHire.getTelephone()}" placeholder="Telephone" id="telephone"
+                       name="telephone"/>
             </div>
             <div>
-                <input type="text" value="${pointHire.getDescription()}" placeholder="Description" id="description" name="description"/>
+                <input type="text" value="${pointHire.getDescription()}" placeholder="Description" id="description"
+                       name="description"/>
             </div>
             <div>
-                <c:if test="${pointHire.getId()==0}">
-                    <input type="hidden" name="command" value="${CommandType.ADD_POINT_HIRE}">
-                    <input  type="submit" value="Add">
-                </c:if>
+                <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
+                    <c:if test="${pointHire.getId()==0}">
+                        <input type="hidden" name="command" value="${CommandType.ADD_POINT_HIRE}">
+                        <input type="submit" value="Add">
+                    </c:if>
 
-                <c:if test="${pointHire.getId()!=0}">
-                    <input type="hidden" name="command" value="${CommandType.UPDATE_POINT_HIRE}">
-                    <input  type="submit" value="Update">
+                    <c:if test="${pointHire.getId()!=0}">
+                        <input type="hidden" name="command" value="${CommandType.UPDATE_POINT_HIRE}">
+                        <input type="submit" value="Update">
+                    </c:if>
                 </c:if>
 
             </div>

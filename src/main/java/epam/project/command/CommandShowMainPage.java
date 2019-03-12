@@ -9,7 +9,7 @@ public class CommandShowMainPage implements Command {
     public ResponseContent execute(HttpServletRequest request) {
 
         ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router(PageConst.MAIN_PAGE_PATH,Router.Type.REDIRECT));
+        responseContent.setRouter(new Router(PageConst.MAIN_PAGE_PATH, Router.Type.REDIRECT));
         return responseContent;
     }
 }

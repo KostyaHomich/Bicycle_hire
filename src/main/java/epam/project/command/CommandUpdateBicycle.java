@@ -1,6 +1,7 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
+import epam.project.entity.EntityType;
 import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
@@ -19,6 +20,7 @@ public class CommandUpdateBicycle implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
+            request.setAttribute("entity", EntityType.BICYCLE);
 
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
             BicycleValidator bicycleValidator = (BicycleValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.BICYCLE);
@@ -31,6 +33,7 @@ public class CommandUpdateBicycle implements Command {
             if (validationResult.getErrors().size() == 0) {
                 bicycleService.update(bicycleBuilder.build(parameters));
                 Router router = new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD);
+
                 responseContent.setRouter(router);
                 return responseContent;
             } else {

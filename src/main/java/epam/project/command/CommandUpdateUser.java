@@ -1,6 +1,7 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
+import epam.project.entity.EntityType;
 import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
@@ -23,6 +24,7 @@ public class CommandUpdateUser implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
+            request.setAttribute("entity", EntityType.USER);
 
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             UserValidator userValidator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);

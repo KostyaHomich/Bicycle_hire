@@ -9,7 +9,9 @@ import epam.project.database.dao.exception.PersistException;
 import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,11 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
 
     private static final String GET_ALL_AVAILABLE_BICYCLE =
             "SELECT * FROM bicycle_hire.bicycle where status='available'";
+
+    private static final String GET_ALL_AVAILABLE_BICYCLES_BY_POINT_HIRE_PK =
+            "SELECT bicycle.id,daily_rental_price,name,status,description  " +
+                    "FROM bicycle,point_hire_bicycle where point_hire_bicycle.id_point_hire=? " +
+                    "and status='available' and bicycle.id=point_hire_bicycle.id_bicycle;";
 
     private static final String GET_ALL_RENTED_BICYCLE =
             "SELECT * FROM bicycle_hire.bicycle where status='rented'";
@@ -185,5 +192,48 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
             throw new DaoException("Failed to get entity.", e);
         }
 
+    }
+
+    @AutoConnection
+    @Override
+    public List<Bicycle> getAllAvailableBicycle() throws DaoException {
+        List<Bicycle> result = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_AVAILABLE_BICYCLE)) {
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Bicycle bicycle = new Bicycle();
+                bicycle.setId(rs.getInt("id"));
+                bicycle.setDaily_rental_price(rs.getBigDecimal("daily_rental_price"));
+                bicycle.setName(rs.getString("name"));
+                bicycle.setStatus(rs.getString("status"));
+                bicycle.setDescription(rs.getString("description"));
+                result.add(bicycle);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity.", e);
+        }
+    }
+
+    @AutoConnection
+    @Override
+    public List<Bicycle> getAllAvailableBicycleByPointHirePk(int id) throws DaoException {
+        List<Bicycle> result = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_AVAILABLE_BICYCLES_BY_POINT_HIRE_PK)) {
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Bicycle bicycle = new Bicycle();
+                bicycle.setId(rs.getInt("id"));
+                bicycle.setDaily_rental_price(rs.getBigDecimal("daily_rental_price"));
+                bicycle.setName(rs.getString("name"));
+                bicycle.setStatus(rs.getString("status"));
+                bicycle.setDescription(rs.getString("description"));
+                result.add(bicycle);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity.", e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
+import epam.project.entity.EntityType;
 import epam.project.entity.Order;
 import epam.project.service.RequestParameterParser;
 import epam.project.service.ServiceFactory;
@@ -21,6 +22,8 @@ public class CommandAddOrder implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
+            request.setAttribute("entity", EntityType.ORDER);
+
             ResponseContent responseContent = new ResponseContent();
 
             OrderValidator orderValidator = (OrderValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.ORDER);

@@ -35,12 +35,20 @@ public class BicycleService implements Service {
     public List<Bicycle> takeAllBicycleByPointHirePk(int id) throws ServiceException {
         try {
            BicycleDao bicycleDao = (BicycleDao)JdbcDaoFactory.getInstance().getDao(Bicycle.class);
-            return bicycleDao.getAllBicycleByPointHirePk(id);
+            return bicycleDao.getAllAvailableBicycleByPointHirePk(id);
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all bicycles by pk", e);
         }
     }
 
+    public List<Bicycle> takeAllAvailableBicycle() throws ServiceException {
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return bicycleDao.getAllAvailableBicycle();
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get all bicycles", e);
+        }
+    }
     public boolean add(Bicycle bicycle) throws ServiceException {
         try {
             BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
@@ -78,6 +86,7 @@ public class BicycleService implements Service {
         }
         return true;
     }
+
     public boolean contains(int id) throws ServiceException {
 
         try {
@@ -89,6 +98,7 @@ public class BicycleService implements Service {
         }
 
     }
+
     public Bicycle getById(int id) throws ServiceException {
         try {
             BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);

@@ -7,7 +7,6 @@ import epam.project.database.dao.PointHireDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
-import epam.project.entity.Bicycle;
 import epam.project.entity.PointHire;
 import epam.project.service.Service;
 import epam.project.service.ServiceFactory;
@@ -39,6 +38,21 @@ public class PointHireService implements Service {
         }
     }
 
+    public List<PointHire> takeAllPointHireWithAvailablaBicycle() throws ServiceException {
+
+        try {
+            EntityDao<PointHire, Integer> pointHireDao = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
+            BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
+            List<PointHire> pointHireList = pointHireDao.getAll();
+            for (PointHire pointHire : pointHireList) {
+                pointHire.setBicycleList(bicycleService.takeAllBicycleByPointHirePk(pointHire.getId()));
+            }
+            return pointHireList;
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get all point hires", e);
+        }
+
+    }
     public boolean add(PointHire pointHire) throws ServiceException {
 
         try {

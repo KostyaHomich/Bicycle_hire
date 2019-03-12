@@ -15,7 +15,6 @@ public class OrderService implements Service {
     private static Logger LOGGER = Logger.getLogger(OrderService.class.getName());
 
     public OrderService(){
-
     }
 
     public List<Order> takeAll() throws ServiceException {
