@@ -6,6 +6,7 @@ import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.exception.ConnectionPoolException;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.pool.ConnectionPool;
+import epam.project.database.pool.ConnectionPoolImpl;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -15,47 +16,48 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class TransactionManager {
-    private Connection proxyConnection;
-    private List<EntityDao> daoList;
+    private Connection connection;
 
-    public void begin(EntityDao dao, EntityDao... daos) throws DaoException {
+
+    public void begin(AbstractJdbcDao dao, AbstractJdbcDao ... daos) throws DaoException {
         try {
-            ConnectionPool connectionPool = ConnectionPoolFactory.getInstance().getConnectionPool();
-            proxyConnection = connectionPool.getConnection();
-            setConnectionWithReflection(dao, proxyConnection);
-            for (EntityDao d : daos) {
-                setConnectionWithReflection(d, proxyConnection);
+            ConnectionPool pool = ConnectionPoolImpl.getInstance();
+            this.connection = pool.getConnection();
+            connection.setAutoCommit(false);
+            setConnectionWithReflection(dao,connection);
+            for (EntityDao specificDao : daos){
+                setConnectionWithReflection(specificDao,connection);
             }
 
-            daoList = new ArrayList<>(daos.length + 1);
-            daoList.addAll(Arrays.asList(daos));
-            daoList.add(dao);
-
-        } catch (ConnectionPoolException e) {
-            throw new DaoException("Failed to get a connection from CP.", e);
+        } catch (SQLException| ConnectionPoolException e) {
+            throw new DaoException("problem with  connection.setAutoCommit(false)" , e);
         }
+
     }
 
     public void end() throws DaoException {
         try {
-            for (EntityDao d : daoList) {
-                setConnectionWithReflection(d, null);
-            }
-            ConnectionPool connectionPool = ConnectionPoolFactory.getInstance().getConnectionPool();
-            connectionPool.releaseConnection(proxyConnection);
-            proxyConnection = null;
-            daoList = null;
-        } catch (ConnectionPoolException e) {
-            e.printStackTrace();
+            connection.close();
+        } catch (SQLException e) {
+            throw new DaoException("failed to return connection" , e);
         }
     }
 
-    public void commit() throws SQLException {
-        proxyConnection.commit();
+    public void commit() throws DaoException{
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            throw new DaoException("failed to commit transaction" , e);
+        }
     }
 
-    public void rollback() throws SQLException {
-        proxyConnection.rollback();
+    public void rollback() throws DaoException {
+
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            throw new DaoException("problem with  rollback transaction" , e);
+        }
     }
 
     static void setConnectionWithReflection(Object dao, Connection connection) throws DaoException {

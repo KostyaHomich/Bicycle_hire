@@ -8,6 +8,7 @@ import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
+import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements BicycleDao, EntityDao<Bicycle, Integer> {
 
+    private static Logger LOGGER = Logger.getLogger(BicycleDaoImpl.class.getName());
     private static final String CREATE_QUERY =
             "insert into bicycle values (NULL ,?,?,?,?);";
 
@@ -126,8 +128,8 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
             int counter = 0;
             statement.setInt(++counter, bicycle.getPoint_hire_id());
             statement.setInt(++counter, bicycle.getId());
-            ResultSet rs = statement.executeQuery();
-            rs.next();
+
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException("Failed to insert entity", e);
         }

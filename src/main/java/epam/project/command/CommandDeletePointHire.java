@@ -7,6 +7,7 @@ import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.PointHireService;
+import epam.project.util.ResponseContentBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,17 +18,15 @@ public class CommandDeletePointHire implements Command {
 
             request.setAttribute("entity", EntityType.POINT_HIRE);
             PointHireService pointHireService = (PointHireService) ServiceFactory.getInstance().getService(ServiceType.POINT_HIRE);
-            Integer id = Integer.valueOf(request.getParameter("point_hireId"));
+            Integer id = Integer.valueOf(request.getParameter("pointHireId"));
 
             PointHire pointHire = pointHireService.getById(id);
             pointHireService.delete(pointHire);
 
-            Command command = new CommandShowPointHireList();
-            return  command.execute(request);
+            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST,request);
         } catch (ServiceException e) {
             request.setAttribute("error","Can't delete point hire.");
-            Command command = new CommandShowPointHireList();
-            return  command.execute(request);
+            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST,request);
 
         }
     }

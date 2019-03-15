@@ -1,11 +1,10 @@
 package epam.project.service;
 
-import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.BicycleService;
 import epam.project.service.impl.OrderService;
 import epam.project.service.impl.PointHireService;
 import epam.project.service.impl.UserService;
-import epam.project.service.recovery.RecoveryPasswordService;
+
 
 public class ServiceFactory {
 
@@ -15,7 +14,7 @@ public class ServiceFactory {
         return instance;
     }
 
-    public Service getService(ServiceType type) throws ServiceException {
+    public Service getService(ServiceType type)  {
         switch (type) {
             case USER:return  new UserService();
             case ORDER: return new OrderService();
@@ -27,7 +26,5 @@ public class ServiceFactory {
     public HashGenerator getHashGenerator() {
         return new HashGenerator();
     }
-    public RecoveryPasswordService getRecoveryPasswordService() {
-        return RecoveryPasswordService.getInstance();
-    }
+
 }

@@ -7,6 +7,7 @@ import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.BicycleService;
+import epam.project.util.ResponseContentBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,10 +16,14 @@ public class CommandShowBicycleDetails implements Command {
     public ResponseContent execute(HttpServletRequest request)  {
         try {
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
+
             int id=Integer.valueOf(request.getParameter("bicycleId"));
-            request.setAttribute("entity", EntityType.BICYCLE);
+
+            request.setAttribute("viewName","bicycle_details");
             if(id==0) {
+                int point_hire_id=Integer.valueOf(request.getParameter("pointHireId"));
                 Bicycle bicycle=new Bicycle();
+                bicycle.setPoint_hire_id(point_hire_id);
                 return setAttribute(request, bicycle);
             }
             else {
@@ -27,16 +32,12 @@ public class CommandShowBicycleDetails implements Command {
             }
        }
         catch (ServiceException e) {
-            ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH,Router.Type.FORWARD));
-            return responseContent;
+            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
         }
     }
 
     private ResponseContent setAttribute(HttpServletRequest request, Bicycle bicycle) {
         request.setAttribute("bicycle", bicycle);
-        ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
-        return responseContent;
+        return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
     }
 }

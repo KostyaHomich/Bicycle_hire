@@ -1,5 +1,6 @@
 package epam.project.service.impl;
 
+import epam.project.database.dao.AbstractJdbcDao;
 import epam.project.database.dao.BicycleDao;
 import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.exception.DaoException;
@@ -12,7 +13,6 @@ import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class BicycleService implements Service {
@@ -35,7 +35,7 @@ public class BicycleService implements Service {
     public List<Bicycle> takeAllBicycleByPointHirePk(int id) throws ServiceException {
         try {
            BicycleDao bicycleDao = (BicycleDao)JdbcDaoFactory.getInstance().getDao(Bicycle.class);
-            return bicycleDao.getAllAvailableBicycleByPointHirePk(id);
+            return bicycleDao.getAllBicycleByPointHirePk(id);
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all bicycles by pk", e);
         }
@@ -50,20 +50,28 @@ public class BicycleService implements Service {
         }
     }
     public boolean add(Bicycle bicycle) throws ServiceException {
+        TransactionManager transactionManager = new TransactionManager();
         try {
-            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
-            TransactionManager transactionManager = new TransactionManager();
-
-            transactionManager.begin(bicycleDao);
-            bicycleDao.persist(bicycle);
-            bicycleDao.addPointHireBicycle(bicycle);
-            transactionManager.end();
+            EntityDao<Bicycle,Integer>entityDao= JdbcDaoFactory.getInstance().getTransactionalDao(Bicycle.class);
+            transactionManager.begin((AbstractJdbcDao) entityDao);
+            Bicycle bicycleInserted=entityDao.persist(bicycle);
+            bicycleInserted.setPoint_hire_id(bicycle.getPoint_hire_id());
+            LOGGER.info("bicycle "+bicycleInserted.toString());
+            ((BicycleDao)entityDao).addPointHireBicycle(bicycleInserted);
             transactionManager.commit();
-
+            transactionManager.end();
             return true;
-        } catch (DaoException | SQLException e) {
-            throw new ServiceException("Failed to login bicycle", e);
+        } catch (DaoException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DaoException d) {
+                LOGGER.error("Failed to rollback", e);
+            }
+            LOGGER.error("Failed to add bicycle", e);
+            throw new ServiceException("Failed to add bicycle", e);
+
         }
+
     }
 
     public boolean delete(Bicycle bicycle) throws ServiceException {
@@ -79,8 +87,8 @@ public class BicycleService implements Service {
 
     public boolean update(Bicycle bicycle) throws ServiceException {
         try {
-            EntityDao<Bicycle, Integer> bicycleDao = JdbcDaoFactory.getInstance().getDao(Bicycle.class);
-            bicycleDao.update(bicycle);
+            BicycleDao entityDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            entityDao.update(bicycle);
         } catch (DaoException e) {
             throw new ServiceException("Failed to delete bicycle", e);
         }
@@ -100,6 +108,7 @@ public class BicycleService implements Service {
     }
 
     public Bicycle getById(int id) throws ServiceException {
+
         try {
             BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
             PointHireBicycle pointHireBicycle = bicycleDao.getByBicyclePkPointHireBicycle(id);
@@ -107,7 +116,7 @@ public class BicycleService implements Service {
             bicycle.setPoint_hire_id(pointHireBicycle.getId_point_hire());
             return bicycle;
         } catch (PersistException | DaoException e) {
-            throw new ServiceException("Failed to login bicycle", e);
+            throw new ServiceException("Failed to get bicycle", e);
         }
 
     }

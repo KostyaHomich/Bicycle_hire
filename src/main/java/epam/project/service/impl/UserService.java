@@ -1,9 +1,12 @@
 package epam.project.service.impl;
 
+import epam.project.database.dao.AbstractJdbcDao;
+import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
+import epam.project.database.dao.impl.TransactionManager;
 import epam.project.entity.User;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
@@ -80,15 +83,29 @@ public class UserService implements Service {
     }
 
     public boolean update(User user) throws ServiceException {
+        TransactionManager transactionManager = new TransactionManager();
         try {
-            UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
-            user.setPassword(userDao.getByLogin(user.getLogin()).getPassword());
-            user.setRegistrationDate(userDao.getByLogin(user.getLogin()).getRegistrationDate());
-            userDao.update(user);
+            UserDao entityDao = (UserDao) JdbcDaoFactory.getInstance().getTransactionalDao(User.class);
+            transactionManager.begin((AbstractJdbcDao) entityDao);
+
+            user.setPassword((entityDao).getByLogin(user.getLogin()).getPassword());
+            user.setRegistrationDate((entityDao).getByLogin(user.getLogin()).getRegistrationDate());
+
+            entityDao.update(user);
+            transactionManager.commit();
+            transactionManager.end();
             return true;
         } catch (DaoException | PersistException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DaoException d) {
+                LOGGER.error("Failed to rollback",e);
+            }
+            LOGGER.error("Failed to update user",e);
             throw new ServiceException("Failed to update user", e);
+
         }
+
 
     }
 
@@ -104,7 +121,7 @@ public class UserService implements Service {
 
 
 
-    public boolean checkLoginExistance(String login) throws ServiceException {
+    public boolean checkLoginExistence(String login) throws ServiceException {
         try {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
             return userDao.checkLoginExistance(login);
@@ -115,7 +132,7 @@ public class UserService implements Service {
 
     }
 
-    public boolean checkEmailExistance(String email) throws ServiceException {
+    public boolean checkEmailExistence(String email) throws ServiceException {
 
         try {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);

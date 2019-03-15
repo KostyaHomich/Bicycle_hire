@@ -2,12 +2,13 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
-import epam.project.service.RequestParameterParser;
+import epam.project.util.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
-import epam.project.service.builder.UserBuilder;
+import epam.project.builder.UserBuilder;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
+import epam.project.util.ResponseContentBuilder;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
 import epam.project.validation.ValidatorType;
@@ -30,7 +31,6 @@ public class CommandRegisterUser implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
-            ResponseContent responseContent = new ResponseContent();
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             UserValidator userValidator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);
 
@@ -42,7 +42,7 @@ public class CommandRegisterUser implements Command {
             if (validationResult.getErrors().size() == 0) {
 
                 User user = userBuilder.build(parameters);
-                if (!userService.checkLoginExistance(user.getLogin())) {
+                if (!userService.checkLoginExistence(user.getLogin())) {
 
                     String password = request.getParameter(PASSWORD);
                     String repeat_password = request.getParameter(REPEAT_PASSWORD);
@@ -50,9 +50,7 @@ public class CommandRegisterUser implements Command {
 
                     if (password.equals(repeat_password)) {
                         userService.register(user);
-                        Router router = new Router(PageConst.MAIN_PAGE_PATH, Router.Type.REDIRECT);
-                        responseContent.setRouter(router);
-                        return responseContent;
+                        return  ResponseContentBuilder.buildRedirectResponseContent(PageConst.MAIN_PAGE_PATH);
 
                     } else {
                         throw new ServiceException("Passwords are not equals");
@@ -62,16 +60,12 @@ public class CommandRegisterUser implements Command {
                     throw new ServiceException("User with this login already exist");
                 }
             } else {
-                Router router = new Router(PageConst.REGISTRATION_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);
-                responseContent.setRouter(router);
-                return responseContent;
+                return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
             }
         } catch (ServiceException e) {
             request.setAttribute("error", e.getMessage());
-            ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.REGISTRATION_PAGE_PATH, Router.Type.FORWARD));
-            return responseContent;
+            return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
         }
     }
 }

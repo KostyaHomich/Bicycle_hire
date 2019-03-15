@@ -3,10 +3,10 @@ package epam.project.command;
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
 import epam.project.entity.UserRole;
-import epam.project.service.RequestParameterParser;
+import epam.project.util.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
-import epam.project.service.builder.UserBuilder;
+import epam.project.builder.UserBuilder;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
 import epam.project.validation.ValidationResult;
@@ -44,7 +44,7 @@ public class CommandLogIn implements Command {
                 request.getSession().setAttribute(USER, signInUser);
 
                 if (signInUser.getRole().equalsIgnoreCase(UserRole.ADMIN.name())) {
-                    Router router = new Router(PageConst.ADMIN_PAGE_PATH, Router.Type.FORWARD);
+                    Router router = new Router(PageConst.USER_PAGE_PATH, Router.Type.FORWARD);
                     responseContent.setRouter(router);
                     return responseContent;
                 } else {

@@ -38,7 +38,7 @@ public class PointHireService implements Service {
         }
     }
 
-    public List<PointHire> takeAllPointHireWithAvailablaBicycle() throws ServiceException {
+    public List<PointHire> takeAllPointHireWithAvailableBicycle() throws ServiceException {
 
         try {
             EntityDao<PointHire, Integer> pointHireDao = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);

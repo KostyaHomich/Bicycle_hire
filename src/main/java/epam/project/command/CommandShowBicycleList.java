@@ -2,13 +2,13 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.Bicycle;
-import epam.project.entity.EntityType;
 import epam.project.entity.User;
 import epam.project.entity.UserRole;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.BicycleService;
+import epam.project.util.ResponseContentBuilder;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ public class CommandShowBicycleList implements Command {
 
         ResponseContent responseContent = new ResponseContent();
             try {
-                request.setAttribute("entity", EntityType.BICYCLE);
+                request.setAttribute("viewName", "bicycle_list");
 
                 BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
 
@@ -36,16 +36,10 @@ public class CommandShowBicycleList implements Command {
                 }
 
                 request.setAttribute("bicycles",bicycleList);
-
-                responseContent.setRouter(new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD));
-                return responseContent;
-
+                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
             } catch (ServiceException e) {
-
-                request.setAttribute("error", "Error: failed get all orders.");
-                responseContent = new ResponseContent();
-                responseContent.setRouter(new Router(PageConst.ENTITY_LIST_PAGE_PATH, Router.Type.FORWARD));
-                return responseContent;
+                request.setAttribute("error", "Error: failed get all bicycles.");
+                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
             }
 
 

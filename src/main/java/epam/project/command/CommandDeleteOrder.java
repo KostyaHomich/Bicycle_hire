@@ -7,6 +7,7 @@ import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.OrderService;
+import epam.project.util.ResponseContentBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,13 +21,11 @@ public class CommandDeleteOrder implements Command {
 
             Order order = orderService.getById(id);
             orderService.delete(order);
-
-            Command command = new CommandShowOrderList();
-            return  command.execute(request);
+            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
         } catch (ServiceException e) {
             request.setAttribute("error","Can't delete order.");
-            Command command = new CommandShowOrderList();
-            return  command.execute(request);
+            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
+
 
         }
     }

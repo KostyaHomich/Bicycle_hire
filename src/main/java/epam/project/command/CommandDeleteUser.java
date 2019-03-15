@@ -7,6 +7,7 @@ import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
+import epam.project.util.ResponseContentBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 public class CommandDeleteUser implements Command {
@@ -20,13 +21,10 @@ public class CommandDeleteUser implements Command {
             User user = userService.getById(id);
             userService.delete(user);
 
-            Command command = new CommandShowUserList();
-            return  command.execute(request);
+            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
         } catch (ServiceException e) {
             request.setAttribute("error","Can't delete user.");
-            Command command = new CommandShowUserList();
-            return  command.execute(request);
-
+            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
         }
     }
 

@@ -5,6 +5,7 @@ import epam.project.validation.Validator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -149,16 +150,19 @@ public class UserValidator implements Validator {
         }
     }
 
-    private void validateBalance(ValidationResult validationResult, String balance) {
+    private void validateBalance(ValidationResult validationResult, String value) {
         ArrayList<String> errors = new ArrayList<>();
         try {
-            Integer.valueOf(balance);
+            BigDecimal balance= BigDecimal.valueOf(Integer.valueOf(value));
+            if(balance.intValue()<0) {
+                errors.add("Balance are must be more then 0");
+            }
         }
         catch (NumberFormatException e){
         errors.add("Balance are not valid ");
         }
         if (errors.size() > 0) {
-            validationResult.add("last_name", errors);
+            validationResult.add("balance", errors);
         }
     }
 
@@ -189,7 +193,7 @@ public class UserValidator implements Validator {
             errors.add("Status length must be less then 16 symbols");
         }
         if (errors.size() > 0) {
-            validationResult.add("password", errors);
+            validationResult.add("status", errors);
         }
     }
 }

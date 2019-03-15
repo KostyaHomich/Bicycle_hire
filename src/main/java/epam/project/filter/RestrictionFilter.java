@@ -16,9 +16,7 @@ import java.io.IOException;
 
 @WebFilter(urlPatterns = "/")
 public class RestrictionFilter implements Filter {
-    private static final Logger LOGGER = LogManager.getLogger(FrontController.class);
 
-    private static final String VIEW_NAME = "viewName";
     private static final String SIGN_IN_USER = "signInUser";
 
     @Override
@@ -39,9 +37,8 @@ public class RestrictionFilter implements Filter {
         if (restrictions.isAllowedRole(role)) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            servletRequest.setAttribute(VIEW_NAME, "error_page");
-            servletRequest.setAttribute("error", "you are forbidden to do this");
-            servletRequest.getRequestDispatcher(PageConst.MAIN_PAGE_PATH).forward(servletRequest, servletResponse);
+            httpServletRequest.getSession().invalidate();
+            servletRequest.getRequestDispatcher(PageConst.LOGIN_PAGE_PATH).forward(servletRequest, servletResponse);
         }
     }
 

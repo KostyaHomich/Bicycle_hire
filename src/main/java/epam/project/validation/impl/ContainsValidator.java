@@ -51,7 +51,7 @@ public class ContainsValidator implements Validator {
     private ValidationResult checkLogin(ValidationResult validationResult, String value) throws ServiceException {
         UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
         ArrayList<String> errors = new ArrayList<>();
-        if (!userService.checkLoginExistance(value)) {
+        if (!userService.checkLoginExistence(value)) {
             errors.add("User with this login doesn't exist");
           validationResult.add("login",errors);
         }
@@ -60,7 +60,7 @@ public class ContainsValidator implements Validator {
     private ValidationResult checkEmail(ValidationResult validationResult, String value) throws ServiceException {
         UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
         ArrayList<String> errors = new ArrayList<>();
-        if (!userService.checkEmailExistance(value)) {
+        if (!userService.checkEmailExistence(value)) {
             errors.add("User with this email doesn't exist");
             validationResult.add("email",errors);
         }

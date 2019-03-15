@@ -7,6 +7,7 @@ import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.BicycleService;
+import epam.project.util.ResponseContentBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,13 +22,10 @@ public class CommandDeleteBicycle implements Command {
             Bicycle bicycle = bicycleService.getById(id);
             bicycleService.delete(bicycle);
 
-            Command command = new CommandShowBicycleList();
-            return  command.execute(request);
+            return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST, request);
         } catch (ServiceException e) {
             request.setAttribute("error","Can't delete bicycle.");
-            Command command = new CommandShowBicycleList();
-            return  command.execute(request);
-
+            return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST, request);
         }
     }
 }

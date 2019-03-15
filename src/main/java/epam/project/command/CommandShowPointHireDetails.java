@@ -7,6 +7,7 @@ import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.PointHireService;
+import epam.project.util.ResponseContentBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,7 +15,7 @@ public class CommandShowPointHireDetails implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
         try {
-            request.setAttribute("entity", EntityType.POINT_HIRE);
+            request.setAttribute("viewName","point_hire_details");
 
             PointHireService pointHireService = (PointHireService) ServiceFactory.getInstance().getService(ServiceType.POINT_HIRE);
             int id=Integer.valueOf(request.getParameter("pointHireId"));
@@ -29,16 +30,12 @@ public class CommandShowPointHireDetails implements Command {
             }
         }
         catch (ServiceException e) {
-            ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH,Router.Type.FORWARD));
-            return responseContent;
+            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
         }
     }
 
     private ResponseContent setAttribute(HttpServletRequest request, PointHire pointHire) {
         request.setAttribute("pointHire", pointHire);
-        ResponseContent responseContent = new ResponseContent();
-        responseContent.setRouter(new Router(PageConst.ENTITY_DETAILS_PAGE_PATH, Router.Type.FORWARD));
-        return responseContent;
+        return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
     }
 }
