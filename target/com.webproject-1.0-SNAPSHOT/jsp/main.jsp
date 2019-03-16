@@ -1,8 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
-<%@ page import="epam.project.entity.UserRole" %>
-<html lang="en">
+<%@ taglib prefix="lang" tagdir="/WEB-INF/tags" %>
+
 <head>
     <title>Main</title>
     <meta charset="utf-8">
@@ -14,25 +15,35 @@
     <link rel="text/javascript" href="${pageContext.request.contextPath}/static/js/jquery.js">
     <link rel="text/javascript" href="${pageContext.request.contextPath}/static/js/main.js">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style_locale.css">
+
+
 </head>
 <body>
+
+<fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'EN'}"/>
+<fmt:setBundle basename="/text" scope="application"/>
+
 <section class="hero">
     <header>
         <div class="wrapper">
-            <a href="#"><img src="${pageContext.request.contextPath}/static/img/logo.png" class="logo" alt=""
-                             title=""/></a>
-            <a href="#" class="hamburger"></a>
+
+            <lang:lang/>
             <nav>
                 <c:if test="${sessionScope.signInUser==null}">
                     <a href="${pageContext.request.contextPath}/registration ?command=${CommandType.SHOW_REGISTRATION_PAGE}"
-                       class="login_btn">Registration</a>
+                       class="login_btn"><fmt:message key="page.main.button.registration"/> </a>
+
                     <a href="${pageContext.request.contextPath}/login ?command=${CommandType.SHOW_LOGIN_PAGE}"
-                       class="login_btn">Login</a>
+                       class="login_btn"><fmt:message key="page.button.login"/> </a>
                 </c:if>
 
                 <c:if test="${sessionScope.signInUser!=null}">
                     <a href="${pageContext.request.contextPath}/user_page ?command=${CommandType.SHOW_USER_PAGE}"
-                       class="login_btn">Account</a>
+                       class="login_btn"><fmt:message key="page.main.button.account"/> </a>
                 </c:if>
 
             </nav>
@@ -41,11 +52,10 @@
 
     <!--  end header section  -->
     <section class="caption">
-        <h2 class="caption">Find You Bicycle</h2>
+        <h2 class="caption"><fmt:message key="page.main.welcome"/></h2>
     </section>
 </section>
 <!--  end hero section  -->
 <jsp:include page="footer.jsp"/>
 
 </body>
-</html>

@@ -1,34 +1,38 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
-
+<%@ taglib prefix="lang" tagdir="/WEB-INF/tags" %>
 
 <div class="container">
     <section id="content">
 
         <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
             <h1>Order details</h1>
-            <c:out value="${sessionScope.error}"/>
+            <c:out value="${requestScope.error}"/>
 
-            <c:if test="${ not empty sessionScope.errorsList}">
-                <c:forEach var="entry" items="${sessionScope.errorsList.getErrors()}">
+            <c:if test="${ not empty requestScope.errorsList}">
+                <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
                     <c:if test="${entry.value.size() >0}">
                         Error:<c:out value="${entry.value}"/>
                     </c:if>
                 </c:forEach>
             </c:if>
-            <input type="hidden" name="id" value="${sessionScope.order.getId()}">
+            <input type="hidden" name="orderId" value="${requestScope.order.getId()}">
             <div>
-                <input type="text" value="${sessionScope.order.getLocation()}" placeholder="Location" id="location"
-                       name="location"/>
+                <input type="text" value="${requestScope.order.getRentalTime()}" placeholder="Rental time" id="rental_time"
+                       name="rental_time"/>
             </div>
             <div>
-                <input type="text" value="${sessionScope.order.getTelephone()}" placeholder="Telephone" id="telephone"
-                       name="telephone"/>
+                <input type="text" value="${requestScope.order.getStatus()}" placeholder="status" id="status"
+                       name="status"/>
             </div>
             <div>
-                <input type="text" value="${sessionScope.order.getDescription()}" placeholder="Description" id="description"
-                       name="description"/>
+                <input type="text" value="${requestScope.order.getTimeOrder()}" placeholder="Time order" id="time_order"
+                       name="time_order"/>
+            </div>
+            <div>
+                <input type="text" value="${requestScope.order.getCost()}" placeholder="Cost" id="cost"
+                       name="cost"/>
             </div>
             <div>
 

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="epam.project.command.CommandType" %>
 <%@ page import="epam.project.entity.UserRole" %>
+<%@ taglib prefix="lang" tagdir="/WEB-INF/tags" %>
 
 <c:if test="${not empty sessionScope.signInUser
 && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">

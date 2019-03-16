@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="epam.project.command.CommandType" %>
 <%@ page import="epam.project.entity.UserRole" %>
-
+<%@ taglib prefix="lang" tagdir="/WEB-INF/tags" %>
 
 <table class="table table-striped jambo_table bulk_action">
     <thead>
@@ -30,12 +30,12 @@
                 <form style="display: inline-block;" action="${pageContext.request.contextPath}/order_details" method="post">
                     <input type="hidden" name="orderId" value="${order.getId()}">
                     <input type="hidden" name="command" value="${CommandType.SHOW_ORDER_DETAILS}">
-                    <input type="image" style="width: 20px;height: 20px" src="${pageContext.request.contextPath}/static/img/edit.jpg">
+                    <input type="submit" value="View">
                 </form>
                 <form style="display: inline-block;" action="${pageContext.request.contextPath}/order_delete" method="post">
                     <input type="hidden" name="orderId" value="${order.getId()}">
                     <input type="hidden" name="command" value="${CommandType.DELETE_ORDER}">
-                    <input type="image" style="width: 20px;height: 20px" src="${pageContext.request.contextPath}/static/img/delete.jpg">
+                    <input type="submit" value="Delete">
                 </form>
                 </c:if>
             </td>

@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
-
+<%@ taglib prefix="lang" tagdir="/WEB-INF/tags" %>
 
 <table class="table table-striped jambo_table bulk_action">
     <thead>

@@ -2,6 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
 <%@ page import="epam.project.entity.UserRole" %>
+<%@ taglib prefix="lang" tagdir="/WEB-INF/tags" %>
+
 <div class="container">
     <section id="content">
 
