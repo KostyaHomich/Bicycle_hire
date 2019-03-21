@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="epam.project.command.CommandType" %>
 <%@ page import="epam.project.entity.UserRole" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="lang" tagdir="/WEB-INF/tags" %>
 
 <div class="container">
@@ -10,30 +10,54 @@
 
         <form action="${pageContext.request.contextPath}/bicycle_list" method="post">
 
-            <h1>Bicycles details</h1>
+            <h1><fmt:message key="page.title.bicycle_details"/></h1>
+
             <c:out value="${requestScope.error}"/>
 
             <c:if test="${not empty requestScope.errorsList}">
                 <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
                     <c:if test="${entry.value.size() >0}">
-                        Error:<c:out value="${entry.value}"/>
+                        <c:forEach var="value" items="${entry.value}">
+                            <fmt:message key="${value}"/>
+                        </c:forEach>
                     </c:if>
                 </c:forEach>
             </c:if>
             <input type="hidden" name="bicycleId" value="${requestScope.bicycle.getId()}">
             <div>
-                <input type="text" value="${requestScope.bicycle.getName()}" placeholder="Name" id="name" name="name"/>
+                <input type="text"
+                        <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
+                            readonly
+                        </c:if>
+                       value="${requestScope.bicycle.getName()}"
+                       placeholder="<fmt:message key="bicycle.name"/>" id="name" name="name"/>
             </div>
             <div>
-                <input type="text" value="${requestScope.bicycle.getDaily_rental_price()}" placeholder="Daily rental price"
+                <input type="text"
+                        <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
+                            readonly
+                        </c:if>
+                       value="${requestScope.bicycle.getDaily_rental_price()}"
+                       placeholder="<fmt:message key="bicycle.daily_rental_price"/>"
                        id="daily_rental_price" name="daily_rental_price"/>
             </div>
+
             <div>
-                <input type="text" value="${requestScope.bicycle.getStatus()}" placeholder="Status" id="status" name="status"/>
+                <input type="text"
+                        <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
+                            readonly
+                        </c:if>
+                       value="${requestScope.bicycle.getStatus()}"
+                       placeholder="<fmt:message key="bicycle.status"/>" id="status" name="status"/>
             </div>
             <div>
-                <input type="text" value="${requestScope.bicycle.getDescription()}" placeholder="Description" id="description"
-                       name="description"/>
+                <textarea style="height: 60px;width: 300px;"
+                        <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
+                            readonly
+                        </c:if>
+                          placeholder="<fmt:message key="bicycle.description"/>" id="description" name="description">
+                    ${requestScope.bicycle.getDescription()}
+                </textarea>
             </div>
             <div>
                 <c:if test="${not empty sessionScope.signInUser
@@ -41,18 +65,20 @@
                     <c:if test="${requestScope.bicycle.getId()==0}">
                         <input type="hidden" name="pointHireId" value="${requestScope.bicycle.getPoint_hire_id()}">
                         <input type="hidden" name="command" value="${CommandType.ADD_BICYCLE}">
-                        <input style="display: inline-block;" type="submit" value="Add">
+                        <input style="display: inline-block;" type="submit"
+                               value="<fmt:message key="page.button.add"/>">
                     </c:if>
 
                     <c:if test="${requestScope.bicycle.getId()!=0}">
                         <input type="hidden" name="command" value="${CommandType.UPDATE_BICYCLE}">
-                        <input style="display: inline-block;"  type="submit" value="Update">
+                        <input style="display: inline-block;" type="submit"
+                               value="<fmt:message key="page.button.update"/>">
                     </c:if>
 
                 </c:if>
                 <form style="display: inline-block; text-align:right;" action="${pageContext.request.contextPath}/bicycle_details" method="post">
                     <div>
-                        <input type="submit" value="Back">
+                        <input type="submit" value="<fmt:message key="page.button.back"/>">
                         <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
                     </div>
                 </form>

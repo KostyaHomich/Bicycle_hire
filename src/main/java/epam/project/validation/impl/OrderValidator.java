@@ -11,20 +11,23 @@ import epam.project.validation.Validator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 public class OrderValidator implements Validator {
 
     private static final String TIME_RENTAL = "time_rental";
-    private static final String STATUS = "status";
+    private static final String TIME_ORDER = "time_order";
     private static final String POINT_HIRE_ID = "point_hire_id";
     private static final String BICYCLE_ID = "bicycle_id";
 
     private static final Logger LOGGER = LogManager.getLogger(OrderValidator.class);
 
-    private static final int MAX_STATUS_LENGTH = 35;
-    private static final int MIN_STATUS_LENGTH = 4;
 
     public ValidationResult doValidate(Map<String,String> params) throws ServiceException {
 
@@ -43,8 +46,8 @@ public class OrderValidator implements Validator {
                 case TIME_RENTAL:
                     validateTimeRental(validationResult, value);
                     break;
-                case STATUS:
-                    validateStatus(validationResult,value);
+                case TIME_ORDER:
+                    validateTimeOrder(validationResult, value);
                     break;
                 default:
                     break;
@@ -55,55 +58,58 @@ public class OrderValidator implements Validator {
     }
 
 
-    private ValidationResult validateBicycleId(ValidationResult validationResult, String value) throws ServiceException {
+    private void validateBicycleId(ValidationResult validationResult, String value) throws ServiceException {
 
         BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
         ArrayList<String> errors = new ArrayList<>();
         if (!bicycleService.contains(Integer.valueOf(value))) {
             errors.add("Bicycle with this id doesn't exist");
-            validationResult.add("bicycle",errors);
+            validationResult.add(BICYCLE_ID,errors);
         }
-        return validationResult;
+
     }
 
-    private ValidationResult validatePointHireId(ValidationResult validationResult, String value) throws ServiceException {
+    private void validatePointHireId(ValidationResult validationResult, String value) throws ServiceException {
 
         PointHireService pointHireService = (PointHireService) ServiceFactory.getInstance().getService(ServiceType.POINT_HIRE);
         ArrayList<String> errors = new ArrayList<>();
         if (!pointHireService.contains(Integer.valueOf(value))) {
             errors.add("Point hire with this id doesn't exist");
-            validationResult.add("bicycle",errors);
+            validationResult.add(POINT_HIRE_ID,errors);
         }
-        return validationResult;
     }
 
 
     private void validateTimeRental(ValidationResult validationResult, String value) {
         ArrayList<String> errors = new ArrayList<>();
-        int dailyRentalPrice;
         try {
-            dailyRentalPrice = Integer.valueOf(value);
+            int dailyRentalPrice = Integer.valueOf(value);
             if (dailyRentalPrice <= 0) {
-                errors.add("Time rental can't be less then 0");
+                errors.add("order.error.time_rental_more_then_0");
             }
         } catch (NumberFormatException e) {
-            errors.add("Time rental are not valid");
+            errors.add("order.error.invalid_time_rental");
         }
         if (errors.size() > 0) {
-            validationResult.add("login", errors);
+            validationResult.add(TIME_RENTAL, errors);
         }
     }
-    private void validateStatus(ValidationResult validationResult, String status) {
-        ArrayList<String> errors = new ArrayList<>();
 
-        if (status.length() <= MIN_STATUS_LENGTH) {
-            errors.add("Status length must be more then 5 symbols");
-        }
-        if (status.length() > MAX_STATUS_LENGTH) {
-            errors.add("Status length must be less then 16 symbols");
+    private void validateTimeOrder(ValidationResult validationResult, String value) {
+        ArrayList<String> errors = new ArrayList<>();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        try {
+
+            Date date = format.parse(value);
+            if(date.getTime()<new Date().getTime()) {
+                errors.add("order.error.time_order_less_than_now");
+            }
+        } catch (ParseException e) {
+         errors.add("order.error.invalid_time_order");
         }
         if (errors.size() > 0) {
-            validationResult.add("password", errors);
+            validationResult.add(TIME_RENTAL, errors);
         }
     }
+
 }

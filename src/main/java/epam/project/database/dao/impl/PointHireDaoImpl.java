@@ -5,11 +5,11 @@ import epam.project.database.dao.AutoConnection;
 import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.PointHireDao;
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
 import epam.project.entity.PointHire;
 
-import java.sql.*;
-
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class PointHireDaoImpl extends AbstractJdbcDao<PointHire, Integer> implem
 
 
     @Override
-    protected List<PointHire> parseResultSet(ResultSet rs) throws SQLException, PersistException {
+    protected List<PointHire> parseResultSet(ResultSet rs) throws DaoException {
         List<PointHire> result = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -42,7 +42,7 @@ public class PointHireDaoImpl extends AbstractJdbcDao<PointHire, Integer> implem
                 result.add(pointHire);
             }
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new DaoException(e);
         }
         return result;
     }

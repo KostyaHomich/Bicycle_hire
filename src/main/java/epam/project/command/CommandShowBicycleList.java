@@ -19,7 +19,6 @@ public class CommandShowBicycleList implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
 
-        ResponseContent responseContent = new ResponseContent();
             try {
                 request.setAttribute("viewName", "bicycle_list");
 

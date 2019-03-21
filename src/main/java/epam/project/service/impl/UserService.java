@@ -1,10 +1,8 @@
 package epam.project.service.impl;
 
 import epam.project.database.dao.AbstractJdbcDao;
-import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.TransactionManager;
 import epam.project.entity.User;
@@ -56,7 +54,7 @@ public class UserService implements Service {
             } else {
                 throw new ServiceException("Wrong password");
             }
-        } catch (PersistException | DaoException e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to sign in user.", e);
         }
     }
@@ -77,7 +75,7 @@ public class UserService implements Service {
         try {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
             return userDao.getByPK(id);
-        } catch (DaoException  | PersistException e) {
+        } catch (DaoException  e) {
             throw new ServiceException("Failed to delete user", e);
         }
     }
@@ -95,7 +93,7 @@ public class UserService implements Service {
             transactionManager.commit();
             transactionManager.end();
             return true;
-        } catch (DaoException | PersistException e) {
+        } catch (DaoException e) {
             try {
                 transactionManager.rollback();
             } catch (DaoException d) {
@@ -113,7 +111,7 @@ public class UserService implements Service {
         try {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
             return userDao.getByLogin(login);
-        } catch (PersistException | DaoException e) {
+        } catch ( DaoException e) {
             throw new ServiceException("Failed to take user.", e);
         }
 
@@ -126,7 +124,7 @@ public class UserService implements Service {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
             return userDao.checkLoginExistance(login);
 
-        } catch (DaoException | PersistException e) {
+        } catch (DaoException  e) {
             throw new ServiceException("Failed to check contains user", e);
         }
 
@@ -138,7 +136,7 @@ public class UserService implements Service {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
             return userDao.checkEmailExistance(email);
 
-        } catch (DaoException | PersistException e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to check contains user", e);
         }
 

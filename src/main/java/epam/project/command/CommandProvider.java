@@ -42,6 +42,9 @@ public class CommandProvider {
         commandMap.put(CommandType.SHOW_USER_DETAILS,new CommandShowUserDetails());
         commandMap.put(CommandType.SHOW_BICYCLE_DETAILS,new CommandShowBicycleDetails());
         commandMap.put(CommandType.SHOW_POINT_HIRE_DETAILS,new CommandShowPointHireDetails());
+
+        commandMap.put(CommandType.CANCEL_ORDER,new CommandCancelOrder());
+        commandMap.put(CommandType.SHOW_ORDER_DETAILS_SECOND_PAGE,new CommandShowOrderDetailsSecondStage());
     }
 
     public static CommandProvider getInstance() {

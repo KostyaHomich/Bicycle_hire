@@ -52,8 +52,8 @@ public class ContainsValidator implements Validator {
         UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
         ArrayList<String> errors = new ArrayList<>();
         if (!userService.checkLoginExistence(value)) {
-            errors.add("User with this login doesn't exist");
-          validationResult.add("login",errors);
+            errors.add("user.error.login_not_exist");
+          validationResult.add(LOGIN,errors);
         }
         return validationResult;
     }
@@ -61,8 +61,8 @@ public class ContainsValidator implements Validator {
         UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
         ArrayList<String> errors = new ArrayList<>();
         if (!userService.checkEmailExistence(value)) {
-            errors.add("User with this email doesn't exist");
-            validationResult.add("email",errors);
+            errors.add("user.error.email_not_exist");
+            validationResult.add(EMAIL,errors);
         }
         return validationResult;
     }

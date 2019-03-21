@@ -1,14 +1,19 @@
 package epam.project.service.impl;
 
-import epam.project.database.dao.EntityDao;
+import epam.project.database.dao.*;
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
+import epam.project.database.dao.impl.TransactionManager;
+import epam.project.dto.PointHireBicycle;
+import epam.project.entity.Bicycle;
 import epam.project.entity.Order;
+import epam.project.entity.PointHire;
+import epam.project.entity.User;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderService implements Service {
@@ -29,16 +34,89 @@ public class OrderService implements Service {
         return orders;
     }
 
-    public boolean add(Order order) throws ServiceException {
+    public List<Order> takeAllOrderByUserPk(int pk) throws ServiceException {
 
+        List<Order> orders;
         try {
-            EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
-            orderDao.persist(order);
-
+            OrderDao orderDao = (OrderDao) JdbcDaoFactory.getInstance().getDao(Order.class);
+            orders = orderDao.getAllOrdersByUserPk(pk);
         } catch (DaoException e) {
-            throw new ServiceException("Failed to add order", e);
+            throw new ServiceException("Failed to get all orders by pk", e);
         }
-        return true;
+        return orders;
+    }
+
+    public boolean add(Order order) throws ServiceException {
+        TransactionManager transactionManager = new TransactionManager();
+        try {
+            EntityDao<Order, Integer> orderDao = JdbcDaoFactory.getInstance().getTransactionalDao(Order.class);
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getTransactionalDao(Bicycle.class);
+            UserDao userDao=(UserDao) JdbcDaoFactory.getInstance().getTransactionalDao(User.class);
+
+            transactionManager.begin((AbstractJdbcDao) orderDao, (AbstractJdbcDao) bicycleDao,(AbstractJdbcDao) userDao);
+
+            PointHireBicycle pointHireBicycle = bicycleDao.getByBicyclePkPointHireBicycle(order.getBicycle().getId());
+            order.setPointHireBicycle(pointHireBicycle);
+
+            Bicycle bicycle = bicycleDao.getByPK(pointHireBicycle.getId_bicycle());
+            User user=userDao.getByPK(order.getUser().getId());
+
+            BigDecimal cost = new BigDecimal(order.getRentalTime() * bicycle.getDaily_rental_price().intValue());
+            BigDecimal userBalance=new BigDecimal(user.getBalance().intValue()-cost.intValue());
+
+            user.setBalance(userBalance);
+            order.setCost(cost);
+
+            bicycle.setStatus("rented");
+
+            bicycleDao.update(bicycle);
+            userDao.update(user);
+            orderDao.persist(order);
+            transactionManager.commit();
+            transactionManager.end();
+            return true;
+        } catch (DaoException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DaoException d) {
+                LOGGER.error("Failed to rollback", e);
+            }
+            LOGGER.error("Failed to add order", e);
+            throw new ServiceException("Failed to add order", e);
+
+        }
+
+    }
+
+    public boolean cancelOrder(int id) throws ServiceException {
+        TransactionManager transactionManager = new TransactionManager();
+        try {
+            EntityDao<Order, Integer> orderDao = JdbcDaoFactory.getInstance().getTransactionalDao(Order.class);
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getTransactionalDao(Bicycle.class);
+            transactionManager.begin((AbstractJdbcDao) orderDao, (AbstractJdbcDao) bicycleDao);
+
+            Order order = orderDao.getByPK(id);
+            PointHireBicycle pointHireBicycle=bicycleDao.getByPkPointHireBicycle(order.getPointHireBicycle().getId());
+            Bicycle bicycle = bicycleDao.getByPK(pointHireBicycle.getId_bicycle());
+            bicycle.setStatus("available");
+            bicycleDao.update(bicycle);
+            order.setStatus("finished");
+            orderDao.update(order);
+
+            transactionManager.commit();
+            transactionManager.end();
+            return true;
+        } catch (DaoException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DaoException d) {
+                LOGGER.error("Failed to rollback", e);
+            }
+            e.printStackTrace();
+            LOGGER.error("Failed to cancel order", e);
+            throw new ServiceException("Failed to cancel order", e);
+
+        }
 
     }
 
@@ -46,6 +124,7 @@ public class OrderService implements Service {
 
         try {
             EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
+
             orderDao.delete(order);
         } catch (DaoException e) {
             throw new ServiceException("Failed to delete order", e);
@@ -57,9 +136,10 @@ public class OrderService implements Service {
 
         try {
             EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
-            return orderDao.getByPK(id);
-        } catch (DaoException  | PersistException e) {
-            throw new ServiceException("Failed to get order", e);
+            return  orderDao.getByPK(id);
+        } catch (DaoException   e) {
+
+            throw new ServiceException("Failed to get by pk order", e);
         }
     }
 

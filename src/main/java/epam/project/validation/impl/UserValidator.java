@@ -17,7 +17,6 @@ public class UserValidator implements Validator {
     private static final String EMAIL = "email";
     private static final String FIST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
-    private static final String STATUS = "status";
 
     private static final Logger LOGGER = LogManager.getLogger(UserValidator.class);
 
@@ -34,8 +33,7 @@ public class UserValidator implements Validator {
     private static final int MAX_LOGIN_LENGTH = 15;
     private static final int MIN_PASSWORD_LENGTH = 7;
     private static final int MAX_PASSWORD_LENGTH = 25;
-    private static final int MIN_STATUS_LENGTH = 3;
-    private static final int MAX_STATUS_LENGTH = 15;
+
 
     public ValidationResult doValidate(Map<String,String> params)  {
 
@@ -63,9 +61,6 @@ public class UserValidator implements Validator {
                 case BALANCE:
                     validateBalance(validationResult,value);
                     break;
-                case STATUS:
-                    validateStatus(validationResult,value);
-                    break;
                 default:
                     break;
             }
@@ -78,13 +73,13 @@ public class UserValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (login.length() <= MIN_LOGIN_LENGTH) {
-            errors.add("Login length must be more then 5 symbols");
+            errors.add("user.error.min_login_length");
         }
         if (login.length() > MAX_LOGIN_LENGTH) {
-            errors.add("Login length must be less then 16 symbols");
+            errors.add("user.error.max_login_length");
         }
         if (login.contains(SPACE)) {
-            errors.add("Login must not have empty space");
+            errors.add("user.error.login_empty_space");
         }
         if (errors.size() > 0) {
             validationResult.add("login", errors);
@@ -96,57 +91,57 @@ public class UserValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (email.length() <= MIN_EMAIL_LENGTH) {
-            errors.add("Email length must be more then 5 symbols");
+            errors.add("user.error.min_email_length");
         }
         if (email.length() > MAX_EMAIL_LENGTH) {
-            errors.add("Email length must be less then 16 symbols");
+            errors.add("user.error.max_email_length");
         }
         if (email.matches(CHECK_EMAIL)) {
-            errors.add("Email are not valid");
+            errors.add("user.error.invalid_email");
         }
         if (email.contains(SPACE)) {
-            errors.add("Email must not have empty space");
+            errors.add("user.error.email_empty_space");
         }
         if (errors.size() > 0) {
-            validationResult.add("email", errors);
+            validationResult.add(EMAIL, errors);
         }
     }
 
     private void validateFirstName(ValidationResult validationResult, String name) {
         ArrayList<String> errors = new ArrayList<>();
         if (name.length() <= MIN_FIRST_NAME_LENGTH) {
-            errors.add("First name length must be more then 5 symbols");
+            errors.add("user.error.min_first_name_length");
         }
         if (name.length() > MAX_FIRST_NAME_LENGTH) {
-            errors.add("First name must be less then 16 symbols");
+            errors.add("user.error.max_first_name_length");
         }
         if (name.matches(CHECK_NAME)) {
-            errors.add("First name are not valid only letters");
+            errors.add("user.error.invalid_first_name");
         }
         if (name.contains(SPACE)) {
-            errors.add("First name must not have empty space");
+            errors.add("user.error.first_name_empty_space");
         }
         if (errors.size() > 0) {
-            validationResult.add("first_name", errors);
+            validationResult.add(FIST_NAME, errors);
         }
     }
 
     private void validateLastName(ValidationResult validationResult, String name) {
         ArrayList<String> errors = new ArrayList<>();
         if (name.length() <= MIN_LAST_NAME_LENGTH) {
-            errors.add("Last name length must be more then 5 symbols");
+            errors.add("user.error.min_last_name_length");
         }
         if (name.length() > MAX_LAST_NAME_LENGTH) {
-            errors.add("Last name length must be less then 16 symbols");
+            errors.add("user.error.max_last_name_length");
         }
         if (name.matches(CHECK_NAME)) {
-            errors.add("Last name are not valid only letters");
+            errors.add("user.error.invalid_last_name");
         }
         if (name.contains(SPACE)) {
-            errors.add("Last name must not have empty space");
+            errors.add("user.error.last_name_empty_space");
         }
         if (errors.size() > 0) {
-            validationResult.add("last_name", errors);
+            validationResult.add(LAST_NAME, errors);
         }
     }
 
@@ -155,14 +150,14 @@ public class UserValidator implements Validator {
         try {
             BigDecimal balance= BigDecimal.valueOf(Integer.valueOf(value));
             if(balance.intValue()<0) {
-                errors.add("Balance are must be more then 0");
+                errors.add("user.error.balance_more_then_0");
             }
         }
         catch (NumberFormatException e){
-        errors.add("Balance are not valid ");
+        errors.add("user.error.invalid_balance");
         }
         if (errors.size() > 0) {
-            validationResult.add("balance", errors);
+            validationResult.add(BALANCE, errors);
         }
     }
 
@@ -170,30 +165,17 @@ public class UserValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (password.length() <= MIN_PASSWORD_LENGTH) {
-            errors.add("Password length must be more then 5 symbols");
+            errors.add("user.error.min_password_length");
         }
         if (password.length() > MAX_PASSWORD_LENGTH) {
-            errors.add("Password length must be less then 16 symbols");
+            errors.add("user.error.max_password_length");
         }
         if (password.contains(SPACE)) {
-            errors.add("Password must not have empty space");
+            errors.add("user.error.password_empty_space");
         }
         if (errors.size() > 0) {
-            validationResult.add("password", errors);
+            validationResult.add(PASSWORD, errors);
         }
     }
 
-    private void validateStatus(ValidationResult validationResult, String status) {
-        ArrayList<String> errors = new ArrayList<>();
-
-        if (status.length() <= MIN_STATUS_LENGTH) {
-            errors.add("Status length must be more then 5 symbols");
-        }
-        if (status.length() > MAX_STATUS_LENGTH) {
-            errors.add("Status length must be less then 16 symbols");
-        }
-        if (errors.size() > 0) {
-            validationResult.add("status", errors);
-        }
-    }
 }

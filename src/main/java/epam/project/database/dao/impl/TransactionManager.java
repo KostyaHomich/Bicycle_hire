@@ -1,7 +1,6 @@
 package epam.project.database.dao.impl;
 
 import epam.project.database.dao.AbstractJdbcDao;
-import epam.project.database.pool.ConnectionPoolFactory;
 import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.exception.ConnectionPoolException;
 import epam.project.database.dao.exception.DaoException;
@@ -11,9 +10,6 @@ import epam.project.database.pool.ConnectionPoolImpl;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public final class TransactionManager {
     private Connection connection;

@@ -25,6 +25,8 @@ public enum CommandType {
     SHOW_REGISTRATION_PAGE,
     SHOW_LOGIN_PAGE,
     LOGIN,
+    SHOW_ORDER_DETAILS_SECOND_PAGE(new Restrictions().setRoles(UserRole.USER.name())),
+    CANCEL_ORDER(new Restrictions().setRoles(UserRole.USER.name())),
     SHOW_USER_LIST(new Restrictions().setRoles(UserRole.ADMIN.name())),
     SHOW_BICYCLE_LIST(new Restrictions().setRoles(UserRole.ADMIN.name(),UserRole.USER.name())),
     SHOW_POINT_HIRE_LIST(new Restrictions().setRoles(UserRole.ADMIN.name(),UserRole.USER.name())),

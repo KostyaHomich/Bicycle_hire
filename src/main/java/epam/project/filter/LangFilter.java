@@ -26,6 +26,7 @@ public class LangFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
@@ -34,45 +35,41 @@ public class LangFilter implements Filter {
         if (change != null) {
             changeLocale(request, response, change);
         } else {
-            initLocale(request);
+            initLocale(request, response);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private void changeLocale(HttpServletRequest request, HttpServletResponse response, String lang) {
 
+
         Optional<LanguageEnum> languageEnum = LanguageEnum.fromString(lang);
         Locale locale = languageEnum.map(LanguageEnum::getLocaleByEnum).orElseGet(() -> LanguageEnum.getLocaleByEnum(LanguageEnum.EN));
 
         Cookie langCookie = new Cookie(LANG_PARAM, locale.getLanguage());
-        langCookie.setPath(request.getContextPath());
-
-        request.getSession().setAttribute(LANG_PARAM, locale);
+        request.setAttribute(LANG_PARAM, locale);
 
         response.addCookie(langCookie);
 
     }
 
-    private void initLocale(HttpServletRequest request) {
+    private void initLocale(HttpServletRequest request, HttpServletResponse response) {
 
         Optional<String> cookieLang = CookieFinder.getValueByName(LANG_PARAM, request.getCookies());
         Supplier<Locale> supplier = () -> LanguageEnum.getLocaleByEnum(LanguageEnum.EN);
 
-
         if (cookieLang.isPresent()) {
+
             Optional<LanguageEnum> languageEnum = LanguageEnum.fromString(cookieLang.get());
             Locale locale = languageEnum.map(LanguageEnum::getLocaleByEnum).orElseGet(supplier);
-
-
-            request.getSession().setAttribute(LANG_PARAM, locale);
+            request.setAttribute(LANG_PARAM, locale);
 
         } else {
             Optional<LanguageEnum> languageEnum = LanguageEnum.fromString(request.getLocale().getLanguage());
-            Locale locale;
-            locale = languageEnum.map(LanguageEnum::getLocaleByEnum).orElseGet(supplier);
-
-            request.getSession().setAttribute(LANG_PARAM, locale);
-
+            Locale locale = languageEnum.map(LanguageEnum::getLocaleByEnum).orElseGet(supplier);
+            Cookie cookie = new Cookie(LANG_PARAM, locale.getLanguage());
+            response.addCookie(cookie);
+            request.setAttribute(LANG_PARAM, locale);
         }
     }
 

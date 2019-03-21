@@ -1,9 +1,6 @@
 package epam.project.database.dao;
 
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
-import epam.project.database.dao.impl.UserDaoImpl;
-import epam.project.service.impl.UserService;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -15,11 +12,11 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
 
     protected Connection connection;
 
-    protected abstract List<T> parseResultSet(ResultSet rs) throws SQLException, PersistException;
+    protected abstract List<T> parseResultSet(ResultSet rs) throws SQLException, DaoException;
 
-    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object) throws SQLException, PersistException;
+    protected abstract void prepareStatementForInsert(PreparedStatement statement, T object) throws SQLException;
 
-    protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object) throws SQLException, PersistException;
+    protected abstract void prepareStatementForUpdate(PreparedStatement statement, T object) throws SQLException;
 
     public abstract String getSelectQuery();
 
@@ -32,7 +29,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
 
     @Override
     @AutoConnection
-    public T getByPK(PK key) throws DaoException, PersistException {
+    public T getByPK(PK key) throws DaoException {
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(getSelectQuery() + " WHERE id = " + key)) {
             return parseResultSet(preparedStatement.executeQuery()).get(0);
         } catch (SQLException e) {
@@ -48,7 +45,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
             list = parseResultSet(rs);
-        } catch (SQLException | PersistException e) {
+        } catch (SQLException  e) {
             throw new DaoException("Failed to get all entity's.",e);
         }
         return list;
@@ -68,7 +65,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
                 throw new SQLException("Creating user failed, no ID obtained.");
             }
 
-        } catch (SQLException | PersistException e) {
+        } catch (SQLException e) {
             throw new DaoException("Failed to insert entity.", e);
         }
     }

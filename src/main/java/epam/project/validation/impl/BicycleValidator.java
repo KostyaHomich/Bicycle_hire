@@ -24,8 +24,6 @@ public class BicycleValidator implements Validator {
     private static final String SPACE = " ";
     private static final int MAX_NAME_LENGTH = 25;
     private static final int MIN_NAME_LENGTH = 4;
-    private static final int MIN_STATUS_LENGTH = 4;
-    private static final int MAX_STATUS_LENGTH = 25;
     private static final int MIN_DESCRIPTION_LENGTH = 4;
 
     public ValidationResult doValidate(Map<String, String> params) {
@@ -45,9 +43,6 @@ public class BicycleValidator implements Validator {
                 case DESCRIPTION:
                     validateDescription(validationResult, value);
                     break;
-                case STATUS:
-                    validateStatus(validationResult, value);
-                    break;
                 default:
                     break;
 
@@ -63,13 +58,13 @@ public class BicycleValidator implements Validator {
         try {
             dailyRentalPrice = BigDecimal.valueOf(Integer.valueOf(value));
             if (dailyRentalPrice.intValue() < 0) {
-                errors.add("Daily rental price can't be less then 0");
+                errors.add("bicycle.error.daily_rental_price_more_then_0");
             }
         } catch (NumberFormatException e) {
-            errors.add("Daily rental price are not valid");
+            errors.add("bicycle.error.invalid_daily_rental_price");
         }
         if (errors.size() > 0) {
-            validationResult.add("daily_rental_price", errors);
+            validationResult.add(DAILY_RENTAL_PRICE, errors);
         }
     }
 
@@ -77,33 +72,16 @@ public class BicycleValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (name.length() <= MIN_NAME_LENGTH) {
-            errors.add("Name must be more then " + MIN_NAME_LENGTH + " symbols");
+            errors.add("bicycle.error.min_name_length");
         }
         if (name.length() > MAX_NAME_LENGTH) {
-            errors.add("Name must be less then " + MAX_NAME_LENGTH + " symbols");
+            errors.add("bicycle.error.max_name_length");
         }
         if (name.contains(SPACE)) {
-            errors.add("Name must not have empty spaces");
+            errors.add("bicycle.error.name_empty_space");
         }
         if (errors.size() > 0) {
-            validationResult.add("login", errors);
-        }
-    }
-
-    private void validateStatus(ValidationResult validationResult, String status) {
-        ArrayList<String> errors = new ArrayList<>();
-
-        if (status.length() <= MIN_STATUS_LENGTH) {
-            errors.add("Status length must be more then " + MIN_STATUS_LENGTH + " symbols");
-        }
-        if (status.length() > MAX_STATUS_LENGTH) {
-            errors.add("Status length must be less then " + MAX_STATUS_LENGTH + " symbols");
-        }
-        if (status.matches(CHECK_NAME)) {
-            errors.add("Status can contains only letters");
-        }
-        if (errors.size() > 0) {
-            validationResult.add("password", errors);
+            validationResult.add(NAME, errors);
         }
     }
 
@@ -111,11 +89,11 @@ public class BicycleValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (description.length() <= MIN_DESCRIPTION_LENGTH) {
-            errors.add("Description length must be more then " + MIN_DESCRIPTION_LENGTH + " symbols");
+            errors.add("bicycle.error.min_description_length");
         }
 
         if (errors.size() > 0) {
-            validationResult.add("password", errors);
+            validationResult.add(DESCRIPTION, errors);
         }
     }
 

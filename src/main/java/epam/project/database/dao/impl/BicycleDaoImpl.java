@@ -5,7 +5,6 @@ import epam.project.database.dao.AutoConnection;
 import epam.project.database.dao.BicycleDao;
 import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
 import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
 import org.apache.log4j.Logger;
@@ -40,6 +39,9 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
     private static final String TAKE_BY_BICYCLE_ID_POINT_HIRE_BICYCLE =
             "SELECT * FROM point_hire_bicycle WHERE id_bicycle=?";
 
+    private static final String TAKE_POINT_HIRE_BICYCLE_BY_ID =
+            "SELECT * FROM point_hire_bicycle WHERE id=?";
+
     private static final String GET_ALL_AVAILABLE_BICYCLE =
             "SELECT * FROM bicycle_hire.bicycle where status='available'";
 
@@ -61,7 +63,7 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
 
 
     @Override
-    protected List<Bicycle> parseResultSet(ResultSet rs) throws PersistException {
+    protected List<Bicycle> parseResultSet(ResultSet rs) throws DaoException {
         List<Bicycle> result = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -74,7 +76,7 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
                 result.add(bicycle);
             }
         } catch (Exception e) {
-            throw new PersistException(e);
+            throw new DaoException(e);
         }
         return result;
     }
@@ -132,6 +134,27 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException("Failed to insert entity", e);
+        }
+    }
+
+    @Override
+    public PointHireBicycle getByPkPointHireBicycle(int id) throws DaoException {
+
+        try (PreparedStatement statement = connection.prepareStatement(TAKE_POINT_HIRE_BICYCLE_BY_ID)) {
+            PointHireBicycle pointHireBicycle = new PointHireBicycle();
+            int counter = 0;
+            statement.setInt(++counter, id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                pointHireBicycle.setId(rs.getInt("id"));
+                pointHireBicycle.setId_bicycle(rs.getInt("id_bicycle"));
+                pointHireBicycle.setId_point_hire(rs.getInt("id_point_hire"));
+            } else {
+                throw new DaoException("This point hire bicycle doesn't exist");
+            }
+            return pointHireBicycle;
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity", e);
         }
     }
 

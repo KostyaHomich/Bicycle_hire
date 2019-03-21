@@ -29,9 +29,7 @@ public class CommandUpdateOrder implements Command {
 
             Map<String, String> parameters = RequestParameterParser.parseParameters(request);
             ValidationResult validationResult = orderValidator.doValidate(parameters);
-
             if (validationResult.getErrors().size() == 0) {
-
                 Order order = orderBuilder.build(parameters);
                 orderService.update(order);
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST, request);

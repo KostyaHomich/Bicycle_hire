@@ -17,20 +17,26 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style_locale.css">
 
 
 </head>
 <body>
 
-<fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'EN'}"/>
+<c:choose>
+    <c:when test="${not empty requestScope.get('lang')}">
+        <fmt:setLocale value="${requestScope.get('lang')}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="${cookie['lang'].value}"/>
+    </c:otherwise>
+</c:choose>
 <fmt:setBundle basename="/text" scope="application"/>
 
 <section class="hero">
     <header>
         <div class="wrapper">
-
             <lang:lang/>
             <nav>
                 <c:if test="${sessionScope.signInUser==null}">
@@ -43,7 +49,7 @@
 
                 <c:if test="${sessionScope.signInUser!=null}">
                     <a href="${pageContext.request.contextPath}/user_page ?command=${CommandType.SHOW_USER_PAGE}"
-                       class="login_btn"><fmt:message key="page.main.button.account"/> </a>
+                       class="login_btn"><fmt:message key="page.header.button.account"/> </a>
                 </c:if>
 
             </nav>

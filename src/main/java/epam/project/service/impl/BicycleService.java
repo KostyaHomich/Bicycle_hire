@@ -4,7 +4,6 @@ import epam.project.database.dao.AbstractJdbcDao;
 import epam.project.database.dao.BicycleDao;
 import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.TransactionManager;
 import epam.project.dto.PointHireBicycle;
@@ -49,6 +48,14 @@ public class BicycleService implements Service {
             throw new ServiceException("Failed to get all bicycles", e);
         }
     }
+    public List<Bicycle> takeAllAvailableBicycleByPointHirePk(int id) throws ServiceException {
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return bicycleDao.getAllAvailableBicycleByPointHirePk(id);
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get all bicycles", e);
+        }
+    }
     public boolean add(Bicycle bicycle) throws ServiceException {
         TransactionManager transactionManager = new TransactionManager();
         try {
@@ -56,7 +63,6 @@ public class BicycleService implements Service {
             transactionManager.begin((AbstractJdbcDao) entityDao);
             Bicycle bicycleInserted=entityDao.persist(bicycle);
             bicycleInserted.setPoint_hire_id(bicycle.getPoint_hire_id());
-            LOGGER.info("bicycle "+bicycleInserted.toString());
             ((BicycleDao)entityDao).addPointHireBicycle(bicycleInserted);
             transactionManager.commit();
             transactionManager.end();
@@ -115,7 +121,7 @@ public class BicycleService implements Service {
             Bicycle bicycle = bicycleDao.getByPK(id);
             bicycle.setPoint_hire_id(pointHireBicycle.getId_point_hire());
             return bicycle;
-        } catch (PersistException | DaoException e) {
+        } catch ( DaoException e) {
             throw new ServiceException("Failed to get bicycle", e);
         }
 

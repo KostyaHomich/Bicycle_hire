@@ -10,6 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 public class CommandShowRegistrationPage implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
-        return  ResponseContentBuilder.buildRedirectResponseContent(PageConst.REGISTRATION_PAGE_PATH);
+        return  ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
     }
 }

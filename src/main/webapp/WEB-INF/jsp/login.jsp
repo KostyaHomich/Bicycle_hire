@@ -11,7 +11,14 @@
 </head>
 <body>
 
-<fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'EN'}"/>
+<c:choose>
+    <c:when test="${not empty requestScope.get('lang')}">
+        <fmt:setLocale value="${requestScope.get('lang')}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="${cookie['lang'].value}"/>
+    </c:otherwise>
+</c:choose>
 <fmt:setBundle basename="/text" scope="application"/>
 
 <div class="container">
@@ -22,13 +29,15 @@
             <h1><fmt:message key="page.title.login_form"/></h1>
             <c:out value="${requestScope.error}"/>
 
-                <c:if test="${ not empty requestScope.errorsList}">
-                    <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
-                        <c:if test="${entry.value.size()>0}">
-                            Error:<c:out value="${entry.value}"/>
-                        </c:if>
-                    </c:forEach>
-                </c:if>
+            <c:if test="${not empty requestScope.errorsList}">
+                <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
+                    <c:if test="${entry.value.size() >0}">
+                        <c:forEach var="value" items="${entry.value}">
+                            <fmt:message key="${value}"/>
+                        </c:forEach>
+                    </c:if>
+                </c:forEach>
+            </c:if>
             <div>
                 <input type="text" placeholder="<fmt:message key="user.login"/>" required="" id="login" name="login"/>
             </div>
@@ -37,7 +46,7 @@
             </div>
             <div>
                 <input type="submit" value="<fmt:message key="page.button.login"/>"/>
-                <a href="${pageContext.request.contextPath}/registration ?command=${CommandType.SHOW_REGISTRATION_PAGE}">Register</a>
+                <a href="${pageContext.request.contextPath}/registration ?command=${CommandType.SHOW_REGISTRATION_PAGE}"><fmt:message key="page.button.register"/></a>
             </div>
             <input type="hidden" name="command" value="${CommandType.LOGIN}">
         </form>

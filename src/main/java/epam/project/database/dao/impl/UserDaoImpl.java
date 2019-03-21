@@ -5,7 +5,6 @@ import epam.project.database.dao.AutoConnection;
 import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
 import epam.project.entity.User;
 import epam.project.entity.UserRole;
 import org.apache.log4j.Logger;
@@ -34,7 +33,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
     private static final String GET_BY_LOGIN = "SELECT * FROM user WHERE login=?;";
 
     @Override
-    protected List<User> parseResultSet(ResultSet rs) throws PersistException {
+    protected List<User> parseResultSet(ResultSet rs) throws DaoException {
         List<User> result = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -55,7 +54,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
                 result.add(user);
             }
         } catch (Exception e) {
-            throw new PersistException("Failed to create entity.", e);
+            throw new DaoException("Failed to create entity.", e);
         }
         return result;
     }
@@ -115,7 +114,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
 
     @AutoConnection
     @Override
-    public User getByLogin(String login) throws DaoException, PersistException {
+    public User getByLogin(String login) throws DaoException {
         User user;
         ResultSet rs;
 
@@ -141,7 +140,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
                 throw new DaoException("This user doesn't exist");
             }
         } catch (SQLException e) {
-            throw new PersistException("Failed to get entity.", e);
+            throw new DaoException("Failed to get entity.", e);
         }
 
         return user;
@@ -151,26 +150,26 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
 
     @AutoConnection
     @Override
-    public boolean checkLoginExistance(String login) throws PersistException {
+    public boolean checkLoginExistance(String login) throws DaoException {
 
         return checkExistance(login, CHECK_IF_CONTAINS_BY_LOGIN);
     }
 
     @AutoConnection
     @Override
-    public boolean checkEmailExistance(String email) throws PersistException {
+    public boolean checkEmailExistance(String email) throws DaoException {
 
         return checkExistance(email, CHECK_IF_CONTAINS_BY_EMAIL);
 
     }
 
-    private boolean checkExistance(String value, String checkIfContains) throws PersistException {
+    private boolean checkExistance(String value, String checkIfContains) throws DaoException {
         try (PreparedStatement statement = connection.prepareStatement(checkIfContains)) {
             statement.setString(1, value);
             ResultSet rs = statement.executeQuery();
             return rs.next();
         } catch (SQLException e) {
-            throw new PersistException("Failed to get entity.", e);
+            throw new DaoException("Failed to get entity.", e);
         }
     }
 }

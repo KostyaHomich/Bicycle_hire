@@ -10,8 +10,15 @@
 </head>
 <body>
 
-<fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'EN'}"/>
-<fmt:setBundle basename="/text" scope="application"/>
+<c:choose>
+	<c:when test="${not empty requestScope.get('lang')}">
+		<fmt:setLocale value="${requestScope.get('lang')}"/>
+	</c:when>
+	<c:otherwise>
+		<fmt:setLocale value="${cookie['lang'].value}"/>
+	</c:otherwise>
+</c:choose>
+<fmt:setBundle basename="text" scope="application"/>
 
 <div class="container">
 <section id="content">
@@ -20,10 +27,12 @@
 
 			<c:out value="${requestScope.error}"/>
 
-			<c:if test="${ not empty requestScope.errorsList}">
+			<c:if test="${not empty requestScope.errorsList}">
 				<c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
 					<c:if test="${entry.value.size() >0}">
-						Error:<c:out value="${entry.value}"/>
+						<c:forEach var="value" items="${entry.value}">
+							<fmt:message key="${value}"/>
+						</c:forEach>
 					</c:if>
 				</c:forEach>
 			</c:if>
@@ -48,7 +57,7 @@
 				<input type="text" placeholder="<fmt:message key="user.email"/>" id="email" name="email"/>
 			</div>
 			<div>
-				<input type="submit" value="<fmt:message key="page.registration.button.register"/>">
+				<input type="submit" value="<fmt:message key="page.button.register"/>">
 			</div>
 			<input type="hidden" name="command" value="${CommandType.REGISTER_USER}">
 		</form>

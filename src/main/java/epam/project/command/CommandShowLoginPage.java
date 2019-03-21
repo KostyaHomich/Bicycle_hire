@@ -8,6 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 public class CommandShowLoginPage implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {
-        return  ResponseContentBuilder.buildRedirectResponseContent(PageConst.LOGIN_PAGE_PATH);
+        return  ResponseContentBuilder.buildForwardResponseContent(PageConst.LOGIN_PAGE_PATH);
     }
 }

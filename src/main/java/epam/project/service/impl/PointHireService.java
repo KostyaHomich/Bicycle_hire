@@ -5,7 +5,6 @@ import epam.project.database.dao.EntityDao;
 import epam.project.database.dao.FactoryProducer;
 import epam.project.database.dao.PointHireDao;
 import epam.project.database.dao.exception.DaoException;
-import epam.project.database.dao.exception.PersistException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.entity.PointHire;
 import epam.project.service.Service;
@@ -45,7 +44,7 @@ public class PointHireService implements Service {
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
             List<PointHire> pointHireList = pointHireDao.getAll();
             for (PointHire pointHire : pointHireList) {
-                pointHire.setBicycleList(bicycleService.takeAllBicycleByPointHirePk(pointHire.getId()));
+                pointHire.setBicycleList(bicycleService.takeAllAvailableBicycleByPointHirePk(pointHire.getId()));
             }
             return pointHireList;
         } catch (DaoException e) {
@@ -103,7 +102,7 @@ public class PointHireService implements Service {
         try {
             EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
             return pointHireDao.getByPK(id);
-        } catch ( DaoException  | PersistException e) {
+        } catch ( DaoException e) {
             throw new ServiceException("Failed to delete point hire", e);
         }
     }

@@ -55,13 +55,13 @@ public class PointHireValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (location.length() <= MIN_LOCATION_LENGTH) {
-            errors.add("Location must be more then " + MIN_LOCATION_LENGTH + " symbols");
+            errors.add("point_hire.error.min_location_length");
         }
         if (location.length() > MAX_LOCATION_LENGTH) {
-            errors.add("Location must be less then " + MAX_LOCATION_LENGTH + " symbols");
+            errors.add("point_hire.error.max_location_length");
         }
         if (errors.size() > 0) {
-            validationResult.add("point_hire", errors);
+            validationResult.add(LOCATION, errors);
         }
     }
 
@@ -69,10 +69,10 @@ public class PointHireValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (telephone.matches(CHECK_TELEPHONE)) {
-            errors.add("Telephone are not valid");
+            errors.add("point_hire.error.invalid_telephone");
         }
         if (errors.size() > 0) {
-            validationResult.add("password", errors);
+            validationResult.add(TELEPHONE, errors);
         }
     }
 
@@ -80,11 +80,11 @@ public class PointHireValidator implements Validator {
         ArrayList<String> errors = new ArrayList<>();
 
         if (description.length() <= MIN_DESCRIPTION_LENGTH) {
-            errors.add("Description length must be more then " + MIN_DESCRIPTION_LENGTH + " symbols");
+            errors.add("point_hire.error.min_description_length");
         }
 
         if (errors.size() > 0) {
-            validationResult.add("password", errors);
+            validationResult.add(DESCRIPTION, errors);
         }
     }
 
