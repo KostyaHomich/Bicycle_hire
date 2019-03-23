@@ -22,8 +22,6 @@ import java.util.Map;
 
 public class CommandRegisterUser implements Command {
 
-    private static final Logger LOGGER = LogManager.getLogger(CommandRegisterUser.class);
-
     private static final String PASSWORD = "password";
     private static final String REPEAT_PASSWORD = "repeat_password";
 
@@ -55,17 +53,19 @@ public class CommandRegisterUser implements Command {
                         return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_MAIN_PAGE, request);
 
                     } else {
-                        throw new ServiceException("Passwords are not equals");
+                        request.setAttribute("error", "user.error.password_are_not_equals");
+                        return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
                     }
                 } else {
-                    throw new ServiceException("User with this login already exist");
+                    request.setAttribute("errorsList", "user.error.login_already_taken");
+                    return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
                 }
             } else {
                 request.setAttribute("errorsList", validationResult);
                 return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("error", "user.error.register_user");
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
         }
     }

@@ -27,23 +27,29 @@ public class CommandShowOrderDetails implements Command {
 
             Map<String, String> parameters = RequestParameterParser.parseParameters(request);
             OrderBuilder orderBuilder = new OrderBuilder();
-            int id = Integer.valueOf(request.getParameter("orderId"));
 
-            if (id == 0) {
-                Order order = orderBuilder.build(parameters);
-                return setAttribute(request, order);
-            } else {
-                Order order = orderService.getById(id);
-                return setAttribute(request, order);
+            if(request.getParameter("orderId")!= null) {
+                int id = Integer.valueOf(request.getParameter("orderId"));
+                if (id == 0) {
+                    Order order = orderBuilder.build(parameters);
+                    return setAttribute(request, order);
+                } else {
+                    Order order = orderService.getById(id);
+                    return setAttribute(request, order);
+                }
+            }
+            else {
+                request.setAttribute("error", "page.error.show_order_details");
+                return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
             }
         } catch (ServiceException e) {
-            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
+            request.setAttribute("error", "page.error.show_order_details");
+            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
         }
     }
 
     private ResponseContent setAttribute(HttpServletRequest request, Order order) {
         request.setAttribute("order", order);
-
         return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
     }
 }

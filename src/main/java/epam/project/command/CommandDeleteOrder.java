@@ -17,13 +17,21 @@ public class CommandDeleteOrder implements Command {
         try {
             request.setAttribute("entity", EntityType.ORDER);
             OrderService orderService = (OrderService) ServiceFactory.getInstance().getService(ServiceType.ORDER);
-            Integer id = Integer.valueOf(request.getParameter("orderId"));
+            if (request.getParameter("orderId") != null) {
 
-            Order order = orderService.getById(id);
-            orderService.delete(order);
-            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
+                Integer id = Integer.valueOf(request.getParameter("orderId"));
+                Order order = orderService.getById(id);
+                orderService.delete(order);
+                return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
+            }
+            else {
+                request.setAttribute("error", "order.error.delete_order");
+                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST, request);
+            }
+
+
         } catch (ServiceException e) {
-            request.setAttribute("error","Can't delete order.");
+            request.setAttribute("error","order.error.delete_order");
             return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
 
 

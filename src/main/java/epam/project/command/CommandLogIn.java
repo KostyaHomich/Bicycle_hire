@@ -3,12 +3,12 @@ package epam.project.command;
 import epam.project.builder.UserBuilder;
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
-import epam.project.entity.UserRole;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
 import epam.project.util.RequestParameterParser;
+import epam.project.util.ResponseContentBuilder;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
 import epam.project.validation.ValidatorType;
@@ -40,36 +40,23 @@ public class CommandLogIn implements Command {
             if (validationResult.getErrors().size() == 0) {
                 User user = userBuilder.build(parameters);
                 User signInUser = userService.signIn(user.getLogin(), user.getPassword());
+
                 if (!signInUser.getStatus().equalsIgnoreCase("banned")) {
 
                     request.getSession().setAttribute(USER, signInUser);
+                    return ResponseContentBuilder.buildForwardResponseContent(PageConst.USER_PAGE_PATH);
 
-                    if (signInUser.getRole().equalsIgnoreCase(UserRole.ADMIN.name())) {
-                        Router router = new Router(PageConst.USER_PAGE_PATH, Router.Type.FORWARD);
-                        responseContent.setRouter(router);
-                        return responseContent;
-                    } else {
-                        Router router = new Router(PageConst.USER_PAGE_PATH, Router.Type.FORWARD);
-                        responseContent.setRouter(router);
-                        return responseContent;
-                    }
                 } else {
                     request.setAttribute("error","user.error.banned");
-                    responseContent = new ResponseContent();
-                    responseContent.setRouter(new Router(PageConst.LOGIN_PAGE_PATH, Router.Type.FORWARD));
-                    return responseContent;
+                    return  ResponseContentBuilder.buildForwardResponseContent(PageConst.LOGIN_PAGE_PATH);
                 }
             } else {
-                Router router = new Router(PageConst.LOGIN_PAGE_PATH, Router.Type.FORWARD);
                 request.setAttribute("errorsList", validationResult);
-                responseContent.setRouter(router);
-                return responseContent;
+                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.LOGIN_PAGE_PATH);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", e.getMessage());
-            ResponseContent responseContent = new ResponseContent();
-            responseContent.setRouter(new Router(PageConst.LOGIN_PAGE_PATH, Router.Type.FORWARD));
-            return responseContent;
+            request.setAttribute("error","page.error.login_failed");
+            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.LOGIN_PAGE_PATH);
         }
 
     }

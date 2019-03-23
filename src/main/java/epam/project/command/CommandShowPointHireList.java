@@ -30,10 +30,10 @@ public class CommandShowPointHireList implements Command {
             }
 
             request.setAttribute("pointHireList",pointHireList);
-
             return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
+
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed get all point hires.");
+            request.setAttribute("error", "page.error.show_point_hire_list");
             return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         }
 

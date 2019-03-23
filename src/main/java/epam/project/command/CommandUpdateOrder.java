@@ -39,7 +39,7 @@ public class CommandUpdateOrder implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_DETAILS, request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed to update order");
+            request.setAttribute("error", "order.error.update_order");
             return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_DETAILS, request);
         }
 

@@ -16,14 +16,20 @@ public class CommandDeleteUser implements Command {
         try {
             request.setAttribute("entity", EntityType.USER);
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
-            Integer id = Integer.valueOf(request.getParameter("userId"));
+            if(request.getParameter("userId")!=null){
+                Integer id = Integer.valueOf(request.getParameter("userId"));
 
-            User user = userService.getById(id);
-            userService.delete(user);
+                User user = userService.getById(id);
+                userService.delete(user);
 
-            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
+                return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
+            }
+            else {
+                request.setAttribute("error","user.error.delete_user");
+                return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
+            }
         } catch (ServiceException e) {
-            request.setAttribute("error","Can't delete user.");
+            request.setAttribute("error","user.error.delete_user");
             return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
         }
     }

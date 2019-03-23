@@ -17,16 +17,17 @@ public class CommandCancelOrder implements Command {
             OrderService orderService = (OrderService) ServiceFactory.getInstance().getService(ServiceType.ORDER);
 
             if (request.getParameter("orderId") != null) {
+
                 int order_id = Integer.valueOf(request.getParameter("orderId"));
                 orderService.cancelOrder(order_id);
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST, request);
 
             } else {
-                request.setAttribute("error", "Error: failed to cancel order");
+                request.setAttribute("error", "order.error.cancel_order");
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST, request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed to cancel order");
+            request.setAttribute("error", "order.error.cancel_order");
             return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST, request);
         }
     }

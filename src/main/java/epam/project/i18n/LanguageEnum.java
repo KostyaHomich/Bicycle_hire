@@ -1,4 +1,4 @@
-package epam.project.filter;
+package epam.project.i18n;
 
 import java.util.Locale;
 
@@ -30,19 +30,4 @@ public enum LanguageEnum {
         }
     }
 
-    public static String getResourceBundleNameFromEnum(LanguageEnum value) {
-        switch (value) {
-            case BY:
-                return "text_by_BY";
-
-            case RU:
-                return "text_ru_RU";
-
-            case EN:
-                return "text_en_US";
-
-            default:
-                return "text_en_US";
-        }
-    }
 }

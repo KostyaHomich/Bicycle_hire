@@ -38,7 +38,7 @@ public class CommandShowUserList implements Command {
             request.setAttribute("users",userList);
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed get all users.");
+            request.setAttribute("error", "page.error.show_user_list");
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         }
     }

@@ -51,7 +51,7 @@ public class CommandAddOrder implements Command {
                 BigDecimal cost = new BigDecimal(order.getRentalTime() * bicycle.getDaily_rental_price().intValue());
                 BigDecimal userBalance=user.getBalance();
                 if(userBalance.intValue()-cost.intValue()<0) {
-                    request.setAttribute("error", "Not enough money");
+                    request.setAttribute("error", "user.error.not_enough_money");
                     return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_DETAILS,request);
                 }
                 else {

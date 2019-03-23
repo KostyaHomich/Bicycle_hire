@@ -30,8 +30,8 @@ public class CommandUpdateBicycle implements Command {
             ValidationResult validationResult = bicycleValidator.doValidate(parameters);
 
             if (validationResult.getErrors().size() == 0) {
-
                 Bicycle bicycle = bicycleBuilder.build(parameters);
+
                 bicycleService.update(bicycle);
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST,request);
 
@@ -40,7 +40,7 @@ public class CommandUpdateBicycle implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_DETAILS,request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed to update bicycle");
+            request.setAttribute("error", "bicycle.error.update_bicycle");
             return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_DETAILS,request);
         }
 

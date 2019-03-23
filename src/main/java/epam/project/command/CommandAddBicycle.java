@@ -29,7 +29,9 @@ public class CommandAddBicycle implements Command {
 
             ValidationResult validationResult = bicycleValidator.doValidate(parameters);
             BicycleBuilder bicycleBuilder = new BicycleBuilder();
+
             if (validationResult.getErrors().size() == 0) {
+
                 Bicycle bicycle = bicycleBuilder.build(parameters);
                 bicycleService.add(bicycle);
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST, request);

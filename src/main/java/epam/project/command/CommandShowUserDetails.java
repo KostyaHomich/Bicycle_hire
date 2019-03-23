@@ -1,7 +1,6 @@
 package epam.project.command;
 
 import epam.project.dto.ResponseContent;
-import epam.project.entity.EntityType;
 import epam.project.entity.User;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
@@ -19,15 +18,22 @@ public class CommandShowUserDetails implements Command {
 
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             int id = Integer.valueOf(request.getParameter("userId"));
+            if (request.getParameter("userId") != null) {
 
-            if (id == 0) {
-                User user = new User();
-                return setAttribute(request, user);
-            } else {
-                User user = userService.getById(id);
-                return setAttribute(request, user);
+                if (id == 0) {
+                    User user = new User();
+                    return setAttribute(request, user);
+                } else {
+                    User user = userService.getById(id);
+                    return setAttribute(request, user);
+                }
+            }
+            else {
+                request.setAttribute("error", "page.error.show_user_details");
+                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
         } catch (ServiceException e) {
+            request.setAttribute("error", "page.error.show_user_details");
             return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
         }
     }

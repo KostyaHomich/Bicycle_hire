@@ -49,13 +49,11 @@ public class CommandShowBicycleList implements Command {
                 else {
                     bicycleList = bicycleService.getAvailableBicycles(5);
                 }
-
             }
-
             request.setAttribute("bicycles", bicycleList);
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed get all bicycles.");
+            request.setAttribute("error", "page.error.show_bicycle_list");
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         }
 

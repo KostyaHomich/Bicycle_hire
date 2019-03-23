@@ -17,14 +17,20 @@ public class CommandDeleteBicycle implements Command {
         try {
             request.setAttribute("entity", EntityType.BICYCLE);
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
-            Integer id = Integer.valueOf(request.getParameter("bicycleId"));
+            if (request.getParameter("bicycleId") != null) {
+                Integer id = Integer.valueOf(request.getParameter("bicycleId"));
 
-            Bicycle bicycle = bicycleService.getById(id);
-            bicycleService.delete(bicycle);
+                Bicycle bicycle = bicycleService.getById(id);
+                bicycleService.delete(bicycle);
+                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST, request);
+            }
+            else {
+                request.setAttribute("error", "bicycle.error.delete_bicycle");
+                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST, request);
+            }
 
-            return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST, request);
         } catch (ServiceException e) {
-            request.setAttribute("error","Can't delete bicycle.");
+            request.setAttribute("error", "bicycle.error.delete_bicycle");
             return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST, request);
         }
     }

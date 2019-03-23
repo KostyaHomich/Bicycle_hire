@@ -39,7 +39,7 @@ public class CommandAddPointHire implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_DETAILS, request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("error", "point_hire.error.add_order");
             return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_DETAILS, request);
         }
 

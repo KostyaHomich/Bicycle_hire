@@ -37,6 +37,7 @@ public class CommandShowOrderDetailsSecondStage implements Command {
             OrderValidator orderValidator = (OrderValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.ORDER);
             ValidationResult validationResult = orderValidator.doValidate(parameters);
             Order order = orderBuilder.build(parameters);
+
             if (validationResult.getErrors().size() == 0) {
                 if (order.getId() == 0 ) {
                     Bicycle bicycle = bicycleService.getById(order.getBicycle().getId());
@@ -53,7 +54,7 @@ public class CommandShowOrderDetailsSecondStage implements Command {
                 return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "Failed show order details");
+            request.setAttribute("error", "page.error.show_order_details");
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ORDER_DETAILS_SECOND_PAGE_PATH);
         }
     }

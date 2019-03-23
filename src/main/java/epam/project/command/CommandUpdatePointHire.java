@@ -41,7 +41,7 @@ public class CommandUpdatePointHire implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_DETAILS, request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed to update point hire");
+            request.setAttribute("error", "point_hire.error.update_point_hire");
             return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_DETAILS, request);
         }
 

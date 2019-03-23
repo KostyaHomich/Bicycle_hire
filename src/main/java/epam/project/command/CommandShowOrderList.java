@@ -15,6 +15,8 @@ import java.util.List;
 
 public class CommandShowOrderList implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CommandShowOrderList.class);
+    private static final int DEFAULT_AMOUNT_ORDERS=5;
+    private static final String AMOUNT_ORDERS="amountOrders";
 
     @Override
     public ResponseContent execute(HttpServletRequest request) {
@@ -26,22 +28,20 @@ public class CommandShowOrderList implements Command {
 
             List<Order> orderList;
 
-            String amountOrders = request.getParameter("amountOrders");
-            request.setAttribute("amountOrders", 5);
+            String amountOrders = request.getParameter(AMOUNT_ORDERS);
+            request.setAttribute(AMOUNT_ORDERS, DEFAULT_AMOUNT_ORDERS);
 
             if (amountOrders != null && !amountOrders.isEmpty()) {
                 int count = Integer.valueOf(amountOrders);
                 orderList = orderService.getOrders(count);
-                request.setAttribute("amountOrders", count);
+                request.setAttribute(AMOUNT_ORDERS, count);
             } else {
-                orderList = orderService.getOrders(5);
+                orderList = orderService.getOrders(DEFAULT_AMOUNT_ORDERS);
             }
-
-
             request.setAttribute("orderList", orderList);
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed get all orders.");
+            request.setAttribute("error", "page.error.show_order_list");
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         }
 

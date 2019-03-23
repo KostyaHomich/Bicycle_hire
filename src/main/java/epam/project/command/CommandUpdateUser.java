@@ -41,7 +41,7 @@ public class CommandUpdateUser implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_DETAILS,request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed to update user");
+            request.setAttribute("error", "user.error.update_user");
             return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_DETAILS,request);
         }
     }
