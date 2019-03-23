@@ -40,7 +40,7 @@
 </c:choose>
 <fmt:setBundle basename="/text" scope="application"/>
 
-    <jsp:include page="frames/header.jsp"/>
+    <jsp:include page="header.jsp"/>
 
 <div class="x_panel">
     <div class="x_content">
