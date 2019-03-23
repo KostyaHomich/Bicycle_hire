@@ -45,7 +45,7 @@
 </c:choose>
 <fmt:setBundle basename="/text" scope="application"/>
 
-<jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/frames/header.jsp"/>
+<jsp:include page="${pageContext.request.contextPath}/jsp/frames/header.jsp"/>
 
 <table class="table table-striped jambo_table bulk_action">
     <thead>
@@ -69,5 +69,5 @@
         </tr>
     </tbody>
 </table>
-<jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/footer.jsp"/>
+<jsp:include page="${pageContext.request.contextPath}/jsp/footer.jsp"/>
 </body>
