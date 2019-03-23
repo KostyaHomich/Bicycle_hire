@@ -1,22 +1,17 @@
 package epam.project.command;
 
-import epam.project.builder.BicycleBuilder;
+import epam.project.builder.PointHireBuilder;
 import epam.project.dto.ResponseContent;
-import epam.project.entity.Bicycle;
-import epam.project.entity.EntityType;
 import epam.project.entity.PointHire;
-import epam.project.service.impl.BicycleService;
-import epam.project.util.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
-import epam.project.builder.PointHireBuilder;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.PointHireService;
+import epam.project.util.RequestParameterParser;
 import epam.project.util.ResponseContentBuilder;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
 import epam.project.validation.ValidatorType;
-import epam.project.validation.impl.BicycleValidator;
 import epam.project.validation.impl.PointHireValidator;
 
 import javax.servlet.http.HttpServletRequest;

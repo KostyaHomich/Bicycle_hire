@@ -29,18 +29,17 @@ public class CommandAddBicycle implements Command {
 
             ValidationResult validationResult = bicycleValidator.doValidate(parameters);
             BicycleBuilder bicycleBuilder = new BicycleBuilder();
-            //sweet-alert
             if (validationResult.getErrors().size() == 0) {
                 Bicycle bicycle = bicycleBuilder.build(parameters);
                 bicycleService.add(bicycle);
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST, request);
             } else {
                 request.setAttribute("errorsList", validationResult);
-                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_DETAILS, request);
+                return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
         } catch (ServiceException e) {
             request.setAttribute("error", e.getMessage());
-            return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_DETAILS, request);
+            return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
         }
 
 

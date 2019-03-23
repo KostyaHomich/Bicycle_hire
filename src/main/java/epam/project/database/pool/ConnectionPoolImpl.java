@@ -65,11 +65,9 @@ public class ConnectionPoolImpl implements ConnectionPool {
         try (InputStream inputStream = ConnectionPoolImpl.class.getClassLoader().getResourceAsStream(DB_PROPERTIES_NAME)) {
             properties.load(inputStream);
 
-            String host = properties.getProperty(DB_HOST);
-            String port = properties.getProperty(DB_PORT);
-            String dbName = properties.getProperty(DB_NAME);
+            String url=properties.getProperty("url");
 
-            this.url = "jdbc:mysql://" + host + ":" + port + "/" + dbName +
+            this.url = url +
                     "?verifyServerCertificate=false" +
                     "&useSSL=false" +
                     "&requireSSL=false" +
@@ -124,7 +122,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
     }
 
     private Connection createConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection(url, properties);
+        Connection connection = DriverManager.getConnection(url, properties.getProperty("host"),properties.getProperty("password"));
         connections.add(connection);
         InvocationHandler connectionHandler = (Object proxy, Method method, Object[] args) -> {
             if (method.getName().equals("close")) {

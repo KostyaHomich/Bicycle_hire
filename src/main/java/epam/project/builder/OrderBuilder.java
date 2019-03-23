@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class OrderBuilder implements Builder<Order> {
 
-    private static final String ID = "orderId";
     private static final String TIME_ORDER = "time_order";
     private static final String TIME_RENTAL = "time_rental";
     private static final String POINT_HIRE_ID = "pointHireId";
@@ -33,9 +32,6 @@ public class OrderBuilder implements Builder<Order> {
             String keyStr = (String) key;
             String value = params.get(keyStr);
             switch (keyStr) {
-                case ID:
-                    order.setId(Integer.valueOf(value));
-                    break;
                 case TIME_ORDER:
                     order.setTimeOrder(value);
                     break;

@@ -38,17 +38,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
         try {
             while (rs.next()) {
                 User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setLogin(rs.getString("login"));
-                user.setPassword(rs.getString("password"));
-                user.setFirstName(rs.getString("first_Name"));
-                user.setLastName(rs.getString("last_Name"));
-                user.setStatus(rs.getString("status"));
-                user.setRegistrationDate(rs.getString("registration_Date"));
-                user.setBalance(rs.getBigDecimal("balance"));
-                user.setEmail(rs.getString("email"));
-                int role = rs.getInt("id_Role");
-                user.setRole(UserRole.values()[--role].toString().toLowerCase());
+                setDefaultData(rs, user);
 
 
                 result.add(user);
@@ -57,6 +47,20 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
             throw new DaoException("Failed to create entity.", e);
         }
         return result;
+    }
+
+    private void setDefaultData(ResultSet rs, User user) throws SQLException {
+        user.setId(rs.getInt("id"));
+        user.setLogin(rs.getString("login"));
+        user.setPassword(rs.getString("password"));
+        user.setFirstName(rs.getString("first_Name"));
+        user.setLastName(rs.getString("last_Name"));
+        user.setStatus(rs.getString("status"));
+        user.setRegistrationDate(rs.getString("registration_Date"));
+        user.setBalance(rs.getBigDecimal("balance"));
+        user.setEmail(rs.getString("email"));
+        int role = rs.getInt("id_Role");
+        user.setRole(UserRole.values()[--role].toString().toLowerCase());
     }
 
     @Override
@@ -69,7 +73,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
     protected void prepareStatementForUpdate(PreparedStatement statement, User object) throws SQLException {
 
         int counter = 0;
-        counter=setDefaultUserData(statement, object, counter);
+        counter = setDefaultUserData(statement, object, counter);
         statement.setInt(++counter, object.getId());
     }
 
@@ -125,17 +129,7 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
 
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("id"));
-                user.setLogin(rs.getString("login"));
-                user.setPassword(rs.getString("password"));
-                user.setFirstName(rs.getString("first_Name"));
-                user.setLastName(rs.getString("last_Name"));
-                user.setStatus(rs.getString("status"));
-                user.setRegistrationDate(rs.getString("registration_Date"));
-                user.setBalance(rs.getBigDecimal("balance"));
-                user.setEmail(rs.getString("email"));
-                int role = rs.getInt("id_Role");
-                user.setRole(UserRole.values()[--role].toString().toLowerCase());
+                setDefaultData(rs, user);
             } else {
                 throw new DaoException("This user doesn't exist");
             }
@@ -146,6 +140,24 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
         return user;
     }
 
+    @AutoConnection
+    @Override
+    public List<User> getUsers(int count) throws DaoException {
+        List<User> result = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_QUERY)) {
+            int counter = 0;
+            ResultSet rs = statement.executeQuery();
+            while (rs.next() && counter < count) {
+                User user = new User();
+                counter++;
+                setDefaultData(rs, user);
+                result.add(user);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity's", e);
+        }
+    }
 
 
     @AutoConnection

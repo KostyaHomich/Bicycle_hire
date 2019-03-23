@@ -12,7 +12,6 @@ public class ResponseContentBuilder {
 
 
     public static ResponseContent buildForwardResponseContent(String path) {
-
         ResponseContent responseContent=new ResponseContent();
         responseContent.setRouter(new Router(path, Router.Type.FORWARD));
         return responseContent;

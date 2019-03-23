@@ -1,13 +1,13 @@
 package epam.project.command;
 
+import epam.project.builder.UserBuilder;
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
-import epam.project.util.RequestParameterParser;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
-import epam.project.builder.UserBuilder;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
+import epam.project.util.RequestParameterParser;
 import epam.project.util.ResponseContentBuilder;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
@@ -32,11 +32,12 @@ public class CommandRegisterUser implements Command {
     public ResponseContent execute(HttpServletRequest request) {
         try {
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
+            Map<String, String> parameters = RequestParameterParser.parseParameters(request);
             UserValidator userValidator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);
 
             UserBuilder userBuilder = new UserBuilder();
 
-            Map<String, String> parameters= RequestParameterParser.parseParameters(request);
+
             ValidationResult validationResult = userValidator.doValidate(parameters);
 
             if (validationResult.getErrors().size() == 0) {
@@ -49,14 +50,14 @@ public class CommandRegisterUser implements Command {
                     user.setRegistrationDate(LocalDate.now().toString());
 
                     if (password.equals(repeat_password)) {
+
                         userService.register(user);
-                        return  ResponseContentBuilder.buildRedirectResponseContent(PageConst.MAIN_PAGE_PATH);
+                        return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_MAIN_PAGE, request);
 
                     } else {
                         throw new ServiceException("Passwords are not equals");
                     }
-                }
-                else {
+                } else {
                     throw new ServiceException("User with this login already exist");
                 }
             } else {

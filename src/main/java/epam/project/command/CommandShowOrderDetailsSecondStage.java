@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static javafx.application.Platform.exit;
+
 public class CommandShowOrderDetailsSecondStage implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) {

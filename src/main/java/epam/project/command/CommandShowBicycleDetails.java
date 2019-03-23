@@ -38,6 +38,13 @@ public class CommandShowBicycleDetails implements Command {
 
     private ResponseContent setAttribute(HttpServletRequest request, Bicycle bicycle) {
         request.setAttribute("bicycle", bicycle);
+
+        String lastPage=request.getParameter("lastPage");
+        switch (lastPage) {
+            case "bicycle_list":request.setAttribute("lastCommand",CommandType.SHOW_BICYCLE_LIST);break;
+            case "point_hire_list":request.setAttribute("lastCommand",CommandType.SHOW_POINT_HIRE_LIST);break;
+            default:break;
+        }
         return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
     }
 }

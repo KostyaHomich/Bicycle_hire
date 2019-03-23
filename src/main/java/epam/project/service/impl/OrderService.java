@@ -154,4 +154,13 @@ public class OrderService implements Service {
 
     }
 
+    public List<Order> getOrders(int count) throws ServiceException {
+        try {
+            OrderDao orderDao = (OrderDao) JdbcDaoFactory.getInstance().getDao(Order.class);
+            return  orderDao.getOrders(count);
+        } catch ( DaoException e) {
+            throw new ServiceException("Failed to get bicycles", e);
+        }
+    }
+
 }

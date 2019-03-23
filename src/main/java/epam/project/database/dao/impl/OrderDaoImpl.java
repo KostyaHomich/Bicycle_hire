@@ -23,15 +23,11 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
                     " where id=?";
     private static final String DELETE_QUERY =
             "DELETE FROM bicycle_order WHERE id=?";
-    private static final String SELECT_QUERY =
-           "SELECT * FROM bicycle_order";
-    private static final String GET_ALL_ORDERS_BY_USER_ID =
-            "SELECT bicycle_order.* FROM bicycle_hire.bicycle_order,user where bicycle_order.id_user=user.id and user.id=?;";
 
-    private static final String CHECK_IF_CONTAINS =
-            "SELECT idbicycle FROM bicycle_order WHERE idbicycle_order=?";
-    private static final String TAKE_BY_ID =
-            "SELECT * FROM bicycle_hire.bicycle_order WHERE idbicycle_order=?";
+    private static final String SELECT_QUERY =
+            "SELECT * FROM bicycle_order";
+    private static final String GET_ALL_ORDERS_BY_USER_ID =
+            "SELECT bicycle_order.* FROM bicycle_order,user where bicycle_order.id_user=user.id and user.id=?;";
 
 
     @Override
@@ -41,18 +37,7 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
             while (rs.next()) {
                 Order order = new Order();
                 order.setId(rs.getInt("id"));
-                User user = new User();
-                user.setId(rs.getInt("id_user"));
-                order.setUser(user);
-                PointHireBicycle pointHireBicycle = new PointHireBicycle();
-                pointHireBicycle.setId(rs.getInt("id_point_hire_bicycle"));
-                order.setPointHireBicycle(pointHireBicycle);
-                order.setTimeOrder(rs.getString("time_order"));
-                order.setRentalTime(rs.getInt("time_rental"));
-                order.setStatus(rs.getString("status"));
-                order.setCost(rs.getBigDecimal("cost"));
-
-                result.add(order);
+                setDefaultData(result, rs, order);
             }
         } catch (Exception e) {
             throw new DaoException(e);
@@ -63,26 +48,25 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Order object) throws SQLException {
 
-        statement.setInt(1, object.getUser().getId());
-        statement.setInt(2, object.getPointHireBicycle().getId());
-            statement.setString(3,object.getTimeOrder());
-            statement.setInt(4,object.getRentalTime());
-            statement.setString(5,object.getStatus());
-            statement.setBigDecimal(6,object.getCost());
+        setStatement(statement, object);
 
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Order object) throws SQLException {
 
+        setStatement(statement, object);
+        statement.setInt(7, object.getId());
+
+    }
+
+    private void setStatement(PreparedStatement statement, Order object) throws SQLException {
         statement.setInt(1, object.getUser().getId());
         statement.setInt(2, object.getPointHireBicycle().getId());
-            statement.setString(3,object.getTimeOrder());
-            statement.setInt(4,object.getRentalTime());
-            statement.setString(5,object.getStatus());
-            statement.setBigDecimal(6,object.getCost());
-            statement.setInt(7,object.getId());
-
+        statement.setString(3, object.getTimeOrder());
+        statement.setInt(4, object.getRentalTime());
+        statement.setString(5, object.getStatus());
+        statement.setBigDecimal(6, object.getCost());
     }
 
     @Override
@@ -116,21 +100,47 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
             while (rs.next()) {
                 Order order = new Order();
                 order.setId(rs.getInt("bicycle_order.id"));
-                User user = new User();
-                user.setId(rs.getInt("id_user"));
-                order.setUser(user);
-                PointHireBicycle pointHireBicycle = new PointHireBicycle();
-                pointHireBicycle.setId(rs.getInt("id_point_hire_bicycle"));
-                order.setPointHireBicycle(pointHireBicycle);
-                order.setTimeOrder(rs.getString("time_order"));
-                order.setRentalTime(rs.getInt("time_rental"));
-                order.setStatus(rs.getString("status"));
-                order.setCost(rs.getBigDecimal("cost"));
-                result.add(order);
+                setDefaultData(result, rs, order);
             }
             return result;
         } catch (SQLException e) {
             throw new DaoException("Failed to get entity.", e);
         }
+    }
+
+    @AutoConnection
+    @Override
+    public List<Order> getOrders(int count) throws DaoException {
+        List<Order> result = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_QUERY)) {
+            ResultSet rs = statement.executeQuery();
+            int counter = 0;
+            while (rs.next() && counter < count) {
+                counter++;
+                Order order = new Order();
+                setOrderData(result, rs, order);
+            }
+            return result;
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity.", e);
+        }
+    }
+
+    private void setOrderData(List<Order> result, ResultSet rs, Order order) throws SQLException {
+        User user = new User();
+        user.setId(rs.getInt("id_user"));
+        order.setUser(user);
+        PointHireBicycle pointHireBicycle = new PointHireBicycle();
+        pointHireBicycle.setId(rs.getInt("id_point_hire_bicycle"));
+        order.setPointHireBicycle(pointHireBicycle);
+        order.setTimeOrder(rs.getString("time_order"));
+        order.setRentalTime(rs.getInt("time_rental"));
+        order.setStatus(rs.getString("status"));
+        order.setCost(rs.getBigDecimal("cost"));
+        result.add(order);
+    }
+
+    private void setDefaultData(List<Order> result, ResultSet rs, Order order) throws SQLException {
+        setOrderData(result, rs, order);
     }
 }

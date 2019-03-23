@@ -44,6 +44,7 @@
                        id="balance" name="balance"/>
             </div>
             <div>
+                <p><fmt:message key="user.status"/></p>
                 <select id="status" name="status">
                     <option
                             <c:if test="${requestScope.user.getStatus().equalsIgnoreCase('banned')}">

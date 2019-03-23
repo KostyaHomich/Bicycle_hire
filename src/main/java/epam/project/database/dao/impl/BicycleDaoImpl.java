@@ -33,6 +33,9 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
     private static final String SELECT_QUERY =
             "SELECT * FROM bicycle";
 
+    private static final String SELECT_ALL_AVAILABLE_BICYCLES =
+            "SELECT * FROM bicycle where status='available'";
+
     private static final String CHECK_IF_CONTAINS =
             "SELECT * FROM bicycle WHERE id=?";
 
@@ -43,7 +46,7 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
             "SELECT * FROM point_hire_bicycle WHERE id=?";
 
     private static final String GET_ALL_AVAILABLE_BICYCLE =
-            "SELECT * FROM bicycle_hire.bicycle where status='available'";
+            "SELECT * FROM bicycle where status='available'";
 
     private static final String GET_ALL_AVAILABLE_BICYCLES_BY_POINT_HIRE_PK =
             "SELECT bicycle.id,daily_rental_price,name,status,description  " +
@@ -51,10 +54,10 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
                     "and status='available' and bicycle.id=point_hire_bicycle.id_bicycle;";
 
     private static final String GET_ALL_RENTED_BICYCLE =
-            "SELECT * FROM bicycle_hire.bicycle where status='rented'";
+            "SELECT * FROM bicycle where status='rented'";
 
     private static final String GET_ALL_IN_REPAIRING_BICYCLE =
-            "SELECT * FROM bicycle_hire.bicycle where status='in repairing'";
+            "SELECT * FROM bicycle where status='in repairing'";
 
     private static final String GET_ALL_BICYCLE_BY_POINTHIRE =
             "SELECT bicycle.id,daily_rental_price,name,status,description " +
@@ -66,39 +69,38 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
     protected List<Bicycle> parseResultSet(ResultSet rs) throws DaoException {
         List<Bicycle> result = new ArrayList<>();
         try {
-            while (rs.next()) {
-                Bicycle bicycle = new Bicycle();
-                bicycle.setId(rs.getInt("id"));
-                bicycle.setDaily_rental_price(rs.getBigDecimal("daily_rental_price"));
-                bicycle.setName(rs.getString("name"));
-                bicycle.setStatus(rs.getString("status"));
-                bicycle.setDescription(rs.getString("description"));
-                result.add(bicycle);
-            }
+            setDefaultData(rs, result);
         } catch (Exception e) {
             throw new DaoException(e);
         }
         return result;
     }
 
+    private void setDefaultData(ResultSet rs, List<Bicycle> result) throws SQLException {
+        while (rs.next()) {
+            setBicycleData(result, rs);
+        }
+    }
+
 
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Bicycle object) throws SQLException {
 
+        setStatement(statement, object);
+
+    }
+
+    private void setStatement(PreparedStatement statement, Bicycle object) throws SQLException {
         statement.setBigDecimal(1, object.getDaily_rental_price());
         statement.setString(2, object.getName());
         statement.setString(3, object.getStatus());
         statement.setString(4, object.getDescription());
-
     }
 
     @Override
     protected void prepareStatementForUpdate(PreparedStatement statement, Bicycle object) throws SQLException {
 
-        statement.setBigDecimal(1, object.getDaily_rental_price());
-        statement.setString(2, object.getName());
-        statement.setString(3, object.getStatus());
-        statement.setString(4, object.getDescription());
+        setStatement(statement, object);
         statement.setInt(5, object.getId());
 
     }
@@ -140,7 +142,11 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
     @Override
     public PointHireBicycle getByPkPointHireBicycle(int id) throws DaoException {
 
-        try (PreparedStatement statement = connection.prepareStatement(TAKE_POINT_HIRE_BICYCLE_BY_ID)) {
+        return getPointHireBicycle(id, TAKE_POINT_HIRE_BICYCLE_BY_ID);
+    }
+
+    private PointHireBicycle getPointHireBicycle(int id, String takePointHireBicycleById) throws DaoException {
+        try (PreparedStatement statement = connection.prepareStatement(takePointHireBicycleById)) {
             PointHireBicycle pointHireBicycle = new PointHireBicycle();
             int counter = 0;
             statement.setInt(++counter, id);
@@ -161,22 +167,7 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
     @AutoConnection
     @Override
     public PointHireBicycle getByBicyclePkPointHireBicycle(int id) throws DaoException {
-        try (PreparedStatement statement = connection.prepareStatement(TAKE_BY_BICYCLE_ID_POINT_HIRE_BICYCLE)) {
-            PointHireBicycle pointHireBicycle = new PointHireBicycle();
-            int counter = 0;
-            statement.setInt(++counter, id);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                pointHireBicycle.setId(rs.getInt("id"));
-                pointHireBicycle.setId_bicycle(rs.getInt("id_bicycle"));
-                pointHireBicycle.setId_point_hire(rs.getInt("id_point_hire"));
-            } else {
-                throw new DaoException("This point hire bicycle doesn't exist");
-            }
-            return pointHireBicycle;
-        } catch (SQLException e) {
-            throw new DaoException("Failed to get entity", e);
-        }
+        return getPointHireBicycle(id, TAKE_BY_BICYCLE_ID_POINT_HIRE_BICYCLE);
     }
 
     @AutoConnection
@@ -198,25 +189,21 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
     @AutoConnection
     @Override
     public List<Bicycle> getAllBicycleByPointHirePk(int id) throws DaoException {
+        return setBicycleData(id, GET_ALL_BICYCLE_BY_POINTHIRE);
+
+    }
+
+    private List<Bicycle> setBicycleData(int id, String getAllBicycleByPointhire) throws DaoException {
         List<Bicycle> result = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_BICYCLE_BY_POINTHIRE)) {
+        try (PreparedStatement statement = connection.prepareStatement(getAllBicycleByPointhire)) {
 
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                Bicycle bicycle = new Bicycle();
-                bicycle.setId(rs.getInt("id"));
-                bicycle.setDaily_rental_price(rs.getBigDecimal("daily_rental_price"));
-                bicycle.setName(rs.getString("name"));
-                bicycle.setStatus(rs.getString("status"));
-                bicycle.setDescription(rs.getString("description"));
-                result.add(bicycle);
-            }
+            setDefaultData(rs, result);
             return result;
         } catch (SQLException e) {
             throw new DaoException("Failed to get entity.", e);
         }
-
     }
 
     @AutoConnection
@@ -225,14 +212,23 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
         List<Bicycle> result = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_AVAILABLE_BICYCLE)) {
             ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                Bicycle bicycle = new Bicycle();
-                bicycle.setId(rs.getInt("id"));
-                bicycle.setDaily_rental_price(rs.getBigDecimal("daily_rental_price"));
-                bicycle.setName(rs.getString("name"));
-                bicycle.setStatus(rs.getString("status"));
-                bicycle.setDescription(rs.getString("description"));
-                result.add(bicycle);
+            setDefaultData(rs, result);
+            return result;
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity.", e);
+        }
+    }
+
+    @AutoConnection
+    @Override
+    public List<Bicycle> getAvailableBicycles(int count) throws DaoException {
+        List<Bicycle> result = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_AVAILABLE_BICYCLES)) {
+            ResultSet rs = statement.executeQuery();
+            int counter = 0;
+            while (rs.next() && counter < count) {
+                counter++;
+                setBicycleData(result, rs);
             }
             return result;
         } catch (SQLException e) {
@@ -242,23 +238,34 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
 
     @AutoConnection
     @Override
-    public List<Bicycle> getAllAvailableBicycleByPointHirePk(int id) throws DaoException {
+    public List<Bicycle> getBicycles(int count) throws DaoException {
         List<Bicycle> result = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(GET_ALL_AVAILABLE_BICYCLES_BY_POINT_HIRE_PK)) {
-            statement.setInt(1, id);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_QUERY)) {
+            int counter = 0;
             ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                Bicycle bicycle = new Bicycle();
-                bicycle.setId(rs.getInt("id"));
-                bicycle.setDaily_rental_price(rs.getBigDecimal("daily_rental_price"));
-                bicycle.setName(rs.getString("name"));
-                bicycle.setStatus(rs.getString("status"));
-                bicycle.setDescription(rs.getString("description"));
-                result.add(bicycle);
+            while (rs.next() && counter < count) {
+                counter++;
+                setBicycleData(result, rs);
             }
             return result;
         } catch (SQLException e) {
-            throw new DaoException("Failed to get entity.", e);
+            throw new DaoException("Failed to get entitys", e);
         }
+    }
+
+    private void setBicycleData(List<Bicycle> result, ResultSet rs) throws SQLException {
+        Bicycle bicycle = new Bicycle();
+        bicycle.setId(rs.getInt("id"));
+        bicycle.setDaily_rental_price(rs.getBigDecimal("daily_rental_price"));
+        bicycle.setName(rs.getString("name"));
+        bicycle.setStatus(rs.getString("status"));
+        bicycle.setDescription(rs.getString("description"));
+        result.add(bicycle);
+    }
+
+    @AutoConnection
+    @Override
+    public List<Bicycle> getAllAvailableBicycleByPointHirePk(int id) throws DaoException {
+        return setBicycleData(id, GET_ALL_AVAILABLE_BICYCLES_BY_POINT_HIRE_PK);
     }
 }

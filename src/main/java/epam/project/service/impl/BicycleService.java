@@ -127,4 +127,20 @@ public class BicycleService implements Service {
 
     }
 
+    public List<Bicycle> getAvailableBicycles(int count) throws ServiceException {
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return  bicycleDao.getAvailableBicycles(count);
+        } catch ( DaoException e) {
+            throw new ServiceException("Failed to get bicycles", e);
+        }
+    }
+    public List<Bicycle> getBicycles(int count) throws ServiceException {
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return  bicycleDao.getBicycles(count);
+        } catch ( DaoException e) {
+            throw new ServiceException("Failed to get bicycles", e);
+        }
+    }
 }

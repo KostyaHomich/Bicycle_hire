@@ -1,10 +1,12 @@
 package epam.project.service.impl;
 
 import epam.project.database.dao.AbstractJdbcDao;
+import epam.project.database.dao.OrderDao;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.TransactionManager;
+import epam.project.entity.Order;
 import epam.project.entity.User;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
@@ -117,7 +119,14 @@ public class UserService implements Service {
 
     }
 
-
+    public List<User> getUsers(int count) throws ServiceException {
+        try {
+            UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
+            return  userDao.getUsers(count);
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to get users", e);
+        }
+    }
 
     public boolean checkLoginExistence(String login) throws ServiceException {
         try {

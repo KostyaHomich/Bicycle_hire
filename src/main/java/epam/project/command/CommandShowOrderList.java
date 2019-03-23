@@ -1,8 +1,7 @@
 package epam.project.command;
 
-import epam.project.builder.OrderBuilder;
 import epam.project.dto.ResponseContent;
-import epam.project.entity.*;
+import epam.project.entity.Order;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
@@ -16,6 +15,7 @@ import java.util.List;
 
 public class CommandShowOrderList implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CommandShowOrderList.class);
+
     @Override
     public ResponseContent execute(HttpServletRequest request) {
 
@@ -24,20 +24,25 @@ public class CommandShowOrderList implements Command {
 
             OrderService orderService = (OrderService) ServiceFactory.getInstance().getService(ServiceType.ORDER);
 
-            User user = (User) request.getSession().getAttribute("signInUser");
-            List<Order> bicycleList;
-            if (user.getRole().equalsIgnoreCase(UserRole.USER.name())) {
-                bicycleList = orderService.takeAllOrderByUserPk(user.getId());
+            List<Order> orderList;
 
+            String amountOrders = request.getParameter("amountOrders");
+            request.setAttribute("amountOrders", 5);
+
+            if (amountOrders != null && !amountOrders.isEmpty()) {
+                int count = Integer.valueOf(amountOrders);
+                orderList = orderService.getOrders(count);
+                request.setAttribute("amountOrders", count);
             } else {
-                bicycleList = orderService.takeAll();
+                orderList = orderService.getOrders(5);
             }
 
-            request.setAttribute("orderList",bicycleList);
-            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
+
+            request.setAttribute("orderList", orderList);
+            return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
             request.setAttribute("error", "Error: failed get all orders.");
-            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
+            return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         }
 
 

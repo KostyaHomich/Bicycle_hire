@@ -16,30 +16,48 @@ import java.util.List;
 
 public class CommandShowBicycleList implements Command {
     private static Logger LOGGER = Logger.getLogger(CommandShowBicycleList.class.getName());
+
     @Override
     public ResponseContent execute(HttpServletRequest request) {
 
-            try {
-                request.setAttribute("viewName", "bicycle_list");
+        try {
+            request.setAttribute("viewName", "bicycle_list");
 
-                BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
+            BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
 
-                User user = (User) request.getSession().getAttribute("signInUser");
-                List<Bicycle> bicycleList;
+            User user = (User) request.getSession().getAttribute("signInUser");
+            List<Bicycle> bicycleList;
 
-                if (user.getRole().equalsIgnoreCase(UserRole.USER.name())) {
-                    bicycleList = bicycleService.takeAllAvailableBicycle();
+            String amountBicycles = request.getParameter("amountBicycles");
+            request.setAttribute("amountBicycles", 5);
 
-                } else {
-                    bicycleList = bicycleService.takeAll();
+            if (user.getRole().equalsIgnoreCase(UserRole.ADMIN.name())) {
+                if (amountBicycles != null && !amountBicycles.isEmpty()) {
+                    int count = Integer.valueOf(amountBicycles);
+                    bicycleList = bicycleService.getBicycles(count);
+                    request.setAttribute("amountBicycles", count);
+                }
+                else {
+                    bicycleList = bicycleService.getBicycles(5);
+                }
+            } else {
+                if (amountBicycles != null && !amountBicycles.isEmpty()) {
+                    int count = Integer.valueOf(amountBicycles);
+                    bicycleList = bicycleService.getAvailableBicycles(count);
+                    request.setAttribute("amountBicycles", count);
+                }
+                else {
+                    bicycleList = bicycleService.getAvailableBicycles(5);
                 }
 
-                request.setAttribute("bicycles",bicycleList);
-                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
-            } catch (ServiceException e) {
-                request.setAttribute("error", "Error: failed get all bicycles.");
-                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
             }
+
+            request.setAttribute("bicycles", bicycleList);
+            return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
+        } catch (ServiceException e) {
+            request.setAttribute("error", "Error: failed get all bicycles.");
+            return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
+        }
 
 
     }

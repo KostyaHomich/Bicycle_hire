@@ -92,6 +92,7 @@
                     <td>
                         <form style="display: inline-block;" action="${pageContext.request.contextPath}/bicycle_details"
                               method="post">
+                            <input type="hidden" name="lastPage" value="point_hire_list">
                             <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
                             <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
                             <input type="submit" value="<fmt:message key="page.button.show"/>">
@@ -130,5 +131,11 @@
     </c:forEach>
 
 </table>
-
+<form style="text-align:right;" action="${pageContext.request.contextPath}/point_hire_list"
+      method="post">
+    <!--5 default count point hires-->
+    <input type="hidden" name="amountPointHires" value="${5 + requestScope.amountPointHires}">
+    <input type="hidden" name="command" value="${CommandType.SHOW_POINT_HIRE_LIST}">
+    <input type="submit" value="<fmt:message key="page.button.show_more"/>">
+</form>
 

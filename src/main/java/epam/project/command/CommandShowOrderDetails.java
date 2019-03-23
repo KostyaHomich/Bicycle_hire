@@ -43,6 +43,7 @@ public class CommandShowOrderDetails implements Command {
 
     private ResponseContent setAttribute(HttpServletRequest request, Order order) {
         request.setAttribute("order", order);
+
         return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
     }
 }

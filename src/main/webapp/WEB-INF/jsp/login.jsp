@@ -27,8 +27,9 @@
         <form action="${pageContext.request.contextPath}/login" method="post">
 
             <h1><fmt:message key="page.title.login_form"/></h1>
-            <c:out value="${requestScope.error}"/>
-
+            <c:if test="${not empty requestScope.error}">
+                <fmt:message key="${requestScope.error}"/>
+            </c:if>
             <c:if test="${not empty requestScope.errorsList}">
                 <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
                     <c:if test="${entry.value.size() >0}">
@@ -42,11 +43,13 @@
                 <input type="text" placeholder="<fmt:message key="user.login"/>" required="" id="login" name="login"/>
             </div>
             <div>
-                <input type="password" placeholder="<fmt:message key="user.password"/>" required="" id="password" name="password"/>
+                <input type="password" placeholder="<fmt:message key="user.password"/>" required="" id="password"
+                       name="password"/>
             </div>
             <div>
                 <input type="submit" value="<fmt:message key="page.button.login"/>"/>
-                <a href="${pageContext.request.contextPath}/registration ?command=${CommandType.SHOW_REGISTRATION_PAGE}"><fmt:message key="page.button.register"/></a>
+                <a href="${pageContext.request.contextPath}/registration ?command=${CommandType.SHOW_REGISTRATION_PAGE}"><fmt:message
+                        key="page.button.register"/></a>
             </div>
             <input type="hidden" name="command" value="${CommandType.LOGIN}">
         </form>
