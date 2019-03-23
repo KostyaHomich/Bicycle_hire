@@ -44,7 +44,7 @@ public class CommandLogIn implements Command {
                 if (!signInUser.getStatus().equalsIgnoreCase("banned")) {
 
                     request.getSession().setAttribute(USER, signInUser);
-                    return ResponseContentBuilder.buildForwardResponseContent(PageConst.USER_PAGE_PATH);
+                    return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_PAGE,request);
 
                 } else {
                     request.setAttribute("error","user.error.banned");
