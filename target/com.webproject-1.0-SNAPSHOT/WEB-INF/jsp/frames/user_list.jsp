@@ -8,13 +8,13 @@
     <thead>
 
     <tr class="headings">
-        <th class="column-title">Login</th>
-        <th class="column-title">Email</th>
-        <th class="column-title">First name</th>
-        <th class="column-title">Last name</th>
-        <th class="column-title">Status</th>
-        <th class="column-title">Balance</th>
-        <th class="column-title no-link last"><span class="nobr">Action</span></th>
+        <th class="column-title"><fmt:message key="user.login"/></th>
+        <th class="column-title"><fmt:message key="user.email"/></th>
+        <th class="column-title"><fmt:message key="user.first_name"/></th>
+        <th class="column-title"><fmt:message key="user.last_name"/></th>
+        <th class="column-title"><fmt:message key="user.status"/></th>
+        <th class="column-title"><fmt:message key="user.balance"/></th>
+        <th class="column-title no-link last"><span class="nobr"><fmt:message key="page.button.action"/></span></th>
 
     </tr>
     </thead>
@@ -32,13 +32,13 @@
                       action="${pageContext.request.contextPath}/user_details" method="post">
                     <input type="hidden" name="userId" value="${user.getId()}">
                     <input type="hidden" name="command" value="${CommandType.SHOW_USER_DETAILS}">
-                    <input  type="submit" value="Show">
+                    <input  type="submit" value="<fmt:message key="page.button.show"/>">
                 </form>
                 <form style="display: inline-block;"
                       action="${pageContext.request.contextPath}/user_details" method="post">
                     <input type="hidden" name="userId" value="${user.getId()}">
                     <input type="hidden" name="command" value="${CommandType.DELETE_USER}">
-                    <input  type="submit" value="Delete">
+                    <input  type="submit" value="<fmt:message key="page.button.delete"/>">
                 </form>
             </td>
         </tr>
