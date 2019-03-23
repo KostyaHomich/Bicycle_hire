@@ -40,6 +40,7 @@
                                     <input type="hidden" name="command" value="${CommandType.SHOW_ORDER_DETAILS}">
                                     <input type="submit" value="<fmt:message key="page.button.show"/>">
                                 </form>
+                                <c:if test="${!order.getStatus().equalsIgnoreCase('in working')}">
                                 <form style="display: inline-block;"
                                       action="${pageContext.request.contextPath}/order_delete"
                                       method="post">
@@ -47,6 +48,7 @@
                                     <input type="hidden" name="command" value="${CommandType.DELETE_ORDER}">
                                     <input type="submit" value="<fmt:message key="page.button.delete"/>">
                                 </form>
+                                </c:if>
                             </c:when>
                             <c:otherwise>
                                 <c:if test="${!order.getStatus().equalsIgnoreCase('finished')}">
@@ -68,6 +70,13 @@
             </c:forEach>
             </tbody>
         </table>
+        <form style="text-align:right;" action="${pageContext.request.contextPath}/order_list"
+              method="post">
+            <!--5 default count orders-->
+            <input type="hidden" name="amountOrders" value="${5 + requestScope.amountOrders}">
+            <input type="hidden" name="command" value="${CommandType.SHOW_ORDER_LIST}">
+            <input type="submit" value="<fmt:message key="page.button.show_more"/>">
+        </form>
     </c:when>
     <c:otherwise>
         <p style="text-align: center; font-size:25px;"><fmt:message key="order.message.not_orders"/></p>

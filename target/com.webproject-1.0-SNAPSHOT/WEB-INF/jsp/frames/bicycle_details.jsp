@@ -41,15 +41,32 @@
                        placeholder="<fmt:message key="bicycle.daily_rental_price"/>"
                        id="daily_rental_price" name="daily_rental_price"/>
             </div>
+            <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN)}">
+                <div>
+                    <p><fmt:message key="bicycle.status"/></p>
+                    <select id="status" name="status">
+                        <option
+                                <c:if test="${requestScope.bicycle.getStatus().equalsIgnoreCase('broken')}">
+                                    selected
+                                </c:if>>
+                            broken
+                        </option>
 
-            <div>
-                <input type="text"
-                        <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
-                            readonly
-                        </c:if>
-                       value="${requestScope.bicycle.getStatus()}"
-                       placeholder="<fmt:message key="bicycle.status"/>" id="status" name="status"/>
-            </div>
+                        <option
+                                <c:if test="${requestScope.bicycle.getStatus().equalsIgnoreCase('available')}">
+                                    selected
+                                </c:if>>
+                            available
+                        </option>
+                        <option
+                                <c:if test="${requestScope.bicycle.getStatus().equalsIgnoreCase('rented')}">
+                                    selected
+                                </c:if>>
+                            rented
+                        </option>
+                    </select>
+                </div>
+            </c:if>
             <div>
                 <textarea style="height: 60px;width: 300px;"
                         <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
@@ -76,10 +93,11 @@
                     </c:if>
 
                 </c:if>
-                <form style="display: inline-block; text-align:right;" action="${pageContext.request.contextPath}/bicycle_details" method="post">
+                <form style="display: inline-block; text-align:right;"
+                      action="${pageContext.request.contextPath}/bicycle_details" method="post">
                     <div>
                         <input type="submit" value="<fmt:message key="page.button.back"/>">
-                        <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
+                        <input type="hidden" name="command" value="${requestScope.lastCommand}">
                     </div>
                 </form>
             </div>

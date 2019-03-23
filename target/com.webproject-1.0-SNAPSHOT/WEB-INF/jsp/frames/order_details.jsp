@@ -38,9 +38,22 @@
             <c:if test="${not empty sessionScope.signInUser
                     && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
                 <div>
-                    <input type="text" value="${requestScope.order.getStatus()}"
-                           placeholder="<fmt:message key="order.status"/>" id="status"
-                           name="status"/>
+                    <p><fmt:message key="order.status"/></p>
+                    <select id="status" name="status">
+                        <option
+                                <c:if test="${requestScope.bicycle.getStatus().equalsIgnoreCase('finished')}">
+                                    selected
+                                </c:if>>
+                            finished
+                        </option>
+
+                        <option
+                                <c:if test="${requestScope.bicycle.getStatus().equalsIgnoreCase('in working')}">
+                                    selected
+                                </c:if>>
+                            in working
+                        </option>
+                    </select>
                 </div>
             </c:if>
             <c:if test="${not empty sessionScope.signInUser

@@ -20,6 +20,7 @@
 
     <c:forEach items="${requestScope.bicycles}" var="bicycle">
         <tr class="even pointer">
+
             <td class=" ">${bicycle.getName()}</td>
             <td class=" ">${bicycle.getDaily_rental_price()}&#36;</td>
             <td class=" ">${bicycle.getStatus()}</td>
@@ -27,6 +28,7 @@
             <td>
                 <form style="display: inline-block;" action="${pageContext.request.contextPath}/bicycle_details"
                       method="post">
+                    <input type="hidden" name="lastPage" value="bicycle_list">
                     <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
                     <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
                     <input type="submit" value="<fmt:message key="page.button.show"/>">
@@ -44,6 +46,13 @@
 
         </tr>
     </c:forEach>
+
     </tbody>
 </table>
+<form style="text-align:right;" action="${pageContext.request.contextPath}/bicycle_list"
+      method="post">
+    <input type="hidden" name="amountBicycles" value="${5 + requestScope.amountBicycles}">
+    <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
+    <input type="submit" value="<fmt:message key="page.button.show_more"/>">
+</form>
 
