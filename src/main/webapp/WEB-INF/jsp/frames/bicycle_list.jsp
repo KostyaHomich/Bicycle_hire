@@ -34,9 +34,11 @@
                     <input type="submit" value="<fmt:message key="page.button.show"/>">
                 </form>
                 <c:if test="${not empty sessionScope.signInUser
-            && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
+            && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())
+            && !bicycle.getStatus().equalsIgnoreCase('rented')}">
                     <form style="display: inline-block;" action="${pageContext.request.contextPath}/bicycle_details"
                           method="post">
+                        <input type="hidden" name="lastPage" value="bicycle_list">
                         <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
                         <input type="hidden" name="command" value="${CommandType.DELETE_BICYCLE}">
                         <input type="submit" value="<fmt:message key="page.button.delete"/>">

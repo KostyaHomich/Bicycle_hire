@@ -13,15 +13,18 @@ import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
 import epam.project.validation.ValidatorType;
 import epam.project.validation.impl.PointHireValidator;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
 public class CommandAddPointHire implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(CommandAddPointHire.class);
 
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             PointHireValidator pointHireValidator = (PointHireValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.POINT_HIRE);
             PointHireService pointHireService = (PointHireService) ServiceFactory.getInstance().getService(ServiceType.POINT_HIRE);
@@ -39,8 +42,9 @@ public class CommandAddPointHire implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_DETAILS, request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "point_hire.error.add_order");
-            return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_DETAILS, request);
+            LOGGER.error("Failed to add point hire.", e);
+            request.setAttribute("error", "point_hire.error.add_point_hire");
+            throw new CommandException("Failed to add point hire.");
         }
 
     }

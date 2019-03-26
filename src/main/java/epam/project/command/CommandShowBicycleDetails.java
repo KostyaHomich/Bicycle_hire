@@ -2,18 +2,22 @@ package epam.project.command;
 
 import epam.project.dto.ResponseContent;
 import epam.project.entity.Bicycle;
-import epam.project.entity.EntityType;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.BicycleService;
 import epam.project.util.ResponseContentBuilder;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class CommandShowBicycleDetails implements Command {
+
+    private static final Logger LOGGER = LogManager.getLogger(CommandShowBicycleDetails.class);
+
     @Override
-    public ResponseContent execute(HttpServletRequest request)  {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             request.setAttribute("viewName", "bicycle_details");
 
@@ -31,31 +35,35 @@ public class CommandShowBicycleDetails implements Command {
                 }
             }
             else {
-                String lastPage=request.getParameter("lastPage");
-                switch (lastPage) {
-                    case "bicycle_list":request.setAttribute("lastCommand",CommandType.SHOW_BICYCLE_LIST);break;
-                    case "point_hire_list":request.setAttribute("lastCommand",CommandType.SHOW_POINT_HIRE_LIST);break;
-                    default:break;
-                }
+                setLastPageAttribute(request);
                 request.setAttribute("error","page.error.show_bicycle_details");
                 return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
 
        }
         catch (ServiceException e) {
+            LOGGER.error("Failed to show bicycle details", e);
             request.setAttribute("error","page.error.show_bicycle_details");
-            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
+            throw new CommandException("Failed to show bicycle details");
+
         }
     }
 
     private ResponseContent setAttribute(HttpServletRequest request, Bicycle bicycle) {
         request.setAttribute("bicycle", bicycle);
+
+        setLastPageAttribute(request);
+
+        return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
+    }
+
+    private void setLastPageAttribute(HttpServletRequest request) {
         String lastPage=request.getParameter("lastPage");
+
         switch (lastPage) {
-            case "bicycle_list":request.setAttribute("lastCommand",CommandType.SHOW_BICYCLE_LIST);break;
+            case "bicycle_list":request.setAttribute("lastCommand", CommandType.SHOW_BICYCLE_LIST);break;
             case "point_hire_list":request.setAttribute("lastCommand",CommandType.SHOW_POINT_HIRE_LIST);break;
             default:break;
         }
-        return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
     }
 }

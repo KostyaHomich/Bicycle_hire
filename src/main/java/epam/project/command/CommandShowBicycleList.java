@@ -18,7 +18,7 @@ public class CommandShowBicycleList implements Command {
     private static Logger LOGGER = Logger.getLogger(CommandShowBicycleList.class.getName());
 
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
 
         try {
             request.setAttribute("viewName", "bicycle_list");
@@ -53,8 +53,9 @@ public class CommandShowBicycleList implements Command {
             request.setAttribute("bicycles", bicycleList);
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
+            LOGGER.error("Failed to show bicycle list", e);
             request.setAttribute("error", "page.error.show_bicycle_list");
-            return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
+            throw new CommandException("Failed to show bicycle list");
         }
 
 

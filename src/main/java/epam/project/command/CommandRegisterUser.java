@@ -25,9 +25,9 @@ public class CommandRegisterUser implements Command {
     private static final String PASSWORD = "password";
     private static final String REPEAT_PASSWORD = "repeat_password";
 
-
+    private static final Logger LOGGER = LogManager.getLogger(CommandRegisterUser.class);
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             Map<String, String> parameters = RequestParameterParser.parseParameters(request);
@@ -48,8 +48,8 @@ public class CommandRegisterUser implements Command {
                     user.setRegistrationDate(LocalDate.now().toString());
 
                     if (password.equals(repeat_password)) {
-
                         userService.register(user);
+
                         return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_MAIN_PAGE, request);
 
                     } else {
@@ -65,8 +65,9 @@ public class CommandRegisterUser implements Command {
                 return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
             }
         } catch (ServiceException e) {
+            LOGGER.error("Failed to register user", e);
             request.setAttribute("error", "user.error.register_user");
-            return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
+            throw new CommandException("Failed to register user");
         }
     }
 }

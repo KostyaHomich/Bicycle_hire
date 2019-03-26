@@ -1,15 +1,18 @@
 package epam.project.command;
 
+import epam.project.builder.OrderBuilder;
 import epam.project.dto.ResponseContent;
-import epam.project.entity.*;
-import epam.project.service.impl.BicycleService;
-import epam.project.service.impl.UserService;
-import epam.project.util.RequestParameterParser;
+import epam.project.entity.Bicycle;
+import epam.project.entity.EntityType;
+import epam.project.entity.Order;
+import epam.project.entity.User;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
-import epam.project.builder.OrderBuilder;
 import epam.project.service.exception.ServiceException;
+import epam.project.service.impl.BicycleService;
 import epam.project.service.impl.OrderService;
+import epam.project.service.impl.UserService;
+import epam.project.util.RequestParameterParser;
 import epam.project.util.ResponseContentBuilder;
 import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
@@ -20,12 +23,15 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class CommandAddOrder implements Command {
-    private static final Logger LOGGER = LogManager.getLogger(CommandShowOrderDetails.class);
+
+    private static final Logger LOGGER = LogManager.getLogger(CommandAddOrder.class);
+
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             request.setAttribute("entity", EntityType.ORDER);
 
@@ -39,7 +45,6 @@ public class CommandAddOrder implements Command {
             ValidationResult validationResult = orderValidator.doValidate(parameters);
 
             OrderBuilder orderBuilder = new OrderBuilder();
-
             if (validationResult.getErrors().size() == 0) {
                 Order order = orderBuilder.build(parameters);
 
@@ -67,8 +72,9 @@ public class CommandAddOrder implements Command {
                 return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
             }
         } catch (ServiceException e) {
-            request.setAttribute("error", "Error: failed to add order");
-            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_DETAILS,request);
+            LOGGER.error("Failed to add order.", e);
+            request.setAttribute("error", "order.error.add_order");
+            throw new CommandException("Failed to add order.");
         }
     }
 }

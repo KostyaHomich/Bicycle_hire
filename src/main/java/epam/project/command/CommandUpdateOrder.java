@@ -13,14 +13,18 @@ import epam.project.validation.ValidationResult;
 import epam.project.validation.ValidatorFactory;
 import epam.project.validation.ValidatorType;
 import epam.project.validation.impl.OrderValidator;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
 public class CommandUpdateOrder implements Command {
+
+    private static final Logger LOGGER = LogManager.getLogger(CommandUpdateOrder.class);
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             OrderService orderService = (OrderService) ServiceFactory.getInstance().getService(ServiceType.ORDER);
             OrderValidator orderValidator = (OrderValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.ORDER);
@@ -39,8 +43,9 @@ public class CommandUpdateOrder implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_DETAILS, request);
             }
         } catch (ServiceException e) {
+            LOGGER.error("Failed to update order", e);
             request.setAttribute("error", "order.error.update_order");
-            return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_DETAILS, request);
+            throw new CommandException("Failed to update order");
         }
 
     }

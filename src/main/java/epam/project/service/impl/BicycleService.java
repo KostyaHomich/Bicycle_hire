@@ -81,7 +81,6 @@ public class BicycleService implements Service {
     }
 
     public boolean delete(Bicycle bicycle) throws ServiceException {
-
         try {
             EntityDao<Bicycle, Integer> bicycleDao = JdbcDaoFactory.getInstance().getDao(Bicycle.class);
             bicycleDao.delete(bicycle);

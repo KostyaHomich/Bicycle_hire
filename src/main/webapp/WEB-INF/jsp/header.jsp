@@ -13,7 +13,7 @@
             <nav>
                 <div>
                     <ul>
-                        <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN)}">
+                        <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
                             <li><a href="?command=${CommandType.SHOW_USER_LIST}">
                                 <fmt:message key="page.header.users"/></a></li>
                         </c:if>

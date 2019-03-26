@@ -34,12 +34,12 @@ public class OrderService implements Service {
         return orders;
     }
 
-    public List<Order> takeAllOrderByUserPk(int pk) throws ServiceException {
+    public List<Order> takeAllOrderByUserPk(int pk,int count) throws ServiceException {
 
         List<Order> orders;
         try {
             OrderDao orderDao = (OrderDao) JdbcDaoFactory.getInstance().getDao(Order.class);
-            orders = orderDao.getAllOrdersByUserPk(pk);
+            orders = orderDao.getAllOrdersByUserPk(pk,count);
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all orders by pk", e);
         }
@@ -94,7 +94,6 @@ public class OrderService implements Service {
             EntityDao<Order, Integer> orderDao = JdbcDaoFactory.getInstance().getTransactionalDao(Order.class);
             BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getTransactionalDao(Bicycle.class);
             transactionManager.begin((AbstractJdbcDao) orderDao, (AbstractJdbcDao) bicycleDao);
-
             Order order = orderDao.getByPK(id);
             PointHireBicycle pointHireBicycle=bicycleDao.getByPkPointHireBicycle(order.getPointHireBicycle().getId());
             Bicycle bicycle = bicycleDao.getByPK(pointHireBicycle.getId_bicycle());
@@ -133,12 +132,39 @@ public class OrderService implements Service {
     }
 
     public Order getById(int id) throws ServiceException {
-
+        TransactionManager transactionManager = new TransactionManager();
         try {
-            EntityDao<Order,Integer> orderDao = JdbcDaoFactory.getInstance().getDao(Order.class);
-            return  orderDao.getByPK(id);
-        } catch (DaoException   e) {
+            EntityDao<Order, Integer> orderDao = JdbcDaoFactory.getInstance().getTransactionalDao(Order.class);
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getTransactionalDao(Bicycle.class);
+            EntityDao<PointHire, Integer> pointHireDao = JdbcDaoFactory.getInstance().getTransactionalDao(PointHire.class);
 
+            transactionManager.begin((AbstractJdbcDao) orderDao, (AbstractJdbcDao) bicycleDao,(AbstractJdbcDao) pointHireDao);
+
+            Order order = orderDao.getByPK(id);
+            System.out.println("1 "+order.getId());
+
+            PointHireBicycle pointHireBicycle=bicycleDao.getByPkPointHireBicycle(order.getPointHireBicycle().getId());
+            System.out.println("2 "+pointHireBicycle.getId());
+            System.out.println("2,5 "+pointHireBicycle.getId_bicycle());
+            Bicycle bicycle = bicycleDao.getByPK(pointHireBicycle.getId_bicycle());
+            System.out.println("3 "+bicycle.getId());
+            PointHire pointHire=pointHireDao.getByPK(pointHireBicycle.getId_point_hire());
+            System.out.println("4 "+pointHire.getId());
+
+            order.setBicycle(bicycle);
+            order.setPointHire(pointHire);
+
+            transactionManager.commit();
+            transactionManager.end();
+            return order;
+        } catch (DaoException e) {
+            try {
+                transactionManager.rollback();
+            } catch (DaoException d) {
+                LOGGER.error("Failed to get by pk order", e);
+            }
+            e.printStackTrace();
+            LOGGER.error("Failed to get by pk order", e);
             throw new ServiceException("Failed to get by pk order", e);
         }
     }

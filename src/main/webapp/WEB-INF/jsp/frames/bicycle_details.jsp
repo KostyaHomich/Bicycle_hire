@@ -12,7 +12,9 @@
 
             <h1><fmt:message key="page.title.bicycle_details"/></h1>
 
-            <c:out value="${requestScope.error}"/>
+            <c:if test="${not empty requestScope.error}">
+                <fmt:message key="${requestScope.error}"/>
+            </c:if>
 
             <c:if test="${not empty requestScope.errorsList}">
                 <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
@@ -30,7 +32,15 @@
                             readonly
                         </c:if>
                        value="${requestScope.bicycle.getName()}"
-                       placeholder="<fmt:message key="bicycle.name"/>" id="name" name="name"/>
+                       placeholder="<fmt:message key="bicycle.name"/>"
+                       id="name"
+                       name="name"
+                       minlength="4"
+                       maxlength="25"
+                       required
+                       pattern="^[a-zA-Z0-9]{4,25}$"
+                       title="<fmt:message key="bicycle.error.invalid_name"/>"
+                />
             </div>
             <div>
                 <input type="text"
@@ -39,7 +49,12 @@
                         </c:if>
                        value="${requestScope.bicycle.getDaily_rental_price()}"
                        placeholder="<fmt:message key="bicycle.daily_rental_price"/>"
-                       id="daily_rental_price" name="daily_rental_price"/>
+                       id="daily_rental_price"
+                       name="daily_rental_price"
+                       required
+                       pattern="^\d{1,10}$"
+                       title="<fmt:message key="bicycle.error.invalid_daily_rental_price"/>"
+                />
             </div>
             <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN)}">
                 <div>
@@ -72,7 +87,10 @@
                         <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
                             readonly
                         </c:if>
-                          placeholder="<fmt:message key="bicycle.description"/>" id="description" name="description">
+                          placeholder="<fmt:message key="bicycle.description"/>"
+                          id="description"
+                          name="description"
+                >
                     ${requestScope.bicycle.getDescription()}
                 </textarea>
             </div>

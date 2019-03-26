@@ -8,11 +8,16 @@ import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
 import epam.project.util.ResponseContentBuilder;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 public class CommandDeleteUser implements Command {
+
+    private static final Logger LOGGER = LogManager.getLogger(CommandDeleteUser.class);
+
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             request.setAttribute("entity", EntityType.USER);
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
@@ -29,8 +34,10 @@ public class CommandDeleteUser implements Command {
                 return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
             }
         } catch (ServiceException e) {
+            LOGGER.error("Failed to delete user", e);
             request.setAttribute("error","user.error.delete_user");
-            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
+            throw new CommandException("Failed to delete user");
+
         }
     }
 

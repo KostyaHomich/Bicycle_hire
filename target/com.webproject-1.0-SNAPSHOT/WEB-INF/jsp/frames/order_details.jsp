@@ -10,7 +10,9 @@
 
         <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
             <h1><fmt:message key="page.title.order_details"/></h1>
-            <c:out value="${requestScope.error}"/>
+            <c:if test="${not empty requestScope.error}">
+                <fmt:message key="${requestScope.error}"/>
+            </c:if>
 
             <c:if test="${not empty requestScope.errorsList}">
                 <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
@@ -24,15 +26,24 @@
             <input type="hidden" name="orderId" value="${requestScope.order.getId()}">
 
             <div style="margin-bottom: 10px">
-                <input type="text" value="${requestScope.order.getRentalTime()}" id="time_rental"
+                <input type="text"
+                       value="${requestScope.order.getRentalTime()}"
+                       id="time_rental"
                        placeholder="<fmt:message key="order.time_rental"/>"
-                       name="time_rental"/>
+                       name="time_rental"
+                       required
+                       pattern="^[1-9]{1,10}$"
+                       title="<fmt:message key="order.error.invalid_time_rental"/>"
+                />
 
             </div>
             <div style="margin-bottom: 10px">
                 <p><fmt:message key="order.time_order"/></p>
-                <input type="datetime-local" value="${requestScope.order.getTimeOrder()}"
-                       placeholder="<fmt:message key="order.time_order"/>" id="time_order"
+                <input type="datetime-local"
+                       value="${requestScope.order.getTimeOrder()}"
+                       placeholder="<fmt:message key="order.time_order"/>"
+                       id="time_order"
+                       required
                        name="time_order"/>
             </div>
             <c:if test="${not empty sessionScope.signInUser
@@ -46,7 +57,6 @@
                                 </c:if>>
                             finished
                         </option>
-
                         <option
                                 <c:if test="${requestScope.bicycle.getStatus().equalsIgnoreCase('in working')}">
                                     selected
@@ -59,9 +69,15 @@
             <c:if test="${not empty sessionScope.signInUser
                     && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
                 <div>
-                    <input type="text" value="${requestScope.order.getCost()}"
-                           placeholder="<fmt:message key="order.cost"/>" id="cost"
-                           name="cost"/>
+                    <input type="text"
+                           value="${requestScope.order.getCost()}"
+                           placeholder="<fmt:message key="order.cost"/>"
+                           id="cost"
+                           name="cost"
+                           required
+                           pattern="^[1-9]{1,10}$"
+                           title="<fmt:message key="order.error.invalid_cost"/>"
+                    />
                 </div>
             </c:if>
             <div>
@@ -102,5 +118,4 @@
         </form>
 
     </section>
-
 </div>

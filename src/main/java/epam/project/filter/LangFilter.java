@@ -1,6 +1,5 @@
 package epam.project.filter;
 
-import epam.project.i18n.LanguageEnum;
 import epam.project.util.CookieFinder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

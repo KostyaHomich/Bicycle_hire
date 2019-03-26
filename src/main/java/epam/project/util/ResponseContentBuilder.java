@@ -1,9 +1,6 @@
 package epam.project.util;
 
-import epam.project.command.Command;
-import epam.project.command.CommandProvider;
-import epam.project.command.CommandType;
-import epam.project.command.Router;
+import epam.project.command.*;
 import epam.project.dto.ResponseContent;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +22,7 @@ public class ResponseContentBuilder {
 
     }
 
-    public static ResponseContent buildCommandResponseContent(CommandType type, HttpServletRequest request) {
+    public static ResponseContent buildCommandResponseContent(CommandType type, HttpServletRequest request) throws CommandException {
 
         Command command = CommandProvider.getInstance().takeCommand(type.name());
         return command.execute(request);

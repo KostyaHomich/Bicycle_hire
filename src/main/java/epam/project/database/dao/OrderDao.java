@@ -6,7 +6,7 @@ import epam.project.entity.Order;
 import java.util.List;
 
 public interface OrderDao extends EntityDao<Order, Integer> {
-    List<Order> getAllOrdersByUserPk(int pk) throws DaoException;
+    List<Order> getAllOrdersByUserPk(int pk, int count) throws DaoException;
     List<Order> getOrders(int count) throws DaoException;
 
 }

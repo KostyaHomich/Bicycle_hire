@@ -40,12 +40,16 @@
 </c:choose>
 <fmt:setBundle basename="/text" scope="application"/>
 
-    <jsp:include page="header.jsp"/>
+    <jsp:include page="frames/header.jsp"/>
 
 <div class="x_panel">
     <div class="x_content">
 
-        <c:out value="${requestScope.error}"/>
+<c:if test="${not empty requestScope.error}">
+    <fmt:message key="${requestScope.error}"/>
+</c:if>
+
+
         <div class="table-responsive">
 
             <jsp:include page="frames/${requestScope.viewName}.jsp"/>

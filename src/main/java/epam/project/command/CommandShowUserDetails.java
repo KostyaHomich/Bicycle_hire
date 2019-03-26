@@ -7,12 +7,17 @@ import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
 import epam.project.util.ResponseContentBuilder;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class CommandShowUserDetails implements Command {
+
+    private static final Logger LOGGER = LogManager.getLogger(CommandShowUserDetails.class);
+
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             request.setAttribute("viewName","user_details");
 
@@ -33,8 +38,9 @@ public class CommandShowUserDetails implements Command {
                 return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
         } catch (ServiceException e) {
+            LOGGER.error("Failed to show user details", e);
             request.setAttribute("error", "page.error.show_user_details");
-            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
+            throw new CommandException("Failed to show user details");
         }
     }
 

@@ -9,7 +9,10 @@
 
         <form action="${pageContext.request.contextPath}/user_list" method="post">
             <h1><fmt:message key="page.title.user_details"/></h1>
-            <c:out value="${requestScope.error}"/>
+
+            <c:if test="${not empty requestScope.error}">
+                <fmt:message key="${requestScope.error}"/>
+            </c:if>
 
             <c:if test="${not empty requestScope.errorsList}">
                 <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
@@ -20,6 +23,7 @@
                     </c:if>
                 </c:forEach>
             </c:if>
+
             <input type="hidden" name="id" value="${requestScope.user.getId()}">
 
             <input type="hidden" value="${requestScope.user.getLogin()}" name="login"/>

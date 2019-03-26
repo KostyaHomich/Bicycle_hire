@@ -1,6 +1,7 @@
 package epam.project.controller;
 
 import epam.project.command.Command;
+import epam.project.command.CommandException;
 import epam.project.command.CommandProvider;
 import epam.project.dto.ResponseContent;
 import org.apache.log4j.LogManager;
@@ -30,15 +31,20 @@ public class FrontController extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String commandParameter =request.getParameter("command");
-        Command command = CommandProvider.getInstance().takeCommand(commandParameter);
-        ResponseContent responseContent= command.execute(request);
 
-        if (responseContent.getRouter().getType().equals("redirect")) {
-            System.out.println(responseContent.getRouter().getRoute());
-            response.sendRedirect(responseContent.getRouter().getRoute());
-        } else {
-            request.getRequestDispatcher(responseContent.getRouter().getRoute()).forward(request, response);
+        try {
+            String commandParameter = request.getParameter("command");
+            Command command = CommandProvider.getInstance().takeCommand(commandParameter);
+            ResponseContent responseContent = command.execute(request);
+
+            if (responseContent.getRouter().getType().equals("redirect")) {
+                response.sendRedirect(responseContent.getRouter().getRoute());
+            } else {
+                request.getRequestDispatcher(responseContent.getRouter().getRoute()).forward(request, response);
+            }
+        }
+        catch (CommandException e) {
+            throw new ServletException(e);
         }
     }
 }

@@ -44,7 +44,6 @@ public class OrderBuilder implements Builder<Order> {
                     PointHire pointHire=new PointHire();
                     pointHire.setId(Integer.valueOf(value));
                     order.setPointHire(pointHire);
-
                     break;
                 case TIME_RENTAL:
                     order.setRentalTime(Integer.valueOf(value));

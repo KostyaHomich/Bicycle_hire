@@ -9,6 +9,10 @@
 <error-code>404</error-code>
 <location>/WEB-INF/jsp/404.jsp</location>
 </error-page>
+    <error-page>
+        <exception-type>epam.project.command.CommandException</exception-type>
+        <location>/WEB-INF/jsp/error.jsp</location>
+    </error-page>
 <welcome-file-list>
     <welcome-file>/WEB-INF/jsp/main.jsp</welcome-file>
 </welcome-file-list>

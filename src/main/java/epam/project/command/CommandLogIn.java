@@ -26,7 +26,7 @@ public class CommandLogIn implements Command {
 
 
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
 
         try {
             ResponseContent responseContent = new ResponseContent();
@@ -53,8 +53,9 @@ public class CommandLogIn implements Command {
                 return  ResponseContentBuilder.buildForwardResponseContent(PageConst.LOGIN_PAGE_PATH);
             }
         } catch (ServiceException e) {
+            LOGGER.error("Failed to login user", e);
             request.setAttribute("error","page.error.login_failed");
-            return  ResponseContentBuilder.buildForwardResponseContent(PageConst.LOGIN_PAGE_PATH);
+            throw new CommandException("Failed to login user");
         }
 
     }

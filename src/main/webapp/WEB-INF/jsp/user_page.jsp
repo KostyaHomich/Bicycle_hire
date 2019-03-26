@@ -45,17 +45,17 @@
 </c:choose>
 <fmt:setBundle basename="/text" scope="application"/>
 
-<jsp:include page="header.jsp"/>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/frames/header.jsp"/>
 
 <table class="table table-striped jambo_table bulk_action">
     <thead>
     <tr class="headings">
-        <th class="column-title"><fmt:message key="user.login"/></th>
-        <th class="column-title"><fmt:message key="user.email"/></th>
-        <th class="column-title"><fmt:message key="user.first_name"/></th>
-        <th class="column-title"><fmt:message key="user.last_name"/></th>
-        <th class="column-title"><fmt:message key="user.status"/></th>
-        <th class="column-title"><fmt:message key="user.balance"/></th>
+        <th class="column-title">Login</th>
+        <th class="column-title">Email</th>
+        <th class="column-title">First name</th>
+        <th class="column-title">Last name</th>
+        <th class="column-title">Status</th>
+        <th class="column-title">Balance</th>
     </tr>
     </thead>
     <tbody>
@@ -69,5 +69,5 @@
         </tr>
     </tbody>
 </table>
-<jsp:include page="footer.jsp"/>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/footer.jsp"/>
 </body>

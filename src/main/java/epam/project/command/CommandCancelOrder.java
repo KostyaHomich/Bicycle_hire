@@ -4,15 +4,18 @@ import epam.project.dto.ResponseContent;
 import epam.project.service.ServiceFactory;
 import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
-import epam.project.service.impl.BicycleService;
 import epam.project.service.impl.OrderService;
 import epam.project.util.ResponseContentBuilder;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class CommandCancelOrder implements Command {
+    private static final Logger LOGGER = LogManager.getLogger(CommandCancelOrder.class);
+
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             OrderService orderService = (OrderService) ServiceFactory.getInstance().getService(ServiceType.ORDER);
 
@@ -27,8 +30,9 @@ public class CommandCancelOrder implements Command {
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST, request);
             }
         } catch (ServiceException e) {
+            LOGGER.error("Failed to cancel order.", e);
             request.setAttribute("error", "order.error.cancel_order");
-            return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST, request);
+            throw new CommandException("Failed to cancel order.");
         }
     }
 }

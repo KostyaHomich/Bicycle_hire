@@ -14,7 +14,6 @@ public class BicycleValidator implements Validator {
 
     private static final String DAILY_RENTAL_PRICE = "daily_rental_price";
     private static final String NAME = "name";
-    private static final String STATUS = "status";
     private static final String DESCRIPTION = "description";
 
 
@@ -79,6 +78,9 @@ public class BicycleValidator implements Validator {
         }
         if (name.contains(SPACE)) {
             errors.add("bicycle.error.name_empty_space");
+        }
+        if (name.matches(CHECK_NAME)) {
+            errors.add("bicycle.error.invalid_name");
         }
         if (errors.size() > 0) {
             validationResult.add(NAME, errors);

@@ -31,7 +31,14 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     @AutoConnection
     public T getByPK(PK key) throws DaoException {
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(getSelectQuery() + " WHERE id = " + key)) {
-            return parseResultSet(preparedStatement.executeQuery()).get(0);
+            ResultSet entityResultSet=preparedStatement.executeQuery();
+            List<T> entities = parseResultSet(entityResultSet);
+            if(entities.stream().findFirst().isPresent()) {
+                return entities.get(0);
+            }
+            else {
+                throw new DaoException("Failed to get by pk entity.");
+            }
         } catch (SQLException e) {
             throw new DaoException("Failed to get by pk entity.",e);
         }

@@ -15,8 +15,10 @@ import java.util.List;
 
 public class CommandShowUserList implements Command {
 
+    private static final Logger LOGGER = LogManager.getLogger(CommandShowUserList.class);
+
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
 
             request.setAttribute("viewName", "user_list");
@@ -38,8 +40,9 @@ public class CommandShowUserList implements Command {
             request.setAttribute("users",userList);
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
+            LOGGER.error("Failed to show user list", e);
             request.setAttribute("error", "page.error.show_user_list");
-            return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
+            throw new CommandException("Failed to show user list");
         }
     }
 }

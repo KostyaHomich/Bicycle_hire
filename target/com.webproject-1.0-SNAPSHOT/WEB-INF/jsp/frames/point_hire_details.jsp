@@ -9,7 +9,9 @@
 
         <form action="${pageContext.request.contextPath}/point_hire_list" method="post">
             <h1><fmt:message key="page.title.point_hire_details"/></h1>
-            <c:out value="${requestScope.error}"/>
+            <c:if test="${not empty requestScope.error}">
+                <fmt:message key="${requestScope.error}"/>
+            </c:if>
 
             <c:if test="${not empty requestScope.errorsList}">
                 <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
@@ -30,24 +32,42 @@
                         <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
                             readonly
                         </c:if>
-                       value="${requestScope.pointHire.getLocation()}" placeholder="<fmt:message key="point_hire.location"/>" id="location"
-                       name="location"/>
+                       value="${requestScope.pointHire.getLocation()}"
+                       placeholder="<fmt:message key="point_hire.location"/>"
+                       id="location"
+                       name="location"
+                       minlength="4"
+                       maxlength="25"
+                       required
+                       pattern="^[a-zA-Z0-9]{4,25}$"
+                       title="<fmt:message key="user.error.invalid_login"/>"
+                />
             </div>
             <div>
                 <input type="text"
                         <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
                             readonly
                         </c:if>
-                       value="${requestScope.pointHire.getTelephone()}" placeholder="<fmt:message key="point_hire.telephone"/>" id="telephone"
-                       name="telephone"/>
+                       value="${requestScope.pointHire.getTelephone()}"
+                       placeholder="<fmt:message key="point_hire.telephone"/>"
+                       id="telephone"
+                       name="telephone"
+                       required
+                       pattern="^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$"
+                       title="<fmt:message key="point_hire.error.invalid_telephone"/>"
+                />
             </div>
             <div>
                 <input type="text"
                         <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
                             readonly
                         </c:if>
-                       value="${requestScope.pointHire.getDescription()}" placeholder="<fmt:message key="point_hire.description"/>" id="description"
-                       name="description"/>
+                       value="${requestScope.pointHire.getDescription()}"
+                       placeholder="<fmt:message key="point_hire.description"/>"
+                       id="description"
+                       name="description"
+                       minlength="3"
+                />
             </div>
             <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
             <div>
@@ -64,7 +84,6 @@
 
             </div>
             </c:if>
-
         </form>
         <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
             <div>
@@ -72,7 +91,5 @@
                 <input type="hidden" name="command" value="${CommandType.SHOW_POINT_HIRE_LIST}">
             </div>
         </form>
-        <!-- form -->
     </section>
-    <!-- content -->
 </div>

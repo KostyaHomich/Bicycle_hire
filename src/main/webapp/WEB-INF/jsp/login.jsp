@@ -40,11 +40,27 @@
                 </c:forEach>
             </c:if>
             <div>
-                <input type="text" placeholder="<fmt:message key="user.login"/>" required="" id="login" name="login"/>
+                <input type="text"
+                       placeholder="<fmt:message key="user.login"/>"
+                       id="login"
+                       name="login"
+                       minlength="5"
+                       maxlength="15"
+                       pattern="^[a-zA-Z0-9]{5,15}$"
+                       required
+                       title="<fmt:message key="user.error.invalid_login"/>"
+                />
             </div>
             <div>
-                <input type="password" placeholder="<fmt:message key="user.password"/>" required="" id="password"
-                       name="password"/>
+                <input type="password"
+                       placeholder="<fmt:message key="user.password"/>"
+                       id="password"
+                       name="password"
+                       minlength="7"
+                       maxlength="25"
+                       required
+                       title="<fmt:message key="user.error.invalid_password"/>"
+                />
             </div>
             <div>
                 <input type="submit" value="<fmt:message key="page.button.login"/>"/>

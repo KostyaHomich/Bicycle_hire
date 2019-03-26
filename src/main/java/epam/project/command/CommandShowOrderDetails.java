@@ -19,7 +19,7 @@ import java.util.Map;
 public class CommandShowOrderDetails implements Command {
     private static final Logger LOGGER = LogManager.getLogger(CommandShowOrderDetails.class);
     @Override
-    public ResponseContent execute(HttpServletRequest request) {
+    public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
             request.setAttribute("viewName","order_details");
 
@@ -30,6 +30,7 @@ public class CommandShowOrderDetails implements Command {
 
             if(request.getParameter("orderId")!= null) {
                 int id = Integer.valueOf(request.getParameter("orderId"));
+                System.out.println(id);
                 if (id == 0) {
                     Order order = orderBuilder.build(parameters);
                     return setAttribute(request, order);
@@ -43,8 +44,9 @@ public class CommandShowOrderDetails implements Command {
                 return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
             }
         } catch (ServiceException e) {
+            LOGGER.error("Failed to show order details", e);
             request.setAttribute("error", "page.error.show_order_details");
-            return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
+            throw new CommandException("Failed to show order details");
         }
     }
 

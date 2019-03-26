@@ -21,7 +21,9 @@ public class UserValidator implements Validator {
     private static final Logger LOGGER = LogManager.getLogger(UserValidator.class);
 
     private static final String CHECK_EMAIL = "([\\w-\\.]+)@\\D((?:[\\w]+\\.)+)([a-zA-Z]{2,4}) ";
-    private static final String CHECK_NAME = "[a-zA-Z]";
+    private static final String CHECK_NAME = "/^[a-zA-Z]{3,15}$/";
+    private static final String CHECK_LOGIN = "/^[a-zA-Z0-9]{5,15}$/";
+
     private static final String SPACE = " ";
     private static final int MAX_EMAIL_LENGTH = 35;
     private static final int MIN_EMAIL_LENGTH = 4;
@@ -80,6 +82,9 @@ public class UserValidator implements Validator {
         }
         if (login.contains(SPACE)) {
             errors.add("user.error.login_empty_space");
+        }
+        if (login.matches(CHECK_LOGIN)) {
+            errors.add("user.error.invalid_login");
         }
         if (errors.size() > 0) {
             validationResult.add("login", errors);

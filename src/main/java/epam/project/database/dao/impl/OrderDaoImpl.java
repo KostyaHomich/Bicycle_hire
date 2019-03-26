@@ -36,8 +36,8 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
         try {
             while (rs.next()) {
                 Order order = new Order();
-                order.setId(rs.getInt("id"));
-                setDefaultData(result, rs, order);
+                setOrderData(rs, order);
+                result.add(order);
             }
         } catch (Exception e) {
             throw new DaoException(e);
@@ -91,16 +91,19 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
 
     @AutoConnection
     @Override
-    public List<Order> getAllOrdersByUserPk(int pk) throws DaoException {
+    public List<Order> getAllOrdersByUserPk(int pk,int count) throws DaoException {
         List<Order> result = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(GET_ALL_ORDERS_BY_USER_ID)) {
 
             statement.setInt(1, pk);
             ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
+            int counter = 0;
+            while (rs.next() && counter < count) {
+                counter++;
                 Order order = new Order();
                 order.setId(rs.getInt("bicycle_order.id"));
-                setDefaultData(result, rs, order);
+                setOrderData(rs, order);
+                result.add(order);
             }
             return result;
         } catch (SQLException e) {
@@ -118,7 +121,8 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
             while (rs.next() && counter < count) {
                 counter++;
                 Order order = new Order();
-                setOrderData(result, rs, order);
+                setOrderData(rs, order);
+                result.add(order);
             }
             return result;
         } catch (SQLException e) {
@@ -126,21 +130,19 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
         }
     }
 
-    private void setOrderData(List<Order> result, ResultSet rs, Order order) throws SQLException {
+    private void setOrderData(ResultSet rs, Order order) throws SQLException {
         User user = new User();
         user.setId(rs.getInt("id_user"));
         order.setUser(user);
         PointHireBicycle pointHireBicycle = new PointHireBicycle();
         pointHireBicycle.setId(rs.getInt("id_point_hire_bicycle"));
+        order.setId(rs.getInt("id"));
         order.setPointHireBicycle(pointHireBicycle);
         order.setTimeOrder(rs.getString("time_order"));
         order.setRentalTime(rs.getInt("time_rental"));
         order.setStatus(rs.getString("status"));
         order.setCost(rs.getBigDecimal("cost"));
-        result.add(order);
+
     }
 
-    private void setDefaultData(List<Order> result, ResultSet rs, Order order) throws SQLException {
-        setOrderData(result, rs, order);
-    }
 }

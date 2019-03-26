@@ -16,7 +16,10 @@
 
         <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
             <h1><fmt:message key="page.title.order_details"/></h1>
-            <c:out value="${requestScope.error}"/>
+
+            <c:if test="${not empty requestScope.error}">
+                <fmt:message key="${requestScope.error}"/>
+            </c:if>
 
             <c:if test="${not empty requestScope.errorsList}">
                 <c:forEach var="entry" items="${requestScope.errorsList.getErrors()}">
