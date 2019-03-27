@@ -40,7 +40,7 @@ public class CommandShowBicycleDetails implements Command {
                 return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
 
-       }
+        }
         catch (ServiceException e) {
             LOGGER.error("Failed to show bicycle details", e);
             request.setAttribute("error","page.error.show_bicycle_details");

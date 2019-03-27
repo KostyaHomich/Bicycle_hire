@@ -45,7 +45,7 @@
 					   name="login"
 					   minlength="5"
 					   maxlength="15"
-					   pattern="^[a-zA-Z0-9]{5,15}$"
+					   pattern="^[a-zA-Z0-9а-яА-ЯёЁ]{5,15}$"
 					   required
 					   title="<fmt:message key="user.error.invalid_login"/>"
 				/>
@@ -80,7 +80,7 @@
 					   minlength="3"
 					   maxlength="15"
 					   required
-					   pattern="^[a-zA-Z]{3,15}$"
+					   pattern="^[a-zA-Zа-яА-ЯёЁ]{3,15}$"
 					   title="<fmt:message key="user.error.invalid_first_name"/>"
 				/>
 			</div>
@@ -92,7 +92,7 @@
 					   minlength="3"
 					   maxlength="15"
 					   required
-					   pattern="^[a-zA-Z]{3,15}$"
+					   pattern="^[a-zA-Zа-яА-ЯёЁ]{3,15}$"
 					   title="<fmt:message key="user.error.invalid_last_name"/>"
 				/>
 			</div>

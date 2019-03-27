@@ -17,10 +17,13 @@ import java.util.List;
 public class CommandShowBicycleList implements Command {
     private static Logger LOGGER = Logger.getLogger(CommandShowBicycleList.class.getName());
 
+    private static final String AMOUNT_BICYCLES="amountBicycles";
+
     @Override
     public ResponseContent execute(HttpServletRequest request) throws CommandException {
 
         try {
+            
             request.setAttribute("viewName", "bicycle_list");
 
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
@@ -28,14 +31,14 @@ public class CommandShowBicycleList implements Command {
             User user = (User) request.getSession().getAttribute("signInUser");
             List<Bicycle> bicycleList;
 
-            String amountBicycles = request.getParameter("amountBicycles");
-            request.setAttribute("amountBicycles", 5);
+            String amountBicycles = request.getParameter(AMOUNT_BICYCLES);
+            request.setAttribute(AMOUNT_BICYCLES, 5);
 
             if (user.getRole().equalsIgnoreCase(UserRole.ADMIN.name())) {
                 if (amountBicycles != null && !amountBicycles.isEmpty()) {
                     int count = Integer.valueOf(amountBicycles);
                     bicycleList = bicycleService.getBicycles(count);
-                    request.setAttribute("amountBicycles", count);
+                    request.setAttribute(AMOUNT_BICYCLES, count);
                 }
                 else {
                     bicycleList = bicycleService.getBicycles(5);
@@ -44,7 +47,7 @@ public class CommandShowBicycleList implements Command {
                 if (amountBicycles != null && !amountBicycles.isEmpty()) {
                     int count = Integer.valueOf(amountBicycles);
                     bicycleList = bicycleService.getAvailableBicycles(count);
-                    request.setAttribute("amountBicycles", count);
+                    request.setAttribute(AMOUNT_BICYCLES, count);
                 }
                 else {
                     bicycleList = bicycleService.getAvailableBicycles(5);

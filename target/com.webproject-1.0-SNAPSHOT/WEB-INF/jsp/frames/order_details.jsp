@@ -10,6 +10,7 @@
 
         <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
             <h1><fmt:message key="page.title.order_details"/></h1>
+
             <c:if test="${not empty requestScope.error}">
                 <fmt:message key="${requestScope.error}"/>
             </c:if>
@@ -26,14 +27,13 @@
             <input type="hidden" name="orderId" value="${requestScope.order.getId()}">
 
             <div style="margin-bottom: 10px">
-                <input type="text"
-                       value="${requestScope.order.getRentalTime()}"
-                       id="time_rental"
+                <input type="text" value="${requestScope.order.getRentalTime()}" id="time_rental"
                        placeholder="<fmt:message key="order.time_rental"/>"
                        name="time_rental"
                        required
-                       pattern="^[1-9]{1,10}$"
+                       pattern="^\d{1,10}$"
                        title="<fmt:message key="order.error.invalid_time_rental"/>"
+
                 />
 
             </div>
@@ -43,8 +43,11 @@
                        value="${requestScope.order.getTimeOrder()}"
                        placeholder="<fmt:message key="order.time_order"/>"
                        id="time_order"
+                       name="time_order"
                        required
-                       name="time_order"/>
+                       pattern="^\d{1,10}$"
+                       title="<fmt:message key="order.error.invalid_time_order"/>"
+                />
             </div>
             <c:if test="${not empty sessionScope.signInUser
                     && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
@@ -57,6 +60,7 @@
                                 </c:if>>
                             finished
                         </option>
+
                         <option
                                 <c:if test="${requestScope.bicycle.getStatus().equalsIgnoreCase('in working')}">
                                     selected
@@ -74,8 +78,7 @@
                            placeholder="<fmt:message key="order.cost"/>"
                            id="cost"
                            name="cost"
-                           required
-                           pattern="^[1-9]{1,10}$"
+                           pattern="^\d{1,10}$"
                            title="<fmt:message key="order.error.invalid_cost"/>"
                     />
                 </div>
@@ -118,4 +121,5 @@
         </form>
 
     </section>
+
 </div>

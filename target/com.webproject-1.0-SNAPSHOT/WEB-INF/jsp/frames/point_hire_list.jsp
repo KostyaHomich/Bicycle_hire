@@ -14,8 +14,8 @@
         <input type="submit" value="<fmt:message key="page.button.add_point_hire"/>">
     </form>
 </c:if>
-<table class="table table-striped jambo_table bulk_action">
 
+<table class="table table-striped jambo_table bulk_action">
     <c:forEach items="${requestScope.pointHireList}" var="pointHire">
         <thead>
         <tr class="headings">
@@ -47,6 +47,7 @@
                     </form>
                     <form style="display: inline-block;" action="${pageContext.request.contextPath}/point_hire_details"
                           method="post">
+                        <input type="hidden" name="lastPage" value="point_hire_list">
                         <input type="hidden" name="pointHireId" value="${pointHire.getId()}">
                         <input type="hidden" name="command" value="${CommandType.DELETE_POINT_HIRE}">
                         <input type="submit" value="<fmt:message key="page.button.delete"/>">
@@ -55,6 +56,7 @@
                           method="post">
                         <input type="hidden" name="pointHireId" value="${pointHire.getId()}">
                         <input type="hidden" name="bicycleId" value="0">
+                        <input type="hidden" name="lastPage" value="point_hire_list">
                         <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
                         <input type="submit" value="<fmt:message key="page.button.add_bicycle"/>">
                     </form>
@@ -85,15 +87,15 @@
                     <td class=" ">${bicycle.getDaily_rental_price()}&#36;</td>
                     <c:if test="${not empty sessionScope.signInUser
                     && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
-                    <td class=" ">${bicycle.getStatus()}</td>
+                        <td class=" ">${bicycle.getStatus()}</td>
                     </c:if>
                     <td class=" ">${bicycle.getDescription()}</td>
 
                     <td>
                         <form style="display: inline-block;" action="${pageContext.request.contextPath}/bicycle_details"
                               method="post">
-                            <input type="hidden" name="lastPage" value="point_hire_list">
                             <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
+                            <input type="hidden" name="lastPage" value="point_hire_list">
                             <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
                             <input type="submit" value="<fmt:message key="page.button.show"/>">
                         </form>
@@ -108,15 +110,17 @@
                                 <input type="hidden" name="orderId" value="0">
                                 <input type="hidden" name="command" value="${CommandType.SHOW_ORDER_DETAILS}">
                                 <input type="submit" value="<fmt:message key="page.button.rent"/>">
-                        </form>
+                            </form>
                         </c:if>
 
                         <c:if test="${not empty sessionScope.signInUser
-                    && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
+                    && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())
+                      && !bicycle.getStatus().equalsIgnoreCase('rented')}">
                             <form style="display: inline-block;"
                                   action="${pageContext.request.contextPath}/bicycle_details"
                                   method="post">
                                 <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
+                                <input type="hidden" name="lastPage" value="point_hire_list">
                                 <input type="hidden" name="command" value="${CommandType.DELETE_BICYCLE}">
                                 <input type="submit" value="<fmt:message key="page.button.delete"/>">
                             </form>

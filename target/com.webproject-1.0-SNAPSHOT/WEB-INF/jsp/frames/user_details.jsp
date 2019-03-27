@@ -9,6 +9,7 @@
 
         <form action="${pageContext.request.contextPath}/user_list" method="post">
             <h1><fmt:message key="page.title.user_details"/></h1>
+
             <c:if test="${not empty requestScope.error}">
                 <fmt:message key="${requestScope.error}"/>
             </c:if>
@@ -23,65 +24,29 @@
                 </c:forEach>
             </c:if>
 
-            <input type="hidden" name="userId" value="${requestScope.user.getId()}">
+            <input type="hidden" name="id" value="${requestScope.user.getId()}">
 
             <input type="hidden" value="${requestScope.user.getLogin()}" name="login"/>
-
             <div>
-                <input type="text"
+                <input type="text" value="${requestScope.user.getEmail()}"
                        placeholder="<fmt:message key="user.email"/>"
-                       value="${requestScope.user.getEmail()}"
-                       id="email"
-                       name="email"
-                       required
-                       minlength="4"
-                       maxlength="35"
-                       pattern="([\w-\.]+)@\D((?:[\w]+\.)+)([a-zA-Z]{2,4})"
-                       title="<fmt:message key="user.error.invalid_email"/>"
-                />
+                       id="email" name="email"/>
             </div>
-
             <div>
-                <input type="text"
-                       placeholder="<fmt:message key="user.first_name"/>"
-                       id="first_name"
-                       name="first_name"
-                       value="${requestScope.user.getFirstName()}"
-                       minlength="3"
-                       maxlength="15"
-                       required
-                       pattern="^[a-zA-Z]{3,15}$"
-                       title="<fmt:message key="user.error.invalid_first_name"/>"
-                />
+                <input type="text" value="${requestScope.user.getFirstName()}"
+                       placeholder="<fmt:message key="user.first_name"/>" id="first_name"
+                       name="first_name"/>
             </div>
-
             <div>
-                <input type="text"
+                <input type="text" value="${requestScope.user.getLastName()}"
                        placeholder="<fmt:message key="user.last_name"/>"
-                       id="last_name"
-                       name="last_name"
-                       value="${requestScope.user.getLastName()}"
-                       minlength="3"
-                       maxlength="15"
-                       required
-                       pattern="^[a-zA-Z]{3,15}$"
-                       title="<fmt:message key="user.error.invalid_last_name"/>"
-                />
+                       id="last_name" name="last_name"/>
             </div>
-
             <div>
-                <input type="text"
-                       value="${requestScope.user.getBalance()}"
+                <input type="text" value="${requestScope.user.getBalance()}"
                        placeholder="<fmt:message key="user.balance"/>"
-                       id="balance"
-                       name="balance"
-
-                       required
-                       pattern="^[0-9]{1,10}$"
-                       title="<fmt:message key="user.error.invalid_balance"/>"
-                />
+                       id="balance" name="balance"/>
             </div>
-
             <div>
                 <p><fmt:message key="user.status"/></p>
                 <select id="status" name="status">

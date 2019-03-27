@@ -106,6 +106,7 @@
 
                     <c:if test="${requestScope.bicycle.getId()!=0}">
                         <input type="hidden" name="command" value="${CommandType.UPDATE_BICYCLE}">
+                        <input type="hidden" name="lastCommand" value="${requestScope.lastCommand}">
                         <input style="display: inline-block;" type="submit"
                                value="<fmt:message key="page.button.update"/>">
                     </c:if>
@@ -121,9 +122,6 @@
             </div>
 
         </form>
-
-        <!-- form -->
     </section>
-    <!-- content -->
 </div>
 

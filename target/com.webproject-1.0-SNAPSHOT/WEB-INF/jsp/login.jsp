@@ -44,19 +44,20 @@
                        placeholder="<fmt:message key="user.login"/>"
                        id="login"
                        name="login"
-                       required
                        minlength="5"
                        maxlength="15"
                        pattern="^[a-zA-Z0-9]{5,15}$"
+                       required
                        title="<fmt:message key="user.error.invalid_login"/>"
                 />
             </div>
             <div>
                 <input type="password"
                        placeholder="<fmt:message key="user.password"/>"
-                       id="password" name="password"
+                       id="password"
+                       name="password"
                        minlength="7"
-                       maxlength="27"
+                       maxlength="25"
                        required
                        title="<fmt:message key="user.error.invalid_password"/>"
                 />

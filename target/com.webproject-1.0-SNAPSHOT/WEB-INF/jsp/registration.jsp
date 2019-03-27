@@ -5,7 +5,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>Registration form</title>
+<title>Paper Stack</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css">
 </head>
 <body>
@@ -23,7 +23,6 @@
 <div class="container">
 <section id="content">
 		<form action="${pageContext.request.contextPath}/registration" method="post">
-
 			<h1><fmt:message key="page.title.registration_form"/></h1>
 
 			<c:if test="${not empty requestScope.error}">
@@ -40,13 +39,14 @@
 				</c:forEach>
 			</c:if>
 			<div>
-				<input type="text" placeholder="<fmt:message key="user.login"/>"
+				<input type="text"
+					   placeholder="<fmt:message key="user.login"/>"
 					   id="login"
 					   name="login"
 					   minlength="5"
 					   maxlength="15"
+					   pattern="^[a-zA-Z0-9а-яА-ЯёЁ]{5,15}$"
 					   required
-					   pattern="^[a-zA-Z0-9]{5,15}$"
 					   title="<fmt:message key="user.error.invalid_login"/>"
 				/>
 			</div>
@@ -56,7 +56,7 @@
 					   id="password"
 					   name="password"
 					   minlength="7"
-					   maxlength="27"
+					   maxlength="25"
 					   required
 					   title="<fmt:message key="user.error.invalid_password"/>"
 				/>
@@ -67,7 +67,7 @@
 					   id="repeat_password"
 					   name="repeat_password"
 					   minlength="7"
-					   maxlength="27"
+					   maxlength="25"
 					   required
 					   title="<fmt:message key="user.error.invalid_password"/>"
 				/>
@@ -80,7 +80,7 @@
 					   minlength="3"
 					   maxlength="15"
 					   required
-					   pattern="^[a-zA-Z]{3,15}$"
+					   pattern="^[a-zA-Zа-яА-ЯёЁ]{3,15}$"
 					   title="<fmt:message key="user.error.invalid_first_name"/>"
 				/>
 			</div>
@@ -92,26 +92,24 @@
 					   minlength="3"
 					   maxlength="15"
 					   required
-					   pattern="^[a-zA-Z]{3,15}$"
+					   pattern="^[a-zA-Zа-яА-ЯёЁ]{3,15}$"
 					   title="<fmt:message key="user.error.invalid_last_name"/>"
 				/>
-
 			</div>
 			<div>
 				<input type="text"
 					   placeholder="<fmt:message key="user.email"/>"
 					   id="email"
 					   name="email"
-					   required
 					   minlength="4"
 					   maxlength="35"
+					   required
 					   pattern="([\w-\.]+)@\D((?:[\w]+\.)+)([a-zA-Z]{2,4})"
 					   title="<fmt:message key="user.error.invalid_email"/>"
 				/>
 			</div>
 			<div>
-				<input type="submit"
-					   value="<fmt:message key="page.button.register"/>">
+				<input type="submit" value="<fmt:message key="page.button.register"/>">
 			</div>
 			<input type="hidden" name="command" value="${CommandType.REGISTER_USER}">
 		</form>
@@ -127,5 +125,4 @@
 </div>
 <!-- container -->
 </body>
-
 

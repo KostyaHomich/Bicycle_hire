@@ -40,7 +40,13 @@
                        value="${requestScope.pointHire.getLocation()}"
                        placeholder="<fmt:message key="point_hire.location"/>"
                        id="location"
-                       name="location"/>
+                       name="location"
+                       minlength="3"
+                       maxlength="35"
+                       required
+                       pattern="^[a-zA-Zа-яА-ЯёЁ0-9 ]{3,35}$"
+                       title="<fmt:message key="point_hire.error.invalid_location"/>"
+                />
             </div>
             <div>
                 <input type="text"
@@ -51,7 +57,10 @@
                        value="${requestScope.pointHire.getTelephone()}"
                        placeholder="<fmt:message key="point_hire.telephone"/>"
                        id="telephone"
-                       name="telephone"/>
+                       name="telephone"
+                       pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$"
+                       title="<fmt:message key="point_hire.error.invalid_telephone"/>"
+                />
             </div>
             <div>
                 <input type="text"

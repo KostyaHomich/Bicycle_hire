@@ -64,9 +64,10 @@ public class CommandAddOrder implements Command {
                     orderService.add(order);
                     user.setBalance(new BigDecimal(userBalance.intValue()-cost.intValue()));
                     request.getSession().setAttribute("signInUser",user);
+                    return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
                 }
 
-                return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);
+
             } else {
                 request.setAttribute("errorsList", validationResult);
                 return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_LIST,request);

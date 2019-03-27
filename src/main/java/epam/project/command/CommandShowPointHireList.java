@@ -33,7 +33,6 @@ public class CommandShowPointHireList implements Command {
             } else {
                 pointHireList = pointHireService.takeAllPointHireWithAvailableBicycle();
             }
-
             request.setAttribute("pointHireList",pointHireList);
             return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
 

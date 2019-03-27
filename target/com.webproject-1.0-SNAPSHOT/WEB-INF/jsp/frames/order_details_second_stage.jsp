@@ -16,6 +16,7 @@
 
         <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
             <h1><fmt:message key="page.title.order_details"/></h1>
+
             <c:if test="${not empty requestScope.error}">
                 <fmt:message key="${requestScope.error}"/>
             </c:if>
@@ -29,17 +30,16 @@
                     </c:if>
                 </c:forEach>
             </c:if>
+
             <div>
-            <p><fmt:message key="order.cost"/></p>
+            <p>Cost</p>
                 <input type="text"
                         <c:if test="${not empty sessionScope.signInUser && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
                             readonly
                         </c:if>
                        value="${requestScope.order.getCost()}"
-                       placeholder="<fmt:message key="order.cost"/>"
-                       id="cost"
-                       name="cost"
-                />
+                       placeholder="<fmt:message key="order.cost"/>" id="cost"
+                       name="cost"/>
             </div>
             <div>
                 <input type="hidden" name="orderId" value="0">
@@ -47,7 +47,9 @@
                 <input type="hidden" name="time_rental" value="${requestScope.order.getRentalTime()}">
                 <input type="hidden" name="pointHireId" value="${requestScope.order.getPointHire().getId()}">
                 <input type="hidden" name="bicycleId" value="${requestScope.order.getBicycle().getId()}">
+
                 <input type="hidden" name="command" value="${CommandType.ADD_ORDER}">
+
                 <input type="submit" value="<fmt:message key="page.button.rent"/>">
 
             </div>

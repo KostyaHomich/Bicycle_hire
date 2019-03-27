@@ -23,7 +23,6 @@ public class ResponseContentBuilder {
     }
 
     public static ResponseContent buildCommandResponseContent(CommandType type, HttpServletRequest request) throws CommandException {
-
         Command command = CommandProvider.getInstance().takeCommand(type.name());
         return command.execute(request);
 

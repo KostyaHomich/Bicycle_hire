@@ -34,7 +34,7 @@ public class CommandShowPointHireDetails implements Command {
                 }
             }else {
                 request.setAttribute("error", "page.error.show_point_hire_details");
-                return  ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST,request);
+                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
         }
         catch (ServiceException e) {

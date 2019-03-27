@@ -38,7 +38,6 @@ public class CommandUpdatePointHire implements Command {
 
                 PointHire pointHire = pointHireBuilder.build(parameters);
                 pointHireService.update(pointHire);
-
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST, request);
 
             } else {

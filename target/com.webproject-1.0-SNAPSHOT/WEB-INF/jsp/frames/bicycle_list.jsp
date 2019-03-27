@@ -6,48 +6,47 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <table class="table table-striped jambo_table bulk_action">
+    <form action="${pageContext.request.contextPath}/point_hire_details"
+          method="post">
+        <input type="hidden" name="lastPage" value="bicycle_list">
 
-    <thead>
-    <tr class="headings">
-        <th class="column-title"><fmt:message key="bicycle.name"/></th>
-        <th class="column-title"><fmt:message key="bicycle.daily_rental_price"/></th>
-        <th class="column-title"><fmt:message key="bicycle.status"/></th>
-        <th class="column-title"><fmt:message key="bicycle.description"/></th>
-        <th class="column-title no-link last"><span class="nobr"><fmt:message key="page.button.action"/></span></th>
-    </tr>
-    </thead>
-    <tbody>
+        <thead>
+        <tr class="headings">
+            <th class="column-title"><fmt:message key="bicycle.name"/></th>
+            <th class="column-title"><fmt:message key="bicycle.daily_rental_price"/></th>
+            <th class="column-title"><fmt:message key="bicycle.status"/></th>
+            <th class="column-title"><fmt:message key="bicycle.description"/></th>
+            <th class="column-title no-link last"><span class="nobr"><fmt:message key="page.button.action"/></span></th>
+        </tr>
+        </thead>
+        <tbody>
 
-    <c:forEach items="${requestScope.bicycles}" var="bicycle">
-        <tr class="even pointer">
+        <c:forEach items="${requestScope.bicycles}" var="bicycle">
+            <tr class="even pointer">
 
-            <td class=" ">${bicycle.getName()}</td>
-            <td class=" ">${bicycle.getDaily_rental_price()}&#36;</td>
-            <td class=" ">${bicycle.getStatus()}</td>
-            <td class=" ">${bicycle.getDescription()}</td>
-            <td>
-                <form style="display: inline-block;" action="${pageContext.request.contextPath}/bicycle_details"
-                      method="post">
-                    <input type="hidden" name="lastPage" value="bicycle_list">
+                <td class=" ">${bicycle.getName()}</td>
+                <td class=" ">${bicycle.getDaily_rental_price()}&#36;</td>
+                <td class=" ">${bicycle.getStatus()}</td>
+                <td class=" ">${bicycle.getDescription()}</td>
+                <td>
                     <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
                     <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
                     <input type="submit" value="<fmt:message key="page.button.show"/>">
-                </form>
-                <c:if test="${not empty sessionScope.signInUser
-            && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())}">
-                    <form style="display: inline-block;" action="${pageContext.request.contextPath}/bicycle_details"
-                          method="post">
+
+                    <c:if test="${not empty sessionScope.signInUser
+            && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())
+            && !bicycle.getStatus().equalsIgnoreCase('rented')}">
                         <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
                         <input type="hidden" name="command" value="${CommandType.DELETE_BICYCLE}">
                         <input type="submit" value="<fmt:message key="page.button.delete"/>">
-                    </form>
-                </c:if>
-            </td>
+                    </c:if>
+                </td>
 
-        </tr>
-    </c:forEach>
+            </tr>
+        </c:forEach>
 
-    </tbody>
+        </tbody>
+    </form>
 </table>
 <form style="text-align:right;" action="${pageContext.request.contextPath}/bicycle_list"
       method="post">

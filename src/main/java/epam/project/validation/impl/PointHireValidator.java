@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class PointHireValidator implements Validator {
 
-    private static final String CHECK_TELEPHONE="/^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?$/";
+    private static final String CHECK_TELEPHONE="/^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$/";
 
     private static final String LOCATION = "location";
     private static final String TELEPHONE = "telephone";
@@ -20,9 +20,8 @@ public class PointHireValidator implements Validator {
 
     private static final Logger LOGGER = LogManager.getLogger(UserValidator.class);
 
-    private static final int MIN_LOCATION_LENGTH = 4;
-    private static final int MAX_LOCATION_LENGTH = 25;
-    private static final int MIN_DESCRIPTION_LENGTH = 4;
+    private static final int MIN_LOCATION_LENGTH = 3;
+    private static final int MAX_LOCATION_LENGTH = 35;
 
     public ValidationResult doValidate(Map<String, String> params) {
 
@@ -37,9 +36,6 @@ public class PointHireValidator implements Validator {
                     break;
                 case TELEPHONE:
                     validateTelephone(validationResult, value);
-                    break;
-                case DESCRIPTION:
-                    validateDescription(validationResult, value);
                     break;
                 default:
                     break;
@@ -75,18 +71,5 @@ public class PointHireValidator implements Validator {
             validationResult.add(TELEPHONE, errors);
         }
     }
-
-    private void validateDescription(ValidationResult validationResult, String description) {
-        ArrayList<String> errors = new ArrayList<>();
-
-        if (description.length() <= MIN_DESCRIPTION_LENGTH) {
-            errors.add("point_hire.error.min_description_length");
-        }
-
-        if (errors.size() > 0) {
-            validationResult.add(DESCRIPTION, errors);
-        }
-    }
-
 
 }

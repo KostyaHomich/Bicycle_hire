@@ -30,7 +30,9 @@
                 <input type="text" value="${requestScope.order.getRentalTime()}" id="time_rental"
                        placeholder="<fmt:message key="order.time_rental"/>"
                        name="time_rental"
-                required
+                       required
+                       pattern="^\d{1,10}$"
+                       title="<fmt:message key="order.error.invalid_time_rental"/>"
 
                 />
 

@@ -40,7 +40,7 @@
 </c:choose>
 <fmt:setBundle basename="/text" scope="application"/>
 
-    <jsp:include page="frames/header.jsp"/>
+    <jsp:include page="header.jsp"/>
 
 <div class="x_panel">
     <div class="x_content">
@@ -51,11 +51,8 @@
 
 
         <div class="table-responsive">
-
-            <jsp:include page="frames/${requestScope.viewName}.jsp"/>
-
+            <jsp:include page="./frames/${requestScope.viewName}.jsp"/>
             <jsp:include page="footer.jsp"/>
-
         </div>
     </div>
 </div>

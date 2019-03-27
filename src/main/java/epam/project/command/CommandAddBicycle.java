@@ -26,7 +26,7 @@ public class CommandAddBicycle implements Command {
     @Override
     public ResponseContent execute(HttpServletRequest request) throws CommandException {
         try {
-
+            request.setAttribute("entity", EntityType.BICYCLE);
 
             BicycleValidator bicycleValidator = (BicycleValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.BICYCLE);
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
@@ -37,15 +37,15 @@ public class CommandAddBicycle implements Command {
             BicycleBuilder bicycleBuilder = new BicycleBuilder();
 
             if (validationResult.getErrors().size() == 0) {
-
                 Bicycle bicycle = bicycleBuilder.build(parameters);
                 bicycleService.add(bicycle);
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST, request);
             } else {
-                request.setAttribute("entity", EntityType.BICYCLE);
                 request.setAttribute("errorsList", validationResult);
                 return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
+
+
         } catch (ServiceException e) {
             LOGGER.error("Failed to add bicycle.", e);
             request.setAttribute("error", "bicycle.error.add_bicycle");
@@ -53,4 +53,5 @@ public class CommandAddBicycle implements Command {
         }
 
     }
+
 }

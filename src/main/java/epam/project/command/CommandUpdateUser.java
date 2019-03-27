@@ -37,13 +37,12 @@ public class CommandUpdateUser implements Command {
             if (validationResult.getErrors().size() == 0) {
 
                 User user = userBuilder.build(parameters);
-                System.out.println("HOBA");
                 userService.update(user);
                 return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_LIST,request);
 
             } else {
                 request.setAttribute("errorsList", validationResult);
-                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_USER_DETAILS,request);
+                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
         } catch (ServiceException e) {
             LOGGER.error("Failed to update user", e);

@@ -29,7 +29,6 @@ public class CommandLogIn implements Command {
     public ResponseContent execute(HttpServletRequest request) throws CommandException {
 
         try {
-            ResponseContent responseContent = new ResponseContent();
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             UserBuilder userBuilder = new UserBuilder();
             ContainsValidator userValidator = (ContainsValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.LOGIN);

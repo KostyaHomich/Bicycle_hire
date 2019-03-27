@@ -38,17 +38,30 @@ public class CommandUpdateBicycle implements Command {
 
                 Bicycle bicycle = bicycleBuilder.build(parameters);
                 bicycleService.update(bicycle);
-                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST,request);
+                return sendTolLastPage(request);
 
             } else {
                 request.setAttribute("errorsList", validationResult);
-                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_DETAILS,request);
+                return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
+
         } catch (ServiceException e) {
             LOGGER.error("Failed to update bicycle", e);
             request.setAttribute("error", "bicycle.error.update_bicycle");
             throw new CommandException("Failed to update bicycle");
         }
 
+    }
+
+    private ResponseContent sendTolLastPage(HttpServletRequest request) throws CommandException {
+        String lastCommand = request.getParameter("lastCommand");
+        switch (lastCommand) {
+            case "SHOW_POINT_HIRE_LIST":
+                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_POINT_HIRE_LIST, request);
+            case "SHOW_BICYCLE_LIST":
+                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_BICYCLE_LIST, request);
+            default:
+                throw new CommandException("Last page are not present");
+        }
     }
 }

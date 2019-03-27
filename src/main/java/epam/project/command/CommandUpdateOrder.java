@@ -40,7 +40,7 @@ public class CommandUpdateOrder implements Command {
 
             } else {
                 request.setAttribute("errorsList", validationResult);
-                return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_ORDER_DETAILS, request);
+                return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_DETAILS_PAGE_PATH);
             }
         } catch (ServiceException e) {
             LOGGER.error("Failed to update order", e);
