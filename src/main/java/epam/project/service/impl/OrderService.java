@@ -141,18 +141,13 @@ public class OrderService implements Service {
             transactionManager.begin((AbstractJdbcDao) orderDao, (AbstractJdbcDao) bicycleDao,(AbstractJdbcDao) pointHireDao);
 
             Order order = orderDao.getByPK(id);
-            System.out.println("1 "+order.getId());
 
             PointHireBicycle pointHireBicycle=bicycleDao.getByPkPointHireBicycle(order.getPointHireBicycle().getId());
-            System.out.println("2 "+pointHireBicycle.getId());
-            System.out.println("2,5 "+pointHireBicycle.getId_bicycle());
             Bicycle bicycle = bicycleDao.getByPK(pointHireBicycle.getId_bicycle());
-            System.out.println("3 "+bicycle.getId());
             PointHire pointHire=pointHireDao.getByPK(pointHireBicycle.getId_point_hire());
-            System.out.println("4 "+pointHire.getId());
-
             order.setBicycle(bicycle);
             order.setPointHire(pointHire);
+
 
             transactionManager.commit();
             transactionManager.end();

@@ -48,8 +48,6 @@
 <c:if test="${not empty requestScope.error}">
     <fmt:message key="${requestScope.error}"/>
 </c:if>
-
-
         <div class="table-responsive">
             <jsp:include page="./frames/${requestScope.viewName}.jsp"/>
             <jsp:include page="footer.jsp"/>

@@ -19,7 +19,7 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
     private static final String CREATE_QUERY =
             "insert into bicycle_order values (NULL ,?,?,?,?,?,?)";
     private static final String UPDATE_QUERY =
-            "update bicycle_order set id_user=?,id_point_hire_bicycle=?,time_order=?,time_rental=?,status=?,cost=?" +
+            "update bicycle_order set time_rental=?,time_order=?,status=?,cost=?" +
                     " where id=?";
     private static final String DELETE_QUERY =
             "DELETE FROM bicycle_order WHERE id=?";
@@ -47,26 +47,21 @@ public class OrderDaoImpl extends AbstractJdbcDao<Order, Integer> implements Ord
 
     @Override
     protected void prepareStatementForInsert(PreparedStatement statement, Order object) throws SQLException {
-
-        setStatement(statement, object);
-
-    }
-
-    @Override
-    protected void prepareStatementForUpdate(PreparedStatement statement, Order object) throws SQLException {
-
-        setStatement(statement, object);
-        statement.setInt(7, object.getId());
-
-    }
-
-    private void setStatement(PreparedStatement statement, Order object) throws SQLException {
         statement.setInt(1, object.getUser().getId());
         statement.setInt(2, object.getPointHireBicycle().getId());
         statement.setString(3, object.getTimeOrder());
         statement.setInt(4, object.getRentalTime());
         statement.setString(5, object.getStatus());
         statement.setBigDecimal(6, object.getCost());
+    }
+
+    @Override
+    protected void prepareStatementForUpdate(PreparedStatement statement, Order object) throws SQLException {
+        statement.setInt(1, object.getRentalTime());
+        statement.setString(2, object.getTimeOrder());
+        statement.setString(3, object.getStatus());
+        statement.setBigDecimal(4, object.getCost());
+        statement.setInt(5, object.getId());
     }
 
     @Override

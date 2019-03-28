@@ -34,7 +34,6 @@ public class FrontController extends HttpServlet {
 
         try {
             String commandParameter = request.getParameter("command");
-            System.out.println(commandParameter);
             Command command = CommandProvider.getInstance().takeCommand(commandParameter);
             ResponseContent responseContent = command.execute(request);
 

@@ -30,7 +30,6 @@ public class CommandShowOrderDetails implements Command {
 
             if(request.getParameter("orderId")!= null) {
                 int id = Integer.valueOf(request.getParameter("orderId"));
-                System.out.println(id);
                 if (id == 0) {
                     Order order = orderBuilder.build(parameters);
                     return setAttribute(request, order);

@@ -8,7 +8,6 @@
 <table class="table table-striped jambo_table bulk_action">
     <form action="${pageContext.request.contextPath}/point_hire_details"
           method="post">
-        <input type="hidden" name="lastPage" value="bicycle_list">
 
         <thead>
         <tr class="headings">
@@ -29,16 +28,21 @@
                 <td class=" ">${bicycle.getStatus()}</td>
                 <td class=" ">${bicycle.getDescription()}</td>
                 <td>
-                    <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
-                    <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
-                    <input type="submit" value="<fmt:message key="page.button.show"/>">
-
+                    <form action="${pageContext.request.contextPath}/bicycle_details" method="post">
+                        <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
+                        <input type="hidden" name="lastPage" value="bicycle_list">
+                        <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_DETAILS}">
+                        <input type="submit" value="<fmt:message key="page.button.show"/>">
+                    </form>
                     <c:if test="${not empty sessionScope.signInUser
             && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN.name())
             && !bicycle.getStatus().equalsIgnoreCase('rented')}">
-                        <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
-                        <input type="hidden" name="command" value="${CommandType.DELETE_BICYCLE}">
-                        <input type="submit" value="<fmt:message key="page.button.delete"/>">
+                        <form action="${pageContext.request.contextPath}/delete_bicycle" method="post">
+                            <input type="hidden" name="lastPage" value="bicycle_list">
+                            <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
+                            <input type="hidden" name="command" value="${CommandType.DELETE_BICYCLE}">
+                            <input type="submit" value="<fmt:message key="page.button.delete"/>">
+                        </form>
                     </c:if>
                 </td>
 
