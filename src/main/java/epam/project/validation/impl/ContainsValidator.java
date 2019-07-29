@@ -1,20 +1,15 @@
 package epam.project.validation.impl;
 
-import epam.project.service.ServiceFactory;
-import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
 import epam.project.validation.ValidationResult;
-import epam.project.validation.Validator;
-import epam.project.validation.ValidatorFactory;
-import epam.project.validation.ValidatorType;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public class ContainsValidator implements Validator {
+public class ContainsValidator {
 
 
 
@@ -27,7 +22,7 @@ public class ContainsValidator implements Validator {
     public ValidationResult doValidate(Map<String, String> params) throws ServiceException {
 
         ValidationResult validationResult;
-        UserValidator validator = (UserValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.USER);
+        UserValidator validator = new UserValidator();
 
         validationResult = validator.doValidate(params);
         for (Object key : params.keySet()) {
@@ -49,7 +44,7 @@ public class ContainsValidator implements Validator {
     }
 
     private ValidationResult checkLogin(ValidationResult validationResult, String value) throws ServiceException {
-        UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
+        UserService userService = new UserService();
         ArrayList<String> errors = new ArrayList<>();
         if (!userService.checkLoginExistence(value)) {
             errors.add("user.error.login_not_exist");
@@ -58,7 +53,7 @@ public class ContainsValidator implements Validator {
         return validationResult;
     }
     private ValidationResult checkEmail(ValidationResult validationResult, String value) throws ServiceException {
-        UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
+        UserService userService = new UserService();
         ArrayList<String> errors = new ArrayList<>();
         if (!userService.checkEmailExistence(value)) {
             errors.add("user.error.email_not_exist");

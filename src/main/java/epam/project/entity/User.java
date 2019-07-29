@@ -15,14 +15,12 @@ public class User implements Identified<Integer> {
     private String lastName;
     private String status;
     private String registrationDate;
-    private BigDecimal balance;
     private String email;
     private String role;
 
 
     public User() {
         this.role = UserRole.USER.name();
-        this.balance=new BigDecimal(0);
         this.status="not conformed";
     }
 

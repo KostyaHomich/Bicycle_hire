@@ -1,5 +1,13 @@
 package epam.project.command;
 
+import epam.project.command.bicycle.*;
+import epam.project.command.page.CommandShowLoginPage;
+import epam.project.command.page.CommandShowMainPage;
+import epam.project.command.page.CommandShowRegistrationPage;
+import epam.project.command.page.CommandShowUserPage;
+import epam.project.command.point.hire.*;
+import epam.project.command.user.*;
+
 import java.util.HashMap;
 import java.util.Map;
 

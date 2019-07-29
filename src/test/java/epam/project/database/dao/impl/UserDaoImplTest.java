@@ -29,7 +29,6 @@ public class UserDaoImplTest {
         testUser.setFirstName("John");
         testUser.setLastName("Philips");
         testUser.setStatus("active");
-        testUser.setBalance(new BigDecimal(15));
         testUser.setRegistrationDate("2019-01-08 01:52:00");
     }
 

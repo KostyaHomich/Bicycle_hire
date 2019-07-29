@@ -3,15 +3,11 @@ package epam.project.command;
 import epam.project.builder.UserBuilder;
 import epam.project.dto.ResponseContent;
 import epam.project.entity.User;
-import epam.project.service.ServiceFactory;
-import epam.project.service.ServiceType;
 import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.UserService;
 import epam.project.util.RequestParameterParser;
 import epam.project.util.ResponseContentBuilder;
 import epam.project.validation.ValidationResult;
-import epam.project.validation.ValidatorFactory;
-import epam.project.validation.ValidatorType;
 import epam.project.validation.impl.ContainsValidator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -29,9 +25,9 @@ public class CommandLogIn implements Command {
     public ResponseContent execute(HttpServletRequest request) throws CommandException {
 
         try {
-            UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
+            UserService userService = new UserService();
             UserBuilder userBuilder = new UserBuilder();
-            ContainsValidator userValidator = (ContainsValidator) ValidatorFactory.getInstance().getValidator(ValidatorType.LOGIN);
+            ContainsValidator userValidator = new ContainsValidator();
 
             Map<String, String> parameters = RequestParameterParser.parseParameters(request);
             ValidationResult validationResult = userValidator.doValidate(parameters);

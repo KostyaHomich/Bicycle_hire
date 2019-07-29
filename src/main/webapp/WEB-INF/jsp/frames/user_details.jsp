@@ -43,11 +43,6 @@
                        id="last_name" name="last_name"/>
             </div>
             <div>
-                <input type="text" value="${requestScope.user.getBalance()}"
-                       placeholder="<fmt:message key="user.balance"/>"
-                       id="balance" name="balance"/>
-            </div>
-            <div>
                 <p><fmt:message key="user.status"/></p>
                 <select id="status" name="status">
                     <option

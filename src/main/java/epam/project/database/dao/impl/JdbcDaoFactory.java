@@ -5,7 +5,6 @@ import epam.project.database.dao.exception.DaoException;
 import epam.project.database.pool.ConnectionPool;
 import epam.project.database.pool.ConnectionPoolFactory;
 import epam.project.entity.Bicycle;
-import epam.project.entity.Order;
 import epam.project.entity.PointHire;
 import epam.project.entity.User;
 
@@ -64,7 +63,6 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
     private JdbcDaoFactory() {
         creators.put(Bicycle.class, BicycleDaoImpl::new);
         creators.put(PointHire.class, PointHireDaoImpl::new);
-        creators.put(Order.class, OrderDaoImpl::new);
         creators.put(User.class, UserDaoImpl::new);
     }
 
@@ -82,7 +80,7 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
     }
 
     @Override
-    public <T extends Identified<PK>, PK extends Serializable> EntityDao<T, PK> getDao(Class<T> entityClass) throws DaoException {
+    public <T extends Identified<PK>, PK extends Serializable> EntityDao getDao(Class<T> entityClass) throws DaoException {
         Supplier<EntityDao> daoCreator = creators.get(entityClass);
         if (daoCreator == null) {
             throw new DaoException("Entity Class cannot be find");
@@ -95,7 +93,7 @@ public class JdbcDaoFactory implements DaoFactory, TransactionalDaoFactory {
     }
 
     @Override
-    public <T extends Identified<PK>, PK extends Serializable> EntityDao<T, PK> getTransactionalDao(Class<T> entityClass) throws DaoException {
+    public <T extends Identified<PK>, PK extends Serializable> EntityDao getTransactionalDao(Class<T> entityClass) throws DaoException {
         Supplier<EntityDao> daoCreator = creators.get(entityClass);
         if (daoCreator == null) {
             throw new DaoException("Entity class cannot be find");

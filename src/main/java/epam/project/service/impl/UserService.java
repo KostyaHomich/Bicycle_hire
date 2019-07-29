@@ -1,20 +1,17 @@
 package epam.project.service.impl;
 
 import epam.project.database.dao.AbstractJdbcDao;
-import epam.project.database.dao.OrderDao;
 import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.TransactionManager;
-import epam.project.entity.Order;
 import epam.project.entity.User;
-import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
-public class UserService implements Service {
+public class UserService {
 
     private static Logger LOGGER = Logger.getLogger(UserService.class.getName());
 

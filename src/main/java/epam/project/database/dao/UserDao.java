@@ -1,7 +1,6 @@
 package epam.project.database.dao;
 
 import epam.project.database.dao.exception.DaoException;
-import epam.project.entity.Order;
 import epam.project.entity.User;
 
 import java.util.List;

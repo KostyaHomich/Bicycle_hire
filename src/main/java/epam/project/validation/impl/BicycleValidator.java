@@ -2,7 +2,6 @@ package epam.project.validation.impl;
 
 
 import epam.project.validation.ValidationResult;
-import epam.project.validation.Validator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -10,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class BicycleValidator implements Validator {
+public class BicycleValidator {
 
     private static final String DAILY_RENTAL_PRICE = "daily_rental_price";
     private static final String NAME = "name";

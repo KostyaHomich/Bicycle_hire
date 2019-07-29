@@ -3,20 +3,18 @@ package epam.project.service.impl;
 import epam.project.database.dao.AbstractJdbcDao;
 import epam.project.database.dao.BicycleDao;
 import epam.project.database.dao.EntityDao;
-import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.TransactionManager;
 import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
 import epam.project.entity.User;
-import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
-public class BicycleService implements Service {
+public class BicycleService {
     private static Logger LOGGER = Logger.getLogger(BicycleService.class.getName());
 
     public BicycleService() {

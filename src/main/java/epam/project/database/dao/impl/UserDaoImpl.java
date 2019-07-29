@@ -18,9 +18,9 @@ import java.util.List;
 public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserDao, EntityDao<User, Integer> {
 
     private static final String CREATE_QUERY =
-            "insert into user values (NULL ,?,?,?, ?,?,?, ?,?,?);";
+            "insert into user values (NULL ,?,?,?, ?,?,?, ?,?);";
     private static final String UPDATE_QUERY =
-            "update user set login=?,password=?,first_name=?,last_name=?,status=?,registration_Date=?,balance=?,email=?,id_Role=? where " +
+            "update user set login=?,password=?,first_name=?,last_name=?,status=?,registration_Date=?,email=?,id_Role=? where " +
                     "id=?;";
     private static final String DELETE_QUERY = "DELETE FROM user WHERE id=?;";
     private static final String SELECT_QUERY = "SELECT * FROM user";
@@ -54,7 +54,6 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
         user.setLastName(rs.getString("last_Name"));
         user.setStatus(rs.getString("status"));
         user.setRegistrationDate(rs.getString("registration_Date"));
-        user.setBalance(rs.getBigDecimal("balance"));
         user.setEmail(rs.getString("email"));
         int role = rs.getInt("id_Role");
         user.setRole(UserRole.values()[--role].toString().toLowerCase());
@@ -82,7 +81,6 @@ public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserD
         statement.setString(++counter, object.getLastName());
         statement.setString(++counter, object.getStatus());
         statement.setString(++counter, object.getRegistrationDate());
-        statement.setBigDecimal(++counter, object.getBalance());
         statement.setString(++counter, object.getEmail());
         int role = UserRole.valueOf(object.getRole().toUpperCase()).ordinal();
         role++;

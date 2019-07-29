@@ -1,7 +1,6 @@
 package epam.project.validation.impl;
 
 import epam.project.validation.ValidationResult;
-import epam.project.validation.Validator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class PointHireValidator implements Validator {
+public class PointHireValidator {
 
     private static final String CHECK_TELEPHONE="/^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$/";
 

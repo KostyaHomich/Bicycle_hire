@@ -1,14 +1,12 @@
 package epam.project.builder;
 
-import epam.project.command.CommandRegisterUser;
+import epam.project.command.user.CommandRegisterUser;
 import epam.project.entity.User;
 import epam.project.service.HashGenerator;
-import epam.project.service.ServiceFactory;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 
@@ -21,14 +19,14 @@ public class UserBuilder implements Builder<User> {
     private static final String EMAIL = "email";
     private static final String FIST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
-    private static final String BALANCE = "balance";
+
     private static final Logger LOGGER = LogManager.getLogger(CommandRegisterUser.class);
 
 
     @Override
     public User build(Map<String, String> params) throws ServiceException {
 
-        HashGenerator hashGenerator = ServiceFactory.getInstance().getHashGenerator();
+        HashGenerator hashGenerator = new HashGenerator();
         User user = new User();
         for (Object key : params.keySet()) {
             String keyStr = (String) key;
@@ -54,8 +52,7 @@ public class UserBuilder implements Builder<User> {
                     break;
                 case ID:
                     user.setId(Integer.valueOf(value));
-                case BALANCE:
-                    user.setBalance(BigDecimal.valueOf(Double.valueOf(value)));
+
                 default:
                     break;
             }

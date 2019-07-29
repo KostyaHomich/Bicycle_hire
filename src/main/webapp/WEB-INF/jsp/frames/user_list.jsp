@@ -8,12 +8,12 @@
     <thead>
 
     <tr class="headings">
-        <th class="column-title">Login</th>
-        <th class="column-title">Email</th>
-        <th class="column-title">First name</th>
-        <th class="column-title">Last name</th>
-        <th class="column-title">Status</th>
-        <th class="column-title no-link last"><span class="nobr">Action</span></th>
+        <th class="column-title"><fmt:message key="user.login"/></th>
+        <th class="column-title"><fmt:message key="user.email"/></th>
+        <th class="column-title"><fmt:message key="user.first_name"/></th>
+        <th class="column-title"><fmt:message key="user.last_name"/></th>
+        <th class="column-title"><fmt:message key="user.status"/></th>
+        <th class="column-title no-link last"><span class="nobr"><fmt:message key="page.button.action"/></span></th>
 
     </tr>
     </thead>

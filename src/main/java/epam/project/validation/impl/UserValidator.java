@@ -1,7 +1,6 @@
 package epam.project.validation.impl;
 
 import epam.project.validation.ValidationResult;
-import epam.project.validation.Validator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -9,11 +8,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class UserValidator implements Validator {
+public class UserValidator {
 
     private static final String PASSWORD = "password";
     private static final String LOGIN = "login";
-    private static final String BALANCE = "balance";
     private static final String EMAIL = "email";
     private static final String FIST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
@@ -59,9 +57,6 @@ public class UserValidator implements Validator {
                     break;
                 case EMAIL:
                     validateEmail(validationResult, value);
-                    break;
-                case BALANCE:
-                    validateBalance(validationResult,value);
                     break;
                 default:
                     break;
@@ -150,21 +145,6 @@ public class UserValidator implements Validator {
         }
     }
 
-    private void validateBalance(ValidationResult validationResult, String value) {
-        ArrayList<String> errors = new ArrayList<>();
-        try {
-            BigDecimal balance= BigDecimal.valueOf(Integer.valueOf(value));
-            if(balance.intValue()<0) {
-                errors.add("user.error.balance_more_then_0");
-            }
-        }
-        catch (NumberFormatException e){
-        errors.add("user.error.invalid_balance");
-        }
-        if (errors.size() > 0) {
-            validationResult.add(BALANCE, errors);
-        }
-    }
 
     private void validatePassword(ValidationResult validationResult, String password) {
         ArrayList<String> errors = new ArrayList<>();
