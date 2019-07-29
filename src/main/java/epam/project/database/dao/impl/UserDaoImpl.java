@@ -17,9 +17,6 @@ import java.util.List;
 
 public class UserDaoImpl extends AbstractJdbcDao<User, Integer> implements UserDao, EntityDao<User, Integer> {
 
-    private static Logger LOGGER = Logger.getLogger(UserDaoImpl.class.getName());
-
-
     private static final String CREATE_QUERY =
             "insert into user values (NULL ,?,?,?, ?,?,?, ?,?,?);";
     private static final String UPDATE_QUERY =

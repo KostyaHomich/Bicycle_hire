@@ -13,30 +13,24 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public class CommandShowBicycleList implements Command {
+public class CommandShowBestBicycles  implements Command {
     private static Logger LOGGER = Logger.getLogger(CommandShowBicycleList.class.getName());
 
     @Override
     public ResponseContent execute(HttpServletRequest request) throws CommandException {
 
         try {
-            
-            request.setAttribute("viewName", "bicycle_list");
-
+            request.setAttribute("viewName", "best_bicycle_list");
             BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
-            List<Bicycle> bicycleList;
 
             User user = (User) request.getSession().getAttribute("signInUser");
-            List<Bicycle> best_bicycles=bicycleService.showBestBicycles(user);
-            bicycleList = bicycleService.takeAll();
-            bicycleList.removeAll(best_bicycles);
-
+            List<Bicycle> bicycleList = bicycleService.showBestBicycles(user);
             request.setAttribute("bicycles", bicycleList);
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
-            LOGGER.error("Failed to show bicycle list", e);
+            LOGGER.error("Failed to show best bicycle list", e);
             request.setAttribute("error", "page.error.show_bicycle_list");
-            throw new CommandException("Failed to show bicycle list");
+            throw new CommandException("Failed to show best bicycle list");
         }
 
 

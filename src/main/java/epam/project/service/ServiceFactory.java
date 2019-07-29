@@ -1,7 +1,6 @@
 package epam.project.service;
 
 import epam.project.service.impl.BicycleService;
-import epam.project.service.impl.OrderService;
 import epam.project.service.impl.PointHireService;
 import epam.project.service.impl.UserService;
 
@@ -17,7 +16,6 @@ public class ServiceFactory {
     public Service getService(ServiceType type)  {
         switch (type) {
             case USER:return  new UserService();
-            case ORDER: return new OrderService();
             case BICYCLE: return new BicycleService();
             case POINT_HIRE: return new PointHireService();
         }

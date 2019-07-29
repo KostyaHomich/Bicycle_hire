@@ -14,16 +14,18 @@
                 <div>
                     <ul>
                         <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.ADMIN)}">
-                            <li><a href="?command=${CommandType.SHOW_USER_LIST}">
+                            <li><a style="font-size: 12px" href="?command=${CommandType.SHOW_USER_LIST}">
                                 <fmt:message key="page.header.users"/></a></li>
                         </c:if>
-                        <li><a href="?command=${CommandType.SHOW_BICYCLE_LIST}">
+                        <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
+                            <li><a style="font-size: 12px" href="?command=${CommandType.SHOW_BEST_BICYCLE_LIST}">
+                                <fmt:message key="page.header.best_bicycles"/></a></li>
+                        </c:if>
+                        <li><a style="font-size: 12px" href="?command=${CommandType.SHOW_BICYCLE_LIST}">
                             <fmt:message key="page.header.bicycles"/></a></li>
-                        <li><a href="?command=${CommandType.SHOW_POINT_HIRE_LIST}">
+                        <li><a style="font-size: 12px" href="?command=${CommandType.SHOW_POINT_HIRE_LIST}">
                             <fmt:message key="page.header.point_hires"/></a></li>
-                        <li><a href="?command=${CommandType.SHOW_ORDER_LIST}">
-                            <fmt:message key="page.header.orders"/></a></li>
-                        <li><a href="?command=${CommandType.SHOW_USER_PAGE}">
+                        <li><a style="font-size: 12px" href="?command=${CommandType.SHOW_USER_PAGE}">
                             <fmt:message key="page.header.button.account"/></a></li>
                     </ul>
 

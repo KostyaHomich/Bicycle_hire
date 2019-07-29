@@ -48,16 +48,18 @@ public class CommandRegisterUser implements Command {
                     user.setRegistrationDate(LocalDate.now().toString());
 
                     if (password.equals(repeat_password)) {
-                        userService.register(user);
 
+                        userService.register(user);
                         return ResponseContentBuilder.buildCommandResponseContent(CommandType.SHOW_MAIN_PAGE, request);
 
                     } else {
+
                         request.setAttribute("error", "user.error.password_are_not_equals");
                         return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
+
                     }
                 } else {
-                    request.setAttribute("errorsList", "user.error.login_already_taken");
+                    request.setAttribute("error", "user.error.login_already_taken");
                     return ResponseContentBuilder.buildForwardResponseContent(PageConst.REGISTRATION_PAGE_PATH);
                 }
             } else {

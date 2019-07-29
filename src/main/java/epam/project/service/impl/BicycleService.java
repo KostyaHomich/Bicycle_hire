@@ -3,11 +3,13 @@ package epam.project.service.impl;
 import epam.project.database.dao.AbstractJdbcDao;
 import epam.project.database.dao.BicycleDao;
 import epam.project.database.dao.EntityDao;
+import epam.project.database.dao.UserDao;
 import epam.project.database.dao.exception.DaoException;
 import epam.project.database.dao.impl.JdbcDaoFactory;
 import epam.project.database.dao.impl.TransactionManager;
 import epam.project.dto.PointHireBicycle;
 import epam.project.entity.Bicycle;
+import epam.project.entity.User;
 import epam.project.service.Service;
 import epam.project.service.exception.ServiceException;
 import org.apache.log4j.Logger;
@@ -40,22 +42,7 @@ public class BicycleService implements Service {
         }
     }
 
-    public List<Bicycle> takeAllAvailableBicycle() throws ServiceException {
-        try {
-            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
-            return bicycleDao.getAllAvailableBicycle();
-        } catch (DaoException e) {
-            throw new ServiceException("Failed to get all bicycles", e);
-        }
-    }
-    public List<Bicycle> takeAllAvailableBicycleByPointHirePk(int id) throws ServiceException {
-        try {
-            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
-            return bicycleDao.getAllAvailableBicycleByPointHirePk(id);
-        } catch (DaoException e) {
-            throw new ServiceException("Failed to get all bicycles", e);
-        }
-    }
+
     public boolean add(Bicycle bicycle) throws ServiceException {
         TransactionManager transactionManager = new TransactionManager();
         try {
@@ -77,6 +64,45 @@ public class BicycleService implements Service {
             throw new ServiceException("Failed to add bicycle", e);
 
         }
+
+    }
+
+    public boolean addBestBicycle(Bicycle bicycle, User user) throws ServiceException {
+
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            PointHireBicycle pointHireBicycle=bicycleDao.getByBicyclePkPointHireBicycle(bicycle.getId());
+            bicycleDao.addBestBicycle(pointHireBicycle,user);
+
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to add best bicycle", e);
+        }
+        return true;
+
+    }
+    public List<Bicycle> showBestBicycles(User user) throws ServiceException {
+
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            return bicycleDao.getAllBestBicyclesByUserId(user.getId());
+
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to register user", e);
+        }
+
+    }
+
+    public boolean deleteBestBicycle(int id) throws ServiceException {
+
+        try {
+            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
+            int idBestBicycle=bicycleDao.getBestBicycleIdByBicycleId(id);
+            bicycleDao.deleteBestBicycle(idBestBicycle);
+
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to delete best bicycle", e);
+        }
+        return true;
 
     }
 
@@ -126,14 +152,6 @@ public class BicycleService implements Service {
 
     }
 
-    public List<Bicycle> getAvailableBicycles(int count) throws ServiceException {
-        try {
-            BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);
-            return  bicycleDao.getAvailableBicycles(count);
-        } catch ( DaoException e) {
-            throw new ServiceException("Failed to get bicycles", e);
-        }
-    }
     public List<Bicycle> getBicycles(int count) throws ServiceException {
         try {
             BicycleDao bicycleDao = (BicycleDao) JdbcDaoFactory.getInstance().getDao(Bicycle.class);

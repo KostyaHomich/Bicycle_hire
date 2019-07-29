@@ -8,13 +8,10 @@ public class CommandProvider {
     private Map<CommandType, Command> commandMap = new HashMap<>();
 
     private CommandProvider() {
+
         commandMap.put(CommandType.ADD_BICYCLE, new CommandAddBicycle());
         commandMap.put(CommandType.DELETE_BICYCLE, new CommandDeleteBicycle());
         commandMap.put(CommandType.UPDATE_BICYCLE, new CommandUpdateBicycle());
-
-        commandMap.put(CommandType.ADD_ORDER, new CommandAddOrder());
-        commandMap.put(CommandType.DELETE_ORDER, new CommandDeleteOrder());
-        commandMap.put(CommandType.UPDATE_ORDER, new CommandUpdateOrder());
 
         commandMap.put(CommandType.REGISTER_USER, new CommandRegisterUser());
         commandMap.put(CommandType.DELETE_USER, new CommandDeleteUser());
@@ -35,16 +32,16 @@ public class CommandProvider {
         commandMap.put(CommandType.SHOW_POINT_HIRE_LIST, new CommandShowPointHireList());
         commandMap.put(CommandType.LOGOUT,new CommandLogOut());
 
-        commandMap.put(CommandType.SHOW_ORDER_LIST, new CommandShowOrderList());
-        commandMap.put(CommandType.SHOW_ORDER_DETAILS, new CommandShowOrderDetails());
         commandMap.put(CommandType.SHOW_USER_PAGE, new CommandShowUserPage());
+        commandMap.put(CommandType.ADD_BEST_BICYCLE, new CommandAddBestBicycle());
+
+        commandMap.put(CommandType.DELETE_BEST_BICYCLE, new CommandDeleteBestBicycle());
+        commandMap.put(CommandType.SHOW_BEST_BICYCLE_LIST, new CommandShowBestBicycles());
 
         commandMap.put(CommandType.SHOW_USER_DETAILS,new CommandShowUserDetails());
         commandMap.put(CommandType.SHOW_BICYCLE_DETAILS,new CommandShowBicycleDetails());
         commandMap.put(CommandType.SHOW_POINT_HIRE_DETAILS,new CommandShowPointHireDetails());
 
-        commandMap.put(CommandType.CANCEL_ORDER,new CommandCancelOrder());
-        commandMap.put(CommandType.SHOW_ORDER_DETAILS_SECOND_PAGE,new CommandShowOrderDetailsSecondStage());
     }
 
     public static CommandProvider getInstance() {

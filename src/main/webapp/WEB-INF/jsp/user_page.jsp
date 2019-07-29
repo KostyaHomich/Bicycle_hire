@@ -54,8 +54,6 @@
         <th class="column-title">Email</th>
         <th class="column-title">First name</th>
         <th class="column-title">Last name</th>
-        <th class="column-title">Status</th>
-        <th class="column-title">Balance</th>
     </tr>
     </thead>
     <tbody>
@@ -64,8 +62,6 @@
             <td class=" ">${sessionScope.signInUser.getEmail()}</td>
             <td class=" ">${sessionScope.signInUser.getFirstName()}</td>
             <td class=" ">${sessionScope.signInUser.getLastName()}</td>
-            <td class=" ">${sessionScope.signInUser.getStatus()}</td>
-            <td class=" ">${sessionScope.signInUser.getBalance()}</td>
         </tr>
     </tbody>
 </table>

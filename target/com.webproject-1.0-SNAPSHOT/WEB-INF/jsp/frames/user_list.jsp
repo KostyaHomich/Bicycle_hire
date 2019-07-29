@@ -13,7 +13,6 @@
         <th class="column-title">First name</th>
         <th class="column-title">Last name</th>
         <th class="column-title">Status</th>
-        <th class="column-title">Balance</th>
         <th class="column-title no-link last"><span class="nobr">Action</span></th>
 
     </tr>
@@ -26,19 +25,12 @@
             <td class=" ">${user.getFirstName()}</td>
             <td class=" ">${user.getLastName()}</td>
             <td class=" ">${user.getStatus()}</td>
-            <td class=" ">${user.getBalance()}</td>
             <td>
                 <form style="display: inline-block;"
                       action="${pageContext.request.contextPath}/user_details" method="post">
                     <input type="hidden" name="userId" value="${user.getId()}">
                     <input type="hidden" name="command" value="${CommandType.SHOW_USER_DETAILS}">
                     <input  type="submit" value="Show">
-                </form>
-                <form style="display: inline-block;"
-                      action="${pageContext.request.contextPath}/user_details" method="post">
-                    <input type="hidden" name="userId" value="${user.getId()}">
-                    <input type="hidden" name="command" value="${CommandType.DELETE_USER}">
-                    <input  type="submit" value="Delete">
                 </form>
             </td>
         </tr>

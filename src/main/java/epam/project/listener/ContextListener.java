@@ -3,6 +3,7 @@ package epam.project.listener;
 import epam.project.database.dao.exception.ConnectionPoolException;
 import epam.project.database.pool.ConnectionPoolFactory;
 import epam.project.database.pool.ConnectionPoolImpl;
+import epam.project.service.DatabaseUpdater;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;
@@ -22,6 +23,8 @@ public class ContextListener implements ServletContextListener {
         } catch (ConnectionPoolException e) {
             LOGGER.error("Failed to init connection pool",e);
         }
+        DatabaseUpdater databaseUpdater=new DatabaseUpdater();
+        databaseUpdater.updateDB();
     }
 
     @Override

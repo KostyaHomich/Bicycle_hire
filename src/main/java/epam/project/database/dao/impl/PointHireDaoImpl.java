@@ -25,8 +25,7 @@ public class PointHireDaoImpl extends AbstractJdbcDao<PointHire, Integer> implem
             "SELECT * FROM point_hire";
     private static final String CHECK_IF_CONTAINS =
             "SELECT * FROM point_hire WHERE id=?";
-    private static final String TAKE_BY_ID =
-            "SELECT * FROM point_hire WHERE id=?";
+
 
 
     @Override

@@ -30,6 +30,7 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
     @Override
     @AutoConnection
     public T getByPK(PK key) throws DaoException {
+
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(getSelectQuery() + " WHERE id = " + key)) {
             ResultSet entityResultSet=preparedStatement.executeQuery();
             List<T> entities = parseResultSet(entityResultSet);

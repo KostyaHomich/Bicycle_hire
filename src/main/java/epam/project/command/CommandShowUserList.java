@@ -25,17 +25,7 @@ public class CommandShowUserList implements Command {
 
             UserService userService = (UserService) ServiceFactory.getInstance().getService(ServiceType.USER);
             List<User> userList;
-
-            String amountUsers = request.getParameter("amountUsers");
-            request.setAttribute("amountUsers", 5);
-
-            if (amountUsers != null && !amountUsers.isEmpty()) {
-                int count = Integer.valueOf(amountUsers);
-                userList = userService.getUsers(count);
-                request.setAttribute("amountUsers", count);
-            } else {
-                userList = userService.getUsers(5);
-            }
+            userList = userService.takeAll();
 
             request.setAttribute("users",userList);
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);

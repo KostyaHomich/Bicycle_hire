@@ -37,21 +37,7 @@ public class PointHireService implements Service {
         }
     }
 
-    public List<PointHire> takeAllPointHireWithAvailableBicycle() throws ServiceException {
 
-        try {
-            EntityDao<PointHire, Integer> pointHireDao = FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
-            BicycleService bicycleService = (BicycleService) ServiceFactory.getInstance().getService(ServiceType.BICYCLE);
-            List<PointHire> pointHireList = pointHireDao.getAll();
-            for (PointHire pointHire : pointHireList) {
-                pointHire.setBicycleList(bicycleService.takeAllAvailableBicycleByPointHirePk(pointHire.getId()));
-            }
-            return pointHireList;
-        } catch (DaoException e) {
-            throw new ServiceException("Failed to get all point hires", e);
-        }
-
-    }
     public boolean add(PointHire pointHire) throws ServiceException {
 
         try {

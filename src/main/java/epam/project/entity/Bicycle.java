@@ -1,27 +1,20 @@
 package epam.project.entity;
 
 import epam.project.database.dao.Identified;
-import lombok.*;
-
-import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
-public class Bicycle implements Identified<Integer> {
+public class Bicycle implements Identified<Integer>,Comparable {
 
-    private BigDecimal daily_rental_price;
     private int id;
 
     private String name;
-
-    private String status;
-
+    private String link;
     private String description;
     private int point_hire_id;
 
     public Bicycle(){
-        this.status="available";
         this.point_hire_id=0;
-
     }
 
     @Override
@@ -35,4 +28,17 @@ public class Bicycle implements Identified<Integer> {
         this.id=id;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        if (o == null) {
+            return -1;
+        }
+        Bicycle bicycle = (Bicycle) o;
+        if (bicycle.getDescription().equalsIgnoreCase(this.getDescription())
+                && bicycle.getLink().equalsIgnoreCase(this.getLink())
+                && bicycle.getName().equalsIgnoreCase(this.getName())) {
+            return 1;
+        }
+            return -1;
+    }
 }

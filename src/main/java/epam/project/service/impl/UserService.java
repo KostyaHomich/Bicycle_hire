@@ -37,7 +37,6 @@ public class UserService implements Service {
 
         try {
             UserDao userDao = (UserDao) JdbcDaoFactory.getInstance().getDao(User.class);
-
             userDao.persist(user);
 
         } catch (DaoException e) {

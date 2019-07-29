@@ -6,7 +6,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <table class="table table-striped jambo_table bulk_action">
-    <form action="${pageContext.request.contextPath}/point_hire_details" method="post">
 
         <thead>
         <tr class="headings">
@@ -25,16 +24,14 @@
                 <td>
                     <input value="<fmt:message key="page.button.show"/>" type="button" onclick="location.href='${bicycle.getLink()}'" />
 
-
                     <c:if test="${sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
-                        <form style="display: inline-block;"
-                              action="${pageContext.request.contextPath}/bicycle_list"
-                              method="post">
-                            <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
-                            <input type="hidden" name="command" value="${CommandType.ADD_BEST_BICYCLE}">
-                            <input type="submit" value="<fmt:message key="page.button.add_best_bicycle"/>">
-
-                        </form>
+                    <form style="display: inline-block;"
+                          action="${pageContext.request.contextPath}/order_delete"
+                          method="post">
+                        <input type="hidden" name="bicycleId" value="${bicycle.getId()}">
+                        <input type="hidden" name="command" value="${CommandType.DELETE_BEST_BICYCLE}">
+                        <input type="submit" value="<fmt:message key="page.button.delete"/>">
+                    </form>
                     </c:if>
 
                 </td>
@@ -43,7 +40,7 @@
         </c:forEach>
 
         </tbody>
-    </form>
+
 </table>
 
 

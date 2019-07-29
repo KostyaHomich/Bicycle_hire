@@ -27,13 +27,15 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
     private static final String DRIVER_CLASS = "driver";
     private static final String DB_HOST = "host";
-    private static final String DB_PORT = "port";
-    private static final String DB_NAME = "name";
+    private static final String DB_PASS = "password";
+    private static final String DB_URL = "url";
     private static final String POOL_CAPACITY = "poolCapacity";
     private static final String DB_PROPERTIES_NAME = "db.properties";
 
     private Properties properties;
     private String url;
+    private String host;
+    private String password;
     private Semaphore semaphore;
     private static Lock lock = new ReentrantLock();
 
@@ -65,7 +67,9 @@ public class ConnectionPoolImpl implements ConnectionPool {
         try (InputStream inputStream = ConnectionPoolImpl.class.getClassLoader().getResourceAsStream(DB_PROPERTIES_NAME)) {
             properties.load(inputStream);
 
-            String url=properties.getProperty("url");
+            String url=properties.getProperty(DB_URL);
+            host=properties.getProperty(DB_HOST);
+            password=properties.getProperty(DB_PASS);
 
             this.url = url +
                     "?verifyServerCertificate=false" +
@@ -122,7 +126,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
     }
 
     private Connection createConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection(url, properties.getProperty("host"),properties.getProperty("password"));
+        Connection connection = DriverManager.getConnection(url, host,password);
         connections.add(connection);
         InvocationHandler connectionHandler = (Object proxy, Method method, Object[] args) -> {
             if (method.getName().equals("close")) {
