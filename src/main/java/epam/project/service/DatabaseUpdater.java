@@ -1,7 +1,6 @@
 package epam.project.service;
 
 import epam.project.entity.Bicycle;
-import epam.project.service.exception.ServiceException;
 import epam.project.service.impl.BicycleService;
 import org.apache.log4j.Logger;
 
@@ -39,9 +38,15 @@ public class DatabaseUpdater {
                         for (Bicycle parseBicycle : parseBicycles) {
                             bicycleService.add(parseBicycle);
                         }
-                    } else if (parseBicycles.size() != bicycles.size()) {
+                    } else if (parseBicycles.size() > bicycles.size()) {
                         for (int i = size; i < parseSize; i++) {
                             bicycleService.add(parseBicycles.get(i));
+                        }
+                    }
+                    else if(parseBicycles.size() < bicycles.size()) {
+                        bicycles.removeAll(parseBicycles);
+                        for (int i = 0; i < bicycles.size(); i++) {
+                            bicycleService.delete(bicycles.get(i));
                         }
                     }
                 } catch (Exception e) {

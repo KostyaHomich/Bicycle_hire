@@ -21,18 +21,29 @@ public class CommandShowBicycleList implements Command {
     public ResponseContent execute(HttpServletRequest request) throws CommandException {
 
         try {
-            
+            int page = 1;
+            int recordsPerPage = 5;
+            if(request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            int currentAmountBicycles=(page-1)*recordsPerPage;
+
             request.setAttribute("viewName", "bicycle_list");
 
             BicycleService bicycleService = new BicycleService();
-            List<Bicycle> bicycleList;
+
 
             User user = (User) request.getSession().getAttribute("signInUser");
-            List<Bicycle> best_bicycles=bicycleService.showBestBicycles(user);
-            bicycleList = bicycleService.takeAll();
-            bicycleList.removeAll(best_bicycles);
+            List<Bicycle> bicycleList = bicycleService.getBicycles(currentAmountBicycles,recordsPerPage, user);
+
+            int amountBicycles=bicycleService.getAmountBicycles();
+            int amountPages=amountBicycles / recordsPerPage;
+
 
             request.setAttribute("bicycles", bicycleList);
+            request.setAttribute("amountPages", amountPages);
+            request.setAttribute("page", page);
+
             return ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);
         } catch (ServiceException e) {
             LOGGER.error("Failed to show bicycle list", e);

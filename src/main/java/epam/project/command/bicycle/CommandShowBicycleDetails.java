@@ -29,7 +29,7 @@ public class CommandShowBicycleDetails implements Command {
                 if (id == 0) {
                     int point_hire_id = Integer.valueOf(request.getParameter("pointHireId"));
                     Bicycle bicycle = new Bicycle();
-                    bicycle.setPoint_hire_id(point_hire_id);
+                    bicycle.setPointHireId(point_hire_id);
                     return setAttribute(request, bicycle);
                 } else {
                     Bicycle bicycle = bicycleService.getById(id);

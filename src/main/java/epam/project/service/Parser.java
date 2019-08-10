@@ -33,7 +33,7 @@ public class Parser {
 
             for (Element names : bicycleNames) {
                 Bicycle bicycle = new Bicycle();
-                bicycle.setPoint_hire_id(1);
+                bicycle.setPointHireId(1);
                 bicycle.setName(names.text());
                 bicycles.add(bicycle);
             }
@@ -59,7 +59,7 @@ public class Parser {
             for (int i=0;i<bicycleNames.size();i++) {
                 Bicycle bicycle = new Bicycle();
                 bicycle.setName(bicycleNames.get(i).text());
-                bicycle.setPoint_hire_id(2);
+                bicycle.setPointHireId(2);
                 bicycle.setLink("https://prostoprokat.by");
                 bicycle.setDescription(bicycleDescription.get(i).text());
                 bicycles.add(bicycle);

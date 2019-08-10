@@ -19,7 +19,7 @@ public interface BicycleDao extends EntityDao<Bicycle, Integer> {
 
     List<Bicycle> getAllBicycleByPointHirePk(int id) throws DaoException;
 
-    List<Bicycle> getBicycles(int count) throws DaoException;
+    List<Bicycle> getBicycles(int start, int count, User user) throws DaoException;
 
     void addBestBicycle(PointHireBicycle pointHireBicycle, User user) throws DaoException;
 
@@ -28,5 +28,7 @@ public interface BicycleDao extends EntityDao<Bicycle, Integer> {
     List<Bicycle> getAllBestBicyclesByUserId(int id) throws DaoException;
 
     int getBestBicycleIdByBicycleId(int id) throws DaoException;
+
+    int getAmountBicycles() throws DaoException;
 
 }

@@ -23,9 +23,8 @@ public class CommandShowPointHireList implements Command {
         try {
             request.setAttribute("viewName","point_hire_list");
             PointHireService pointHireService =new PointHireService();
-            List<PointHire> pointHireList;
 
-            pointHireList = pointHireService.takeAll();
+            List<PointHire> pointHireList = pointHireService.takeAll();
 
             request.setAttribute("pointHireList",pointHireList);
             return  ResponseContentBuilder.buildForwardResponseContent(PageConst.ENTITY_LIST_PAGE_PATH);

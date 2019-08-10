@@ -36,10 +36,22 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
             "DELETE FROM bicycle WHERE id=?";
 
     private static final String SELECT_QUERY =
-            "SELECT * FROM bicycle";
+            "SELECT * FROM bicycle;";
+
+    private static final String SELECT_QUERY_WITHOUT_BEST_BICYCLE_LIMITED_BY_USER_ID =
+            " select distinct( bicycle.id),link,name,description from bicycle,best_bicycle,point_hire_bicycle  where bicycle.id not in( " +
+                    " SELECT bicycle.id" +
+                    " FROM bicycle,best_bicycle,point_hire_bicycle" +
+                    " where best_bicycle.id_user=?" +
+                    " and best_bicycle.id_point_hire_bicycle=point_hire_bicycle.id" +
+                    " and bicycle.id=point_hire_bicycle.id_bicycle) limit ?,?;";
+
 
     private static final String CHECK_IF_CONTAINS =
             "SELECT * FROM bicycle WHERE id=?";
+
+    private static final String GET_AMOUNT_BICYCLES =
+            "SELECT count(*)  FROM bicycle;";
 
     private static final String TAKE_BY_BICYCLE_ID_POINT_HIRE_BICYCLE =
             "SELECT * FROM point_hire_bicycle WHERE id_bicycle=?";
@@ -123,7 +135,7 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
     public void addPointHireBicycle(Bicycle bicycle) throws DaoException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY_POINT_HIRE_BICYCLE)) {
             int counter = 0;
-            statement.setInt(++counter, bicycle.getPoint_hire_id());
+            statement.setInt(++counter, bicycle.getPointHireId());
             statement.setInt(++counter, bicycle.getId());
 
             statement.executeUpdate();
@@ -141,8 +153,8 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 pointHireBicycle.setId(rs.getInt("id"));
-                pointHireBicycle.setId_bicycle(rs.getInt("id_bicycle"));
-                pointHireBicycle.setId_point_hire(rs.getInt("id_point_hire"));
+                pointHireBicycle.setBicycleId(rs.getInt("id_bicycle"));
+                pointHireBicycle.setPointHireId(rs.getInt("id_point_hire"));
             } else {
                 throw new DaoException("This point hire bicycle doesn't exist");
             }
@@ -199,13 +211,18 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
 
     @AutoConnection
     @Override
-    public List<Bicycle> getBicycles(int count) throws DaoException {
+    public List<Bicycle> getBicycles(int start, int count, User user) throws DaoException {
         List<Bicycle> result = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_QUERY)) {
+
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_QUERY_WITHOUT_BEST_BICYCLE_LIMITED_BY_USER_ID)) {
+
             int counter = 0;
+            statement.setInt(++counter, user.getId());
+            statement.setInt(++counter, start);
+            statement.setInt(++counter, count);
+
             ResultSet rs = statement.executeQuery();
-            while (rs.next() && counter < count) {
-                counter++;
+            while (rs.next()) {
                 setBicycleData(result, rs);
             }
             return result;
@@ -273,6 +290,22 @@ public class BicycleDaoImpl extends AbstractJdbcDao<Bicycle, Integer> implements
             throw new DaoException("Failed to get entity.", e);
         }
 
+    }
+
+    @AutoConnection
+    @Override
+    public int getAmountBicycles() throws DaoException {
+
+        try (PreparedStatement statement = connection.prepareStatement(GET_AMOUNT_BICYCLES)) {
+            int amountBicycles=0;
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+             amountBicycles=rs.getInt(1);
+            }
+            return amountBicycles;
+        } catch (SQLException e) {
+            throw new DaoException("Failed to get entity.", e);
+        }
     }
 
     private void setBicycleData(List<Bicycle> result, ResultSet rs) throws SQLException {

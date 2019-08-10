@@ -42,8 +42,42 @@
             </tr>
         </c:forEach>
 
-        </tbody>
-    </form>
 </table>
+<div style="float: right">
+    <table border="1" cellpadding="5" cellspacing="5">
+        <tr>
+            <c:forEach begin="1" end="${requestScope.amountPages}" var="i">
+                <c:if test="${requestScope.page != i}">
+                    <form action="${pageContext.request.contextPath}/bicycle_list"
+                          method="post">
+                        <input type="hidden" name="page" value="${i}">
+                        <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
+                        <input type="submit" value="${i}">
+                    </form>
+                </c:if>
+            </c:forEach>
+        </tr>
+    </table>
+
+    <c:if test="${requestScope.page != 1}">
+        <form action="${pageContext.request.contextPath}/bicycle_list"
+              method="post">
+            <input type="hidden" name="page" value="${requestScope.page-1}">
+            <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
+            <input type="submit" value="Previous">
+        </form>
+    </c:if>
+
+    <c:if test="${requestScope.page  lt requestScope.amountPages}">
+        <form action="${pageContext.request.contextPath}/bicycle_list"
+              method="post">
+            <input type="hidden" name="page" value="${requestScope.page+1}">
+            <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
+            <input type="submit" value="Next">
+        </form>
+
+    </c:if>
+</div>
+
 
 

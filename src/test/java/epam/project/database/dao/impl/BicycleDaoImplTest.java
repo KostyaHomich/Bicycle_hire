@@ -28,7 +28,7 @@ public class BicycleDaoImplTest {
 
         testBicycle.setDescription("A");
 
-        testBicycle.setPoint_hire_id(1);
+        testBicycle.setPointHireId(1);
     }
 
     @Test

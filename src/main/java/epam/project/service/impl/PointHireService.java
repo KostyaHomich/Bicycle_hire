@@ -23,11 +23,7 @@ public class PointHireService {
     public List<PointHire> takeAll() throws ServiceException {
         try {
             EntityDao<PointHire,Integer> pointHireDao =  FactoryProducer.getDaoFactory(DaoFactoryType.JDBC).getDao(PointHire.class);
-            BicycleService bicycleService=new BicycleService();
             List<PointHire> pointHireList= pointHireDao.getAll();
-            for(PointHire pointHire:pointHireList) {
-                pointHire.setBicycleList(bicycleService.takeAllBicycleByPointHirePk(pointHire.getId()));
-            }
             return pointHireList;
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all point hires", e);

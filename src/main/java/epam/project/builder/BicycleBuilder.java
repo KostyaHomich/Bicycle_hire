@@ -2,7 +2,6 @@ package epam.project.builder;
 
 import epam.project.entity.Bicycle;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 public class BicycleBuilder implements Builder<Bicycle> {
@@ -27,7 +26,7 @@ public class BicycleBuilder implements Builder<Bicycle> {
                 case ID:
                     bicycle.setId(Integer.valueOf(value));
                 case POINT_HIRE_ID:
-                    bicycle.setPoint_hire_id(Integer.valueOf(value));
+                    bicycle.setPointHireId(Integer.valueOf(value));
                 default:
                     break;
             }

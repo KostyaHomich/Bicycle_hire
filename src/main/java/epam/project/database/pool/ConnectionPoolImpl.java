@@ -3,10 +3,8 @@ package epam.project.database.pool;
 import epam.project.database.dao.exception.ConnectionPoolException;
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -32,7 +30,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
     private static final String POOL_CAPACITY = "poolCapacity";
     private static final String DB_PROPERTIES_NAME = "db.properties";
 
-    private Properties properties;
     private String url;
     private String host;
     private String password;
@@ -63,13 +60,13 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
     public void init() throws ConnectionPoolException {
 
-        properties = new Properties();
+        Properties properties = new Properties();
         try (InputStream inputStream = ConnectionPoolImpl.class.getClassLoader().getResourceAsStream(DB_PROPERTIES_NAME)) {
             properties.load(inputStream);
 
-            String url=properties.getProperty(DB_URL);
-            host=properties.getProperty(DB_HOST);
-            password=properties.getProperty(DB_PASS);
+            String url= properties.getProperty(DB_URL);
+            host= properties.getProperty(DB_HOST);
+            password= properties.getProperty(DB_PASS);
 
             this.url = url +
                     "?verifyServerCertificate=false" +
@@ -125,7 +122,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
         }
     }
 
-    private Connection createConnection() throws SQLException {
+    private void createConnection() throws SQLException {
         Connection connection = DriverManager.getConnection(url, host,password);
         connections.add(connection);
         InvocationHandler connectionHandler = (Object proxy, Method method, Object[] args) -> {
@@ -136,7 +133,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
             return method.invoke(connection, args);
         };
 
-        return (Connection) Proxy.newProxyInstance(connection.getClass().getClassLoader(),
+        Proxy.newProxyInstance(connection.getClass().getClassLoader(),
                 connection.getClass().getInterfaces(), connectionHandler);
     }
 }
