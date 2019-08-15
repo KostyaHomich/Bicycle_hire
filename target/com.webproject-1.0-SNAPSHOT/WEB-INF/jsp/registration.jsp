@@ -39,6 +39,7 @@
 				</c:forEach>
 			</c:if>
 			<div>
+				<p><fmt:message key="user.login"/></p>
 				<input type="text"
 					   placeholder="<fmt:message key="user.login"/>"
 					   id="login"
@@ -51,6 +52,7 @@
 				/>
 			</div>
 			<div>
+				<p><fmt:message key="user.password"/></p>
 				<input type="password"
 					   placeholder="<fmt:message key="user.password"/>"
 					   id="password"
@@ -62,6 +64,7 @@
 				/>
 			</div>
 			<div>
+				<p><fmt:message key="user.repeat_password"/></p>
 				<input type="password"
 					   placeholder="<fmt:message key="user.repeat_password"/>"
 					   id="repeat_password"
@@ -73,6 +76,7 @@
 				/>
 			</div>
 			<div>
+				<p><fmt:message key="user.first_name"/></p>
 				<input type="text"
 					   placeholder="<fmt:message key="user.first_name"/>"
 					   id="first_name"
@@ -85,6 +89,8 @@
 				/>
 			</div>
 			<div>
+				<p><fmt:message key="user.last_name"/></p>
+
 				<input type="text"
 					   placeholder="<fmt:message key="user.last_name"/>"
 					   id="last_name"
@@ -97,6 +103,8 @@
 				/>
 			</div>
 			<div>
+				<p><fmt:message key="user.email"/></p>
+
 				<input type="text"
 					   placeholder="<fmt:message key="user.email"/>"
 					   id="email"

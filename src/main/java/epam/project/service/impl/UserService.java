@@ -26,6 +26,7 @@ public class UserService {
             users = userDao.getAll();
         } catch (DaoException e) {
             throw new ServiceException("Failed to get all users", e);
+
         }
         return users;
     }

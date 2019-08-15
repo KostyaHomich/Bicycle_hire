@@ -85,7 +85,6 @@ public abstract class AbstractJdbcDao<T extends Identified<PK>, PK extends Numbe
             prepareStatementForUpdate(statement, object);
             statement.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new DaoException("Cannot update entity.",e);
         }
 

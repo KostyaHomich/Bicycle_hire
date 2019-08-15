@@ -37,10 +37,4 @@
     </c:forEach>
     </tbody>
 </table>
-<form style="text-align:right;" action="${pageContext.request.contextPath}/user_list"
-      method="post">
-    <!--5 default count users-->
-    <input type="hidden" name="amountUsers" value="${5 + requestScope.amountUsers}">
-    <input type="hidden" name="command" value="${CommandType.SHOW_USER_LIST}">
-    <input type="submit" value="<fmt:message key="page.button.show_more"/>">
-</form>
+

@@ -28,16 +28,21 @@
 
             <input type="hidden" value="${requestScope.user.getLogin()}" name="login"/>
             <div>
+                <p><fmt:message key="user.email"/></p>
                 <input type="text" value="${requestScope.user.getEmail()}"
                        placeholder="<fmt:message key="user.email"/>"
                        id="email" name="email"/>
             </div>
             <div>
+                <p><fmt:message key="user.first_name"/></p>
+
                 <input type="text" value="${requestScope.user.getFirstName()}"
                        placeholder="<fmt:message key="user.first_name"/>" id="first_name"
                        name="first_name"/>
             </div>
             <div>
+                <p><fmt:message key="user.last_name"/></p>
+
                 <input type="text" value="${requestScope.user.getLastName()}"
                        placeholder="<fmt:message key="user.last_name"/>"
                        id="last_name" name="last_name"/>

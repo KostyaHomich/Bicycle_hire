@@ -124,7 +124,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
     private void createConnection() throws SQLException {
         Connection connection = DriverManager.getConnection(url, host,password);
-        connections.add(connection);
+
         InvocationHandler connectionHandler = (Object proxy, Method method, Object[] args) -> {
             if (method.getName().equals("close")) {
                 releaseConnection((Connection) proxy);
@@ -135,5 +135,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
 
         Proxy.newProxyInstance(connection.getClass().getClassLoader(),
                 connection.getClass().getInterfaces(), connectionHandler);
+        connections.add(connection);
     }
 }

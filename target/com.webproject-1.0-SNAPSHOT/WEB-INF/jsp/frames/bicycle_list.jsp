@@ -64,7 +64,7 @@
               method="post">
             <input type="hidden" name="page" value="${requestScope.page-1}">
             <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
-            <input type="submit" value="Previous">
+            <input type="submit" value="<fmt:message key="page.button.previous"/>">
         </form>
     </c:if>
 
@@ -73,7 +73,7 @@
               method="post">
             <input type="hidden" name="page" value="${requestScope.page+1}">
             <input type="hidden" name="command" value="${CommandType.SHOW_BICYCLE_LIST}">
-            <input type="submit" value="Next">
+            <input type="submit" value="<fmt:message key="page.button.next"/>">
         </form>
 
     </c:if>

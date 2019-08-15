@@ -40,6 +40,7 @@
                 </c:forEach>
             </c:if>
             <div>
+                <p><fmt:message key="user.login"/></p>
                 <input type="text"
                        placeholder="<fmt:message key="user.login"/>"
                        id="login"
@@ -52,6 +53,7 @@
                 />
             </div>
             <div>
+                <p><fmt:message key="user.password"/></p>
                 <input type="password"
                        placeholder="<fmt:message key="user.password"/>"
                        id="password"

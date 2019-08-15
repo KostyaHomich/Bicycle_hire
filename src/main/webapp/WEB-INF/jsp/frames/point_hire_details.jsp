@@ -32,6 +32,8 @@
                    name="id"
                    value="${requestScope.pointHire.getId()}">
             <div>
+                <p><fmt:message key="point_hire.location"/></p>
+
                 <input type="text"
                         <c:if test="${not empty sessionScope.signInUser
                         && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
@@ -49,6 +51,7 @@
                 />
             </div>
             <div>
+                <p><fmt:message key="point_hire.telephone"/></p>
                 <input type="text"
                         <c:if test="${not empty sessionScope.signInUser
                         && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">
@@ -63,6 +66,8 @@
                 />
             </div>
             <div>
+                <p><fmt:message key="point_hire.description"/></p>
+
                 <input type="text"
                         <c:if test="${not empty sessionScope.signInUser
                         && sessionScope.signInUser.role.equalsIgnoreCase(UserRole.USER)}">

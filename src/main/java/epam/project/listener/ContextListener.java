@@ -3,7 +3,7 @@ package epam.project.listener;
 import epam.project.database.dao.exception.ConnectionPoolException;
 import epam.project.database.pool.ConnectionPoolFactory;
 import epam.project.database.pool.ConnectionPoolImpl;
-import epam.project.service.DatabaseUpdater;
+import epam.project.util.DatabaseUpdater;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContextEvent;

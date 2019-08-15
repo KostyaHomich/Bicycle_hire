@@ -1,4 +1,4 @@
-package epam.project.service;
+package epam.project.util;
 
 import epam.project.entity.Bicycle;
 import org.apache.log4j.LogManager;
